@@ -1,0 +1,7 @@
+# Vercel-i, po e pa `server.js` ne root, e ndertoi projektin si aplikacion Node
+# dhe nuk shperndau `vendor/` — faqja mbetej te ekrani i nisjes.
+# Keto skedare i duhen VETEM prezantimit lokal, jo hostimit.
+server.js
+nis.cmd
+build-single.js
+dist/
