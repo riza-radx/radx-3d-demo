@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RadX — Prezantim</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23022636'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%237fbc42'%3EX%3C/text%3E%3C/svg%3E">
+<style>
+  /* ================= PALETA (ndryshoje vetem ketu) ================= */
+  :root{
+    --brand:#7fbc42;
+    --brand-dk:#4e7a26;
+    --teal:#10a2ac;
+    --navy:#022636;
+    --navy-2:#04384d;
+    --ink:#eaf4f7;
+    --dim:#8fb0bb;
+    --warn:#f0a33a;
+    --bad:#e2564a;
+    --card:rgba(2,38,54,.84);
+    --line:rgba(143,176,187,.22);
+    --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",monospace;
+    --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:var(--sans);color:var(--ink);
+    background:radial-gradient(120% 90% at 42% 0%, #0b5566 0%, #04384d 42%, #022636 100%);
+  }
+  #scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  #ui{position:fixed;inset:0;pointer-events:none;z-index:2}
+  .clickable{pointer-events:auto}
+
+  /* ================= LOGO ================= */
+  .brandmark{position:absolute;top:26px;left:34px;display:flex;align-items:baseline;gap:12px}
+  .brandmark b{font-size:25px;font-weight:700;letter-spacing:-.5px}
+  .brandmark b i{color:var(--brand);font-style:normal}
+  .brandmark span{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
+
+  /* ================= KARTA E KAPITULLIT ================= */
+  .chapter{
+    position:absolute;left:34px;bottom:32px;width:min(520px,40vw);
+    background:var(--card);border:1px solid var(--line);border-radius:15px;
+    padding:20px 24px 16px;backdrop-filter:blur(14px);
+    box-shadow:0 24px 64px rgba(0,0,0,.45);
+  }
+  .chapter .step{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--teal);margin-bottom:9px;
+  }
+  .chapter .step b{color:var(--brand);font-weight:700}
+  .chapter h1{font-size:28px;line-height:1.12;letter-spacing:-.4px;margin-bottom:9px}
+  .chapter p{font-size:15.5px;line-height:1.52;color:#cfe3ea;min-height:5.6em}
+  .chapter .tech{
+    display:none;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line);
+    font-family:var(--mono);font-size:11.5px;line-height:1.5;color:#6f97a4;
+  }
+  .chapter.showtech .tech{display:block}
+
+  .navrow{display:flex;align-items:center;gap:12px;margin-top:16px}
+  .navrow button{
+    font:inherit;font-size:13.5px;font-weight:600;color:var(--ink);
+    background:rgba(143,176,187,.12);border:1px solid var(--line);
+    border-radius:9px;padding:8px 15px;cursor:pointer;transition:.15s;
+  }
+  .navrow button:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#0b2a06}
+  .navrow button:disabled{opacity:.3;cursor:default}
+  .dots{display:flex;gap:6px;margin-left:auto;align-items:center}
+  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(143,176,187,.3);cursor:pointer;pointer-events:auto;transition:.2s}
+  .dots i.on{background:var(--brand);transform:scale(1.5)}
+  .dots u{width:11px;display:block}
+
+  /* ================= TELEFONI ================= */
+  .phone{
+    position:absolute;right:40px;top:50%;transform:translateY(-50%);
+    width:322px;height:648px;border-radius:42px;
+    background:linear-gradient(160deg,#1a2b33,#0a161c);
+    padding:11px;box-shadow:0 40px 90px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.07);
+  }
+  .phone .glass{
+    position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;
+    background:#061b24;
+  }
+  .phone .notch{
+    position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:96px;height:22px;border-radius:12px;background:#050f14;z-index:6;
+  }
+  .sbar{
+    position:absolute;top:0;left:0;right:0;height:40px;z-index:5;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 20px;font-size:11.5px;font-family:var(--mono);color:#cfe3ea;
+  }
+  .sbar .rt{display:flex;gap:6px;align-items:center}
+  .sbar .bat{width:20px;height:10px;border:1.4px solid #cfe3ea;border-radius:3px;position:relative}
+  .sbar .bat::after{content:'';position:absolute;inset:1.6px;right:5px;background:#cfe3ea;border-radius:1px}
+
+  .appbar{
+    position:absolute;top:40px;left:0;right:0;height:46px;z-index:4;
+    display:flex;align-items:center;gap:9px;padding:0 18px;
+    border-bottom:1px solid rgba(143,176,187,.14);
+  }
+  .appbar b{font-size:15px;font-weight:700}
+  .appbar b i{color:var(--brand);font-style:normal}
+  .appbar span{margin-left:auto;font-size:11px;color:var(--dim)}
+
+  .screens{position:absolute;top:86px;left:0;right:0;bottom:0;z-index:3}
+  .scr{
+    position:absolute;inset:0;padding:16px 18px;
+    opacity:0;transform:translateY(10px);transition:.4s cubic-bezier(.2,.8,.2,1);
+    pointer-events:none;overflow:hidden;
+  }
+  .scr.on{opacity:1;transform:none}
+
+  .h{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:11px}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;
+        padding:4px 10px;border-radius:999px;background:rgba(127,188,66,.16);color:var(--brand)}
+  .pill.t{background:rgba(16,162,172,.18);color:#4fd3dd}
+  .pill.w{background:rgba(240,163,58,.18);color:var(--warn)}
+  .pill.b{background:rgba(226,86,74,.18);color:#ff8a7e}
+
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;font-size:13px;color:var(--dim)}
+  .row b{font-family:var(--mono);font-size:14.5px;color:var(--ink);font-weight:600}
+  .row.big b{font-size:22px}
+  .sep{height:1px;background:rgba(143,176,187,.16);margin:10px 0}
+
+  .btn{
+    display:block;width:100%;text-align:center;margin-top:14px;
+    background:var(--brand);color:#0b2a06;font-weight:800;font-size:15px;
+    padding:14px;border-radius:13px;box-shadow:0 10px 26px rgba(127,188,66,.28);
+  }
+  .btn.ghost{background:rgba(143,176,187,.13);color:var(--ink);box-shadow:none;font-weight:700}
+
+  /* harta */
+  .map{position:absolute;inset:0;background:
+      linear-gradient(rgba(143,176,187,.07) 1px,transparent 1px) 0 0/100% 46px,
+      linear-gradient(90deg,rgba(143,176,187,.07) 1px,transparent 1px) 0 0/46px 100%,
+      #08222c}
+  .map .road{position:absolute;background:rgba(143,176,187,.13)}
+  .pin{position:absolute;width:26px;height:26px;border-radius:50% 50% 50% 4px;
+       transform:rotate(-45deg);display:grid;place-items:center;
+       box-shadow:0 5px 14px rgba(0,0,0,.45)}
+  .pin s{transform:rotate(45deg);font-size:11px;font-weight:800;text-decoration:none}
+  .pin.free{background:var(--brand);color:#0b2a06}
+  .pin.busy{background:#3f6472;color:#cfe3ea}
+  .pin.me{background:var(--teal);color:#02252a;width:32px;height:32px;animation:beat 1.8s infinite}
+  @keyframes beat{0%,100%{transform:rotate(-45deg) scale(1)}50%{transform:rotate(-45deg) scale(1.12)}}
+  .maptop{position:absolute;top:12px;left:14px;right:14px;z-index:2;
+          background:rgba(4,34,44,.9);border:1px solid var(--line);border-radius:11px;
+          padding:9px 12px;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+  .mapbot{position:absolute;bottom:14px;left:14px;right:14px;z-index:2;
+          background:#04222c;border:1px solid var(--line);border-radius:13px;padding:12px 14px}
+
+  /* bateria rrethore */
+  .ring{position:relative;width:158px;height:158px;margin:2px auto 10px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .ring .mid b{font-family:var(--mono);font-size:38px;font-weight:700;letter-spacing:-2px;display:block;line-height:1}
+  .ring .mid span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+
+  /* checks */
+  .chk{display:flex;align-items:center;gap:11px;padding:11px 0;font-size:13.5px;
+       opacity:.25;transition:.45s}
+  .chk.ok{opacity:1}
+  .chk em{width:22px;height:22px;border-radius:50%;flex:0 0 22px;display:grid;place-items:center;
+          background:rgba(143,176,187,.16);font-style:normal;font-size:12px;font-weight:800;color:var(--dim);transition:.45s}
+  .chk.ok em{background:var(--brand);color:#0b2a06}
+  .chk u{text-decoration:none;color:var(--dim);font-size:11.5px;display:block}
+
+  /* njoftim push */
+  .push{
+    background:#0c2f3c;border:1px solid rgba(127,188,66,.4);border-radius:14px;
+    padding:13px 14px;box-shadow:0 12px 30px rgba(0,0,0,.4);
+    animation:drop .5s cubic-bezier(.2,.9,.2,1);
+  }
+  @keyframes drop{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
+  .push b{display:block;font-size:13.5px;margin-bottom:4px}
+  .push span{font-size:12.5px;color:#b7d2db;line-height:1.45}
+  .push span b{display:inline;font-weight:700;color:#eaf4f7}
+
+  /* shirita ndarjeje fuqie */
+  .sh{margin:9px 0}
+  .sh .lb{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-bottom:5px}
+  .sh .lb b{font-family:var(--mono);color:var(--ink)}
+  .sh .tr{height:9px;border-radius:6px;background:rgba(143,176,187,.15);overflow:hidden}
+  .sh .tr i{display:block;height:100%;border-radius:6px;transition:width .7s}
+
+  /* fatura */
+  .inv{background:#f6fafb;color:#0b2733;border-radius:13px;padding:15px}
+  .inv .t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#5d7580;margin-bottom:9px}
+  .inv .r{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;color:#3c5560}
+  .inv .r b{font-family:var(--mono);color:#0b2733}
+  .inv .tot{margin-top:9px;padding-top:9px;border-top:2px solid #0b2733;font-size:14px}
+  .inv .tot b{font-size:20px}
+
+  /* ================= NDIHMA E TASTIERES ================= */
+  .keys{position:absolute;left:34px;top:64px;font-size:11.5px;color:var(--dim);line-height:1.85;opacity:.75}
+  .keys kbd{font-family:var(--mono);font-size:10.5px;background:rgba(143,176,187,.14);
+            border:1px solid var(--line);border-radius:5px;padding:2px 6px;color:var(--ink)}
+
+  .draghint{
+    position:absolute;left:calc(50% - 190px);bottom:52px;transform:translateX(-50%);
+    background:var(--brand);color:#0b2a06;font-weight:800;font-size:15.5px;
+    padding:12px 24px;border-radius:999px;box-shadow:0 14px 40px rgba(127,188,66,.42);
+    opacity:0;transition:.35s;white-space:nowrap;
+  }
+  .draghint.show{opacity:1}
+  .draghint.done{background:var(--teal);color:#02252a;box-shadow:0 14px 40px rgba(16,162,172,.42)}
+
+  #boot{position:fixed;inset:0;z-index:9;display:grid;place-items:center;background:var(--navy);transition:opacity .6s}
+  #boot.hide{opacity:0;pointer-events:none}
+  #boot b{font-size:34px;letter-spacing:-1px}
+  #boot b i{color:var(--brand);font-style:normal}
+  #boot p{margin-top:10px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);text-align:center}
+
+  @media (max-width:1280px){
+    .phone{width:268px;height:540px;right:22px}
+    .chapter{width:min(430px,38vw)}
+  }
+  @media (max-width:980px){
+    .phone{display:none}
+    .chapter{width:calc(100% - 40px);left:20px}
+    .keys{display:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<div id="ui">
+  <div class="brandmark"><b>Rad<i>X</i></b><span>Prezantim</span></div>
+
+  <div class="keys">
+    <div><kbd>←</kbd> <kbd>→</kbd> hapat · <kbd>1</kbd>…<kbd>9</kbd><kbd>0</kbd><kbd>-</kbd><kbd>=</kbd> kapitujt</div>
+    <div><kbd>F</kbd> ekran i plotë · <kbd>R</kbd> nga fillimi · <kbd>T</kbd> shtresa teknike</div>
+  </div>
+
+  <!-- ===================== TELEFONI ===================== -->
+  <div class="phone">
+    <div class="glass">
+      <div class="notch"></div>
+      <div class="sbar">
+        <span id="ph-time">14:27</span>
+        <span class="rt"><span>◾◾◾</span><span class="bat"></span></span>
+      </div>
+      <div class="appbar"><b>Rad<i>X</i></b><span id="ph-ctx">Tiranë</span></div>
+
+      <div class="screens">
+
+        <!-- 1 · harta -->
+        <div class="scr" data-s="map">
+          <div class="map">
+            <div class="road" style="left:0;right:0;top:118px;height:9px"></div>
+            <div class="road" style="left:0;right:0;top:300px;height:7px"></div>
+            <div class="road" style="top:0;bottom:0;left:96px;width:9px"></div>
+            <div class="road" style="top:0;bottom:0;left:198px;width:7px"></div>
+            <div class="pin free" style="left:74px;top:150px"><s>2</s></div>
+            <div class="pin busy" style="left:168px;top:92px"><s>0</s></div>
+            <div class="pin free" style="left:212px;top:246px"><s>4</s></div>
+            <div class="pin busy" style="left:52px;top:322px"><s>0</s></div>
+            <div class="pin free" style="left:158px;top:372px"><s>1</s></div>
+            <div class="pin me" style="left:110px;top:196px"><s>◎</s></div>
+          </div>
+          <div class="maptop"><span>Pika karikimi pranë meje</span><b style="font-family:var(--mono)">12</b></div>
+          <div class="mapbot">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div><b style="font-size:14px">RDX-014 · Rruga e Kavajës</b>
+                   <div style="font-size:11.5px;color:var(--dim);margin-top:3px">240 m · 2 vende të lira</div></div>
+              <span class="pill">I LIRË</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 · detaji i karikuesit -->
+        <div class="scr" data-s="charger">
+          <div class="h">Pika e karikimit</div>
+          <div style="font-size:19px;font-weight:700;line-height:1.2">RDX-014</div>
+          <div style="font-size:12.5px;color:var(--dim);margin-top:4px">Rruga e Kavajës · 240 m</div>
+          <div style="display:flex;gap:7px;margin:13px 0"><span class="pill">2 VENDE</span><span class="pill t">1 I LIRË</span></div>
+          <div class="sep"></div>
+          <div class="row big"><span>Çmimi për ty</span><b>35<u style="font-size:11px;color:var(--dim);text-decoration:none"> L/kWh</u></b></div>
+          <div class="row"><span>Vlen për orën</span><b>14:00–16:00</b></div>
+          <div class="row"><span>Fuqia maksimale</span><b>60 kW</b></div>
+          <div class="row"><span>Portofoli i tij</span><b>2,400 L</b></div>
+          <div class="btn">Nis karikimin</div>
+        </div>
+
+        <!-- 3 · kontrolli -->
+        <div class="scr" data-s="auth">
+          <div class="h">Po kontrollohet</div>
+          <div class="chk" id="k1"><em>✓</em><div>Kush është<u>Kartela e njohur · llogari aktive</u></div></div>
+          <div class="chk" id="k2"><em>✓</em><div>Çfarë çmimi i takon<u>35 L/kWh sipas marrëveshjes së kompanisë</u></div></div>
+          <div class="chk" id="k3"><em>✓</em><div>Sa para ka<u>2,400 L — mbulon karikimin</u></div></div>
+          <div class="sep"></div>
+          <div style="font-size:12px;color:var(--dim);line-height:1.5">
+            Nëse ndonjëra bie, karikimi nuk nis — dhe shoferi merr arsyen e saktë, nuk mbetet duke pyetur.
+          </div>
+          <div class="btn" id="authbtn" style="opacity:.3">Gati</div>
+        </div>
+
+        <!-- 4 · nisja -->
+        <div class="scr" data-s="starting">
+          <div class="h">Po nis</div>
+          <div style="margin-top:24px">
+            <div class="chk ok"><em>✓</em><div>Kërkesa iku te karikuesi<u>brenda një sekonde</u></div></div>
+            <div class="chk ok" id="k4"><em>✓</em><div>Karikuesi u përgjigj<u>e pranoi — vendi është i tij tani</u></div></div>
+            <div class="chk" id="k5"><em>✓</em><div>Sesioni u hap<u>ora dhe matësi nisën</u></div></div>
+          </div>
+          <div class="sep"></div>
+          <div style="font-size:12px;color:var(--dim);line-height:1.5">
+            Vendi rezervohet për të për 60 sekonda, sa të lidhë spinën.
+          </div>
+        </div>
+
+        <!-- 5 · lidh spinën -->
+        <div class="scr" data-s="connect">
+          <div class="h">Hapi i radhës</div>
+          <div style="text-align:center;margin-top:40px">
+            <div style="font-size:52px">🔌</div>
+            <div style="font-size:19px;font-weight:700;margin-top:14px">Lidh spinën</div>
+            <div style="font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.5">
+              Karikuesi po pret. Kur spina hyn, energjia nis vetë.
+            </div>
+            <div class="pill w" style="margin-top:18px">DUKE PRITUR</div>
+          </div>
+        </div>
+
+        <!-- 6 · karikimi -->
+        <div class="scr" data-s="charging">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="h" style="margin:0">Po karikon</div><span class="pill" id="ph-live">● LIVE</span>
+          </div>
+          <div class="ring">
+            <svg width="158" height="158">
+              <circle cx="79" cy="79" r="68" fill="none" stroke="rgba(143,176,187,.16)" stroke-width="13"/>
+              <circle id="ph-arc" cx="79" cy="79" r="68" fill="none" stroke="#7fbc42" stroke-width="13"
+                      stroke-linecap="round" stroke-dasharray="427" stroke-dashoffset="427"/>
+            </svg>
+            <div class="mid"><b id="ph-soc">22</b><span>Bateria</span></div>
+          </div>
+          <div class="row"><span>Fuqia tani</span><b id="ph-kw">0 kW</b></div>
+          <div class="row"><span>Energjia</span><b id="ph-kwh">0.0 kWh</b></div>
+          <div class="row"><span>Kohëzgjatja</span><b id="ph-time2">00:00</b></div>
+          <div class="row"><span>Kostoja</span><b id="ph-cost">0 L</b></div>
+          <div class="btn ghost">Ndalo karikimin</div>
+        </div>
+
+        <!-- 7 · bateria plot -->
+        <div class="scr" data-s="full">
+          <div class="push">
+            <b>Bateria është 100%</b>
+            <span>Ke <b id="ph-grace" style="font-family:var(--mono)">10:00</b> pa pagesë për të lëvizur makinën.</span>
+          </div>
+          <div class="sep"></div>
+          <div class="row"><span>Energjia e marrë</span><b id="ph-kwh2">33.0 kWh</b></div>
+          <div class="row"><span>Kostoja e karikimit</span><b id="ph-cost2">1,155 L</b></div>
+          <div class="sep"></div>
+          <div class="row"><span>Tarifa e vendit</span><b id="ph-idle">0 L</b></div>
+          <div style="font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:6px">
+            Pas 10 minutash, 4 L për minutë — për vendin që zë, jo për energji.
+          </div>
+          <div class="btn">Shkëpute dhe largohu</div>
+        </div>
+
+        <!-- 8 · pagesa -->
+        <div class="scr" data-s="paid">
+          <div class="h">Sesioni u mbyll</div>
+          <div style="text-align:center;margin:16px 0 6px">
+            <div style="font-size:44px">✅</div>
+            <div style="font-family:var(--mono);font-size:34px;font-weight:700;letter-spacing:-1.5px;margin-top:8px" id="ph-total">1,155 L</div>
+            <div style="font-size:11.5px;color:var(--dim);margin-top:4px">u zbrit nga portofoli</div>
+          </div>
+          <div class="sep"></div>
+          <div class="row"><span>Portofoli më parë</span><b>2,400 L</b></div>
+          <div class="row"><span>Portofoli tani</span><b id="ph-wallet" style="color:var(--brand)">1,245 L</b></div>
+          <div class="sep"></div>
+          <div style="font-size:11.5px;color:var(--dim);line-height:1.5">
+            Nëse portofoli nuk mbulonte të gjithë, diferenca mbetej e regjistruar si detyrim —
+            karikimi nuk ndalej në gjysmë.
+          </div>
+        </div>
+
+        <!-- 9 · fatura -->
+        <div class="scr" data-s="invoice">
+          <div class="h">Fatura</div>
+          <div class="inv">
+            <div class="t">Faturë zyrtare</div>
+            <div class="r"><span>Energjia</span><b>33.0 kWh</b></div>
+            <div class="r"><span>Çmimi</span><b>35 L / kWh</b></div>
+            <div class="r"><span>Pika</span><b>RDX-014</b></div>
+            <div class="r"><span>Data</span><b>28.08.2026</b></div>
+            <div class="r tot"><span>Total</span><b>1,155 L</b></div>
+          </div>
+          <div style="display:flex;gap:7px;margin-top:12px"><span class="pill">✓ E LËSHUAR</span><span class="pill t">DËRGUAR ME EMAIL</span></div>
+          <div style="font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:11px">
+            Brenda të njëjtës ditë, pa e shkruar njeri me dorë.
+          </div>
+        </div>
+
+        <!-- 10 · fuqia e ndarë -->
+        <div class="scr" data-s="shared">
+          <div class="h">Pika është plot</div>
+          <div class="push" style="border-color:rgba(240,163,58,.45)">
+            <b>Fuqia u ndau mes tre makinave</b>
+            <span>Karikimi vazhdon më ngadalë, por nuk ndalet.</span>
+          </div>
+          <div style="margin-top:14px">
+            <div class="sh"><div class="lb"><span>Makina e tij</span><b>55 kW</b></div><div class="tr"><i style="width:37%;background:#7fbc42"></i></div></div>
+            <div class="sh"><div class="lb"><span>Makina 2</span><b>52 kW</b></div><div class="tr"><i style="width:35%;background:#10a2ac"></i></div></div>
+            <div class="sh"><div class="lb"><span>Makina 3</span><b>43 kW</b></div><div class="tr"><i style="width:28%;background:#f0a33a"></i></div></div>
+          </div>
+          <div class="sep"></div>
+          <div class="row"><span>Sa mban pika</span><b>150 kW</b></div>
+          <div class="row"><span>Sa po jep tani</span><b style="color:var(--brand)">150 kW</b></div>
+        </div>
+
+        <!-- 11 · problem -->
+        <div class="scr" data-s="problem">
+          <div class="h">Nuk u nis</div>
+          <div class="push" style="border-color:rgba(226,86,74,.5)">
+            <b>Karikuesi nuk përgjigjet</b>
+            <span>Nuk u hoq gjë nga portofoli. Provo pikën më të afërt.</span>
+          </div>
+          <div class="mapbot" style="position:static;margin-top:14px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div><b style="font-size:13.5px">RDX-021 · Bulevardi</b>
+                   <div style="font-size:11.5px;color:var(--dim);margin-top:3px">200 m · 3 vende të lira</div></div>
+              <span class="pill">I LIRË</span>
+            </div>
+          </div>
+          <div class="sep"></div>
+          <div class="row"><span>Operatori u njoftua</span><b class="pill b" style="font-family:var(--sans)">MENJËHERË</b></div>
+          <div style="font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:8px">
+            Me gjithë gjurmën e çfarë ndodhi, kur, dhe në cilin vend.
+          </div>
+        </div>
+
+        <!-- 12 · fund -->
+        <div class="scr" data-s="thanks">
+          <div class="h">Historiku</div>
+          <div class="row"><span>Sot · RDX-014</span><b>1,155 L</b></div>
+          <div class="row"><span>22.08 · RDX-007</span><b>860 L</b></div>
+          <div class="row"><span>14.08 · RDX-014</span><b>1,420 L</b></div>
+          <div class="sep"></div>
+          <div style="text-align:center;margin-top:26px">
+            <div style="font-size:15px;font-weight:700">Gjithçka e njëjtë</div>
+            <div style="font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.5">
+              Numrat që shikon shoferi janë të njëjtët që shikon operatori.
+              Një e vërtetë, dy pamje.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="draghint" id="draghint">Tërhiq spinën me maus drejt makinës →</div>
+
+  <div class="chapter" id="chapcard">
+    <div class="step" id="c-step">—</div>
+    <h1 id="c-title">—</h1>
+    <p id="c-body">—</p>
+    <div class="tech" id="c-tech">—</div>
+    <div class="navrow">
+      <button class="clickable" id="btn-prev">← Mbrapa</button>
+      <button class="clickable" id="btn-next">Vazhdo →</button>
+      <div class="dots clickable" id="dots"></div>
+    </div>
+  </div>
+</div>
+
+<div id="boot"><div><b>Rad<i>X</i></b><p>Po ngarkohet</p></div></div>
+
+<script type="importmap">
+{ "imports": { "three":"./vendor/three.module.js", "three/addons/":"./vendor/jsm/" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+/* ===================== PALETA 3D ===================== */
+const P = {
+  brand:0x7fbc42, teal:0x10a2ac, navy:0x022636, asphalt:0x0e2b38,
+  line:0x9fb8c1, metal:0xdfe9ec, dark:0x0a1f29, glass:0x0d3a4a,
+  warn:0xf0a33a, bad:0xe2564a,
+  carA:0xe8eef0, carB:0x2d5c6b, carC:0x8a97a0,
+};
+
+/* ===================== NUMRAT E TREGIMIT ===================== */
+const TARIFF     = 35;    // L / kWh
+const SITE_LIMIT = 150;   // kW
+const BATTERY    = 42;    // kWh, bateria e makinës
+const SOC_START  = 22;    // %
+const WALLET     = 2400;  // L
+const IDLE_FEE   = 4;     // L / minutë pas grace
+const GRACE_MIN  = 10;    // minuta pa pagesë pas 100%
+const SPEED      = 90;    // 1 sekondë reale = 90 sekonda sesioni
+
+/* ===================== KAPITUJT ===================== */
+const CHAPTERS = [
+  { sec:'Shoferi', screen:'map',
+    title:'Një aplikacion, të gjitha pikat',
+    body:'Në qytet ka pika karikimi të kompanive të ndryshme. Shoferi nuk i kërkon nëpër pesë '+
+         'aplikacione — i shikon të gjitha në një të vetëm, me çmimin dhe me vendet e lira në atë moment.',
+    tech:'Charger-at publikë të gjitha kompanive; visibility ≠ company scope.',
+    cam:[17.0, 9.0, 15.0], look:[5.5, 1.0, -0.8] },
+
+  { sec:'Shoferi', screen:'charger',
+    title:'Çmimi dihet përpara',
+    body:'Çmimi nuk është i njëjti për të gjithë: varet nga kompania e shoferit, nga ora e ditës '+
+         'dhe nga marrëveshja. Aplikacioni tregon çmimin e tij, jo një çmim të përgjithshëm. '+
+         'Pa surpriza kur mbaron.',
+    tech:'rate: user → charger → company default (toggle e përmbys); çmim për orë (rate_per_days).',
+    cam:[-3.8, 2.7, 2.4], look:[-0.9, 1.25, -2.1] },
+
+  { sec:'Shoferi', screen:'auth',
+    title:'Një sekondë kontroll',
+    body:'Afron kartelën ose shtyp në telefon. Në atë sekondë kontrollohen tre gjëra: kush është, '+
+         'çfarë çmimi i takon, dhe sa para ka. Nëse ndonjëra bie, karikimi nuk nis — dhe shoferi '+
+         'merr arsyen e saktë.',
+    tech:'Authorize → Accepted / Expired / Blocked / Invalid; split_wallet, pay-as-you-go, balance.',
+    cam:[-2.5, 1.72, 0.85], look:[-1.0, 1.02, -2.1] },
+
+  { sec:'Shoferi', screen:'starting',
+    title:'Komanda shkon te karikuesi',
+    body:'Sistemi i thotë karikuesit të nisë. Karikuesi përgjigjet se e pranoi. Sesioni quhet i hapur '+
+         'vetëm pas kësaj përgjigjeje — jo kur shtypi butoni. Kjo është arsyeja pse për një moment '+
+         'në ekran shkruan "po nis".',
+    tech:'RemoteStartTransaction → ACK i charger-it; sesioni hapet në StartTransaction.',
+    cam:[-2.2, 2.5, 2.8], look:[-0.7, 1.15, -2.0] },
+
+  { sec:'Shoferi', screen:'connect',
+    title:'Pjesa e vetme me dorë',
+    body:'Gjithçka tjetër ndodh vetë. Kjo nuk. Tërhiq spinën nga karikuesi te makina — '+
+         'karikuesi e pret dhe, sapo hyn, energjia nis.',
+    tech:'StatusNotification: Preparing → Charging.',
+    cam:[-1.9, 3.1, 4.8], look:[0.2, 1.0, -0.9] },
+
+  { sec:'Karikimi', screen:'charging',
+    title:'Numrat rrjedhin te dy anët',
+    body:'Karikuesi raporton vazhdimisht sa fuqi po jep, sa energji ka kaluar, sa është bateria. '+
+         'Shoferi shikon në telefon të njëjtët numra që operatori shikon në panel. '+
+         'Nuk ka dy të vërteta.',
+    tech:'MeterValues: current, voltage, power, energy, SOC → sesioni dhe kostoja përditësohen.',
+    cam:[-2.6, 2.3, 4.2], look:[0.1, 1.0, -0.90] },
+
+  { sec:'Karikimi', screen:'full',
+    title:'Bateria u mbush — vendi jo',
+    body:'Në 100% shoferi merr njoftim dhe ka dhjetë minuta pa pagesë për të lëvizur makinën. '+
+         'Pas kësaj paguan një tarifë të vogël për minutë: për vendin që zë, jo për energji. '+
+         'Kështu pika nuk bllokohet nga makina të mbushura.',
+    tech:'SOC=100 → push; grace 10 min; minuta × charger.fullchargefeeperminute; faturë e ndarë.',
+    cam:[-1.4, 3.5, 6.6], look:[0.5, 1.05, -0.80] },
+
+  { sec:'Karikimi', screen:'paid',
+    title:'Matja e fundit dhe pagesa',
+    body:'Sesioni mbyllet, matja e fundit merret nga karikuesi dhe kostoja zbritet nga portofoli. '+
+         'Nëse portofoli nuk mbulon të gjithë, diferenca mbetet e regjistruar si detyrim — '+
+         'karikimi nuk ndalet në gjysmë dhe llogaria nuk humbet.',
+    tech:'kWh=(meterStop−meter_start)/1000 × çmim; balance−cost, teprica → debit_balance.',
+    cam:[5.6, 3.1, 6.6], look:[1.4, 1.05, -0.3] },
+
+  { sec:'Karikimi', screen:'invoice',
+    title:'Fatura del vetë',
+    body:'Fatura zyrtare krijohet dhe dërgohet brenda të njëjtës ditë, pa e shkruar njeri me dorë. '+
+         'Dhe nëse një faturë dështon të dalë, sistemi e kap vetë dhe raporton — '+
+         'nuk humbet pa u vënë re.',
+    tech:'Fiskalizim përmes BC (IIC/NIVF) ose PDF i RadX sipas check_fisk; abandoned-invoice check.',
+    cam:[5.2, 3.5, 7.2], look:[1.4, 1.10, -0.4] },
+
+  { sec:'Operimi', screen:'shared',
+    title:'Kur karikojnë të gjithë njëherësh',
+    body:'Një pikë mund të marrë vetëm një sasi fuqie. Kur mbushen të tre vendet, sistemi e ndan '+
+         'fuqinë mes tyre në vend që të fikë ndonjërin. Të tre karikojnë — më ngadalë, por karikojnë, '+
+         'dhe kufiri nuk kalohet kurrë.',
+    tech:'SetChargingProfile / load management; kufiri i lidhjes së pikës.',
+    cam:[14.5, 7.2, 12.5], look:[5.6, 1.0, -1.2] },
+
+  { sec:'Operimi', screen:'problem',
+    title:'Kur diçka shkon keq',
+    body:'Karikues që nuk përgjigjet, sesion që nis dhe nuk jep energji, matje që mbetet përgjysmë — '+
+         'kjo ndodh vërtet. Sistemi i kap, i thotë shoferit ku të shkojë, dhe njofton operatorin '+
+         'menjëherë. Asnjë pagesë e dyfishtë, asnjë gjë pa gjurmë.',
+    tech:'Timeout / offline / 0 kWh; lock atomik kundër StopTransaction të dyfishtë; audit log.',
+    cam:[14.8, 5.8, 9.0], look:[7.4, 1.20, -2.0] },
+
+  { sec:'Operimi', screen:'thanks',
+    title:'Nga lart: paneli i operatorit',
+    body:'Gjithçka që pa shoferi, operatori e shikon nga lart: cilat pika punojnë, kush karikon tani, '+
+         'sa energji shkoi, çfarë kërkon ndërhyrje. Nga i njëjti panel rinis një karikues nga distanca — '+
+         'pa dërguar njeri në terren.',
+    tech:'Reset · ChangeAvailability · UnlockConnector · GetDiagnostics · RemoteStop, sipas scope-it të rolit.',
+    cam:[1.2, 4.3, 9.8], look:[0.4, 3.50, -1.6] },
+];
+const N = CHAPTERS.length;
+
+/* ===================== RENDERER ===================== */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(P.navy, 24, 60);
+const camera = new THREE.PerspectiveCamera(42, 2, 0.1, 200);
+camera.position.set(...CHAPTERS[0].cam);
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(renderer), 0.02).texture;
+pmrem.dispose();
+
+const key = new THREE.DirectionalLight(0xffffff, 2.1);
+key.position.set(7, 11, 6);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.near = 1; key.shadow.camera.far = 44;
+key.shadow.camera.left = -16; key.shadow.camera.right = 16;
+key.shadow.camera.top = 16;   key.shadow.camera.bottom = -16;
+key.shadow.bias = -0.0007; key.shadow.normalBias = 0.02;
+scene.add(key);
+scene.add(new THREE.HemisphereLight(0x9fd4e0, P.navy, 0.5));
+const rim = new THREE.DirectionalLight(0x67d5e8, 0.85);
+rim.position.set(-9, 5, -7); scene.add(rim);
+
+/* ===================== NDIHMESA ===================== */
+const track = [];
+function mat(o){ const m = new THREE.MeshStandardMaterial(o); track.push(m); return m; }
+function geo(g){ track.push(g); return g; }
+function box(w,h,d,m,x=0,y=0,z=0,p=scene){
+  const o = new THREE.Mesh(geo(new THREE.BoxGeometry(w,h,d)), m);
+  o.position.set(x,y,z); o.castShadow = o.receiveShadow = true; p.add(o); return o;
+}
+function cyl(rt,rb,h,s,m,x=0,y=0,z=0,p=scene){
+  const o = new THREE.Mesh(geo(new THREE.CylinderGeometry(rt,rb,h,s)), m);
+  o.position.set(x,y,z); o.castShadow = o.receiveShadow = true; p.add(o); return o;
+}
+const MAT = {
+  asphalt:mat({color:P.asphalt,roughness:.94}),
+  paint:  mat({color:P.line,roughness:.8}),
+  curb:   mat({color:0x123544,roughness:.85}),
+  shell:  mat({color:P.metal,roughness:.36,metalness:.35}),
+  shellDk:mat({color:0x27404c,roughness:.5,metalness:.4}),
+  frame:  mat({color:P.dark,roughness:.2}),
+  rubber: mat({color:0x0c1a21,roughness:.95}),
+  chrome: mat({color:0xc9d6da,roughness:.22,metalness:.9}),
+  glass:  mat({color:P.glass,roughness:.09,metalness:.55}),
+  carA:   mat({color:P.carA,roughness:.28,metalness:.55,envMapIntensity:1.25}),
+  carB:   mat({color:P.carB,roughness:.34,metalness:.5}),
+  carC:   mat({color:P.carC,roughness:.4,metalness:.45}),
+};
+
+/* ===================== TOKA ===================== */
+const ground = new THREE.Mesh(geo(new THREE.PlaneGeometry(100,100)), MAT.asphalt);
+ground.rotation.x = -Math.PI/2; ground.receiveShadow = true; scene.add(ground);
+
+const BAY_X = [1.6, 6.0, 10.4];
+const STATION_X = BAY_X.map(x => x - 2.5);
+BAY_X.forEach(x => {
+  [-1.85, 1.85].forEach(o => box(0.1,0.02,5.4,MAT.paint,x+o,0.011,-0.4).castShadow = false);
+  box(3.7,0.02,0.1,MAT.paint,x,0.011,-3.0).castShadow = false;
+});
+box(30,0.26,0.7,MAT.curb,4.0,0.13,-3.9);
+
+/* ===================== EKRANI I KARIKUESIT ===================== */
+function makeScreen(){
+  const c = document.createElement('canvas'); c.width = 256; c.height = 208;
+  const x = c.getContext('2d');
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; track.push(tex);
+  let last = '';
+  const draw = (label, value, accent, id) => {
+    const sig = [label,value,accent,id].join('|'); if (sig === last) return; last = sig;
+    x.fillStyle = '#04222c'; x.fillRect(0,0,256,208);
+    x.fillStyle = accent;    x.fillRect(0,0,256,7);
+    x.fillStyle = '#7d9aa4'; x.font = '600 16px sans-serif'; x.fillText(id, 18, 36);
+    x.fillStyle = accent;    x.font = '700 27px sans-serif'; x.fillText(label, 18, 92);
+    x.fillStyle = '#eaf4f7'; x.font = '700 26px monospace';  x.fillText(value, 18, 142);
+    x.fillStyle = '#456975'; x.font = '600 15px sans-serif'; x.fillText('RadX', 18, 186);
+    tex.needsUpdate = true;
+  };
+  const m = new THREE.MeshBasicMaterial({ map:tex, toneMapped:false }); track.push(m);
+  return { draw, material:m };
+}
+
+/* ===================== KARIKUESI ===================== */
+function buildStation(x){
+  const g = new THREE.Group(); g.position.set(x, 0, -2.35); scene.add(g);
+  box(1.0,0.1,0.72,MAT.shellDk,0,0.05,0,g);
+  box(0.62,1.62,0.36,MAT.shell,0,0.9,0,g);
+  cyl(0.31,0.31,0.36,24,MAT.shell,0,1.71,0,g).rotation.set(Math.PI/2,0,0);
+  box(0.44,0.36,0.03,MAT.frame,0,1.26,0.19,g);
+  const screen = makeScreen();
+  const scr = new THREE.Mesh(geo(new THREE.PlaneGeometry(0.42,0.34)), screen.material);
+  scr.position.set(0,1.26,0.206); g.add(scr);
+
+  const led = box(0.07,0.92,0.03, mat({ color:0x0b1f26, roughness:.3,
+      emissive:new THREE.Color(0xffffff), emissiveIntensity:1.6 }), -0.24,0.78,0.19,g);
+  led.castShadow = false;
+  const glow = new THREE.PointLight(0xffffff, 0.55, 3.2, 2);
+  glow.position.set(-0.24,0.8,0.5); g.add(glow);
+  box(0.2,0.14,0.12,MAT.shellDk,0.19,1.02,0.2,g);
+
+  return { group:g, led, glow, screen,
+    outlet:new THREE.Vector3(x+0.19, 1.1, -2.1),
+    reader:new THREE.Vector3(x-0.11, 1.00, -2.12) };
+}
+const stations = STATION_X.map(buildStation);
+
+/* ===================== MAKINA ===================== */
+function buildCar(x, bodyMat, rot=0){
+  const g = new THREE.Group(); g.position.set(x,0,-0.5); g.rotation.y = rot; scene.add(g);
+  box(1.92,0.58,4.35,bodyMat,0,0.66,0,g);
+  box(1.70,0.30,3.30,bodyMat,0,1.02,-0.05,g);
+  box(1.56,0.46,2.05,MAT.glass,0,1.28,-0.12,g);
+  box(1.60,0.10,2.00,bodyMat,0,1.53,-0.12,g);
+  [[-0.98,1.42],[0.98,1.42],[-0.98,-1.42],[0.98,-1.42]].forEach(([wx,wz])=>{
+    cyl(0.35,0.35,0.22,20,MAT.rubber,wx,0.35,wz,g).rotation.z = Math.PI/2;
+    cyl(0.19,0.19,0.235,16,MAT.chrome,wx,0.35,wz,g).rotation.z = Math.PI/2;
+  });
+  const hl = mat({color:0xffffff,roughness:.2,emissive:new THREE.Color(0xdff4ff),emissiveIntensity:1.1});
+  box(0.42,0.11,0.06,hl,-0.62,0.78,2.19,g).castShadow = false;
+  box(0.42,0.11,0.06,hl, 0.62,0.78,2.19,g).castShadow = false;
+  box(1.30,0.09,0.05, mat({color:0x400d0d,roughness:.3,
+      emissive:new THREE.Color(0xff3b30),emissiveIntensity:.75}), 0,0.82,-2.19,g).castShadow = false;
+
+  const port = cyl(0.10,0.10,0.05,18,MAT.shellDk,-0.97,0.88,0.60,g);
+  port.rotation.z = Math.PI/2;
+  g.updateMatrixWorld(true);
+  const portWorld = port.getWorldPosition(new THREE.Vector3());
+
+  const ringMat = new THREE.MeshBasicMaterial({ color:P.brand, transparent:true, opacity:0, side:THREE.DoubleSide });
+  track.push(ringMat);
+  const ring = new THREE.Mesh(geo(new THREE.RingGeometry(0.20,0.28,36)), ringMat);
+  ring.position.copy(port.position); ring.position.x -= 0.16; g.add(ring);
+
+  const markMat = new THREE.MeshBasicMaterial({ color:P.brand, transparent:true, opacity:0 });
+  track.push(markMat);
+  const mark = new THREE.Group();
+  const cone = new THREE.Mesh(geo(new THREE.ConeGeometry(0.075,0.15,18)), markMat);
+  cone.rotation.x = Math.PI; cone.position.y = 0.44;
+  const stem = new THREE.Mesh(geo(new THREE.CylinderGeometry(0.006,0.006,0.28,8)), markMat);
+  stem.position.y = 0.25;
+  mark.add(cone, stem);
+  mark.position.copy(port.position); mark.position.x -= 0.14; g.add(mark);
+
+  return { group:g, portWorld, ring, ringMat, mark, markMat };
+}
+const heroCar = buildCar(BAY_X[0], MAT.carA);
+const car2    = buildCar(BAY_X[1], MAT.carB, 0.03);
+const car3    = buildCar(BAY_X[2], MAT.carC, -0.02);
+
+/* ===================== KARTA RFID ===================== */
+const cardMat   = mat({ color:P.brand, roughness:.34, transparent:true, opacity:0 });
+const stripeMat = mat({ color:0xffffff, roughness:.3, transparent:true, opacity:0 });
+const card = new THREE.Group(); scene.add(card);
+box(0.112,0.070,0.005,cardMat,0,0,0,card).castShadow = false;
+box(0.112,0.014,0.006,stripeMat,0,-0.018,0.001,card).castShadow = false;
+const CARD_FAR  = stations[0].reader.clone().add(new THREE.Vector3(-0.30,-0.18,0.44));
+const CARD_NEAR = stations[0].reader.clone().add(new THREE.Vector3(-0.01, 0.00,0.12));
+card.position.copy(CARD_FAR);
+
+const tapMat = new THREE.MeshBasicMaterial({ color:0x2f9bff, transparent:true, opacity:0, side:THREE.DoubleSide });
+track.push(tapMat);
+const tapRing = new THREE.Mesh(geo(new THREE.RingGeometry(0.065,0.088,32)), tapMat);
+tapRing.position.copy(stations[0].reader).add(new THREE.Vector3(0,0,0.03));
+tapRing.visible = false; scene.add(tapRing);
+
+/* ===================== KABLLI + SPINA ===================== */
+const HOME = stations[0].outlet.clone().add(new THREE.Vector3(0,-0.08,0.42));
+const plugPos = HOME.clone();
+const plug = new THREE.Group(); scene.add(plug);
+box(0.16,0.18,0.26,MAT.shellDk,0,0,0,plug);
+cyl(0.075,0.075,0.16,16,MAT.chrome,0,0,0.2,plug).rotation.x = Math.PI/2;
+box(0.10,0.10,0.05, mat({color:0x0b1f26,roughness:.4,
+    emissive:new THREE.Color(P.brand),emissiveIntensity:0}), 0,0.11,0, plug);
+
+const cableMat = mat({ color:0x101d24, roughness:.72 });
+let cableMesh = null, cableCurve = null;
+const lastPlug = new THREE.Vector3(1e9,0,0);
+function refreshCable(force=false){
+  if (!force && lastPlug.distanceToSquared(plugPos) < 2e-5) return;
+  lastPlug.copy(plugPos);
+  const a = stations[0].outlet, b = plugPos;
+  const sag = Math.min(0.55, 0.16 + a.distanceTo(b)*0.14);
+  cableCurve = new THREE.CatmullRomCurve3([
+    a,
+    a.clone().lerp(b,0.34).add(new THREE.Vector3(0,-sag,0)),
+    a.clone().lerp(b,0.68).add(new THREE.Vector3(0,-sag*0.72,0)),
+    b,
+  ]);
+  const g = new THREE.TubeGeometry(cableCurve, 44, 0.035, 10, false);
+  if (cableMesh){ cableMesh.geometry.dispose(); cableMesh.geometry = g; }
+  else { cableMesh = new THREE.Mesh(g, cableMat); cableMesh.castShadow = true; scene.add(cableMesh); }
+}
+refreshCable(true);
+
+const pulseMat = new THREE.MeshBasicMaterial({ color:0xd6ffa8, transparent:true, opacity:0 });
+track.push(pulseMat);
+const pulses = Array.from({length:7}, ()=>{
+  const s = new THREE.Mesh(geo(new THREE.SphereGeometry(0.058,12,10)), pulseMat);
+  scene.add(s); return s;
+});
+
+function sideCable(st, car){
+  const c = new THREE.CatmullRomCurve3([
+    st.outlet,
+    st.outlet.clone().lerp(car.portWorld,.35).add(new THREE.Vector3(0,-0.42,0)),
+    st.outlet.clone().lerp(car.portWorld,.7).add(new THREE.Vector3(0,-0.3,0)),
+    car.portWorld,
+  ]);
+  const m = new THREE.Mesh(geo(new THREE.TubeGeometry(c,34,0.033,8,false)),
+    mat({ color:0x101d24, roughness:.72, transparent:true, opacity:0 }));
+  m.castShadow = true; scene.add(m); return m;
+}
+const sideCables = [ sideCable(stations[1],car2), sideCable(stations[2],car3) ];
+
+/* ===================== PANELI I OPERATORIT ===================== */
+function dashboardTexture(){
+  const c = document.createElement('canvas'); c.width = 1600; c.height = 900;
+  const x = c.getContext('2d');
+  x.fillStyle='#f2f6f8'; x.fillRect(0,0,1600,900);
+  x.fillStyle='#10a2ac'; x.fillRect(0,0,1600,74);
+  x.fillStyle='#fff'; x.font='600 30px sans-serif'; x.fillText('RadX · Paneli i rrjetit', 40, 48);
+  x.fillStyle='#022636'; x.fillRect(40,104,1520,86);
+  x.fillStyle='#fff'; x.font='600 26px sans-serif';
+  x.fillText('Rrjeti punon. 3 gjëra kërkojnë kujdes.', 66, 156);
+  [['ENERGJIA SOT','6,780 kWh'],['TË ARDHURAT','259K ALL'],['SESIONE','249'],
+   ['KARIKON TANI','17'],['DISPONUESHËM','87.6%']].forEach(([k,v],i)=>{
+    const px = 40 + i*307;
+    x.fillStyle='#fff'; x.fillRect(px,214,287,124);
+    x.strokeStyle='#dfe7ea'; x.strokeRect(px,214,287,124);
+    x.fillStyle='#7b939c'; x.font='500 16px sans-serif'; x.fillText(k,px+20,248);
+    x.fillStyle='#022636'; x.font='700 36px monospace'; x.fillText(v,px+20,300);
+  });
+  x.fillStyle='#fff'; x.fillRect(40,362,1080,420);
+  x.strokeStyle='#dfe7ea'; x.strokeRect(40,362,1080,420);
+  x.fillStyle='#022636'; x.font='600 22px sans-serif'; x.fillText('Ngarkesa e rrjetit sot',68,402);
+  const pts=[.08,.13,.3,.34,.33,.55,.48,.5,.52,.42,.86,.88];
+  const path=()=>{ x.beginPath(); pts.forEach((v,i)=>{const gx=80+i*90,gy=740-v*300; i?x.lineTo(gx,gy):x.moveTo(gx,gy);}); };
+  path(); x.lineTo(80+(pts.length-1)*90,740); x.lineTo(80,740); x.closePath();
+  x.fillStyle='rgba(16,162,172,.18)'; x.fill();
+  path(); x.strokeStyle='#10a2ac'; x.lineWidth=4; x.stroke();
+  x.fillStyle='#fff'; x.fillRect(1150,362,410,420);
+  x.strokeStyle='#dfe7ea'; x.strokeRect(1150,362,410,420);
+  x.fillStyle='#022636'; x.font='600 22px sans-serif'; x.fillText('Shëndeti i rrjetit',1178,402);
+  x.beginPath(); x.arc(1355,560,92,-1.57,4.0); x.strokeStyle='#7fbc42'; x.lineWidth=26; x.stroke();
+  x.beginPath(); x.arc(1355,560,92,4.0,4.71); x.strokeStyle='#f0a33a'; x.stroke();
+  x.fillStyle='#022636'; x.font='700 42px monospace'; x.textAlign='center';
+  x.fillText('87.6%',1355,574); x.textAlign='left';
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; track.push(t); return t;
+}
+const panelMat = new THREE.MeshBasicMaterial({ map:dashboardTexture(), transparent:true, opacity:0, toneMapped:false });
+track.push(panelMat);
+const panel = new THREE.Mesh(geo(new THREE.PlaneGeometry(6.4,3.6)), panelMat);
+panel.position.set(0.4,3.6,-1.6); panel.rotation.x = -0.06; scene.add(panel);
+const frameMat = mat({ color:0x02222e, roughness:.4, metalness:.3, transparent:true, opacity:0 });
+const panelFrame = box(6.66,3.86,0.08,frameMat,0.4,3.6,-1.68);
+panelFrame.rotation.x = -0.06; panelFrame.castShadow = false;
+new THREE.TextureLoader().load('./assets/dashboard.png', tex=>{
+  tex.colorSpace = THREE.SRGBColorSpace; panelMat.map = tex; panelMat.needsUpdate = true; track.push(tex);
+}, undefined, ()=>{});
+
+/* ===================== SHTEGU I KAMERES ===================== */
+const camCurve = new THREE.CatmullRomCurve3(
+  CHAPTERS.map(c => new THREE.Vector3(...c.cam)), false, 'catmullrom', 0.3);
+const lookPts = CHAPTERS.map(c => new THREE.Vector3(...c.look));
+const lookNow = lookPts[0].clone();
+let chapter = 0, progress = 0, progFrom = 0, progTo = 0, progT = 1;
+const PROG_DUR = 1.6;
+const easeIO = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
+
+/* ===================== GJENDJA ===================== */
+const S = {
+  phase:'idle', connected:false,
+  kw:0, kwh:0, secs:0, soc:SOC_START,
+  graceLeft:GRACE_MIN*60, idleFee:0,
+  dragging:false, idle:0, autoDone:false,
+  ledColor:new THREE.Color(0xffffff), ledTarget:new THREE.Color(0xffffff),
+  ring:0, pulse:0, side:0, panel:0, cardOp:0, fault:0,
+};
+
+/* ===================== TELEFONI: NDERRIMI I EKRANEVE ===================== */
+const screens = {};
+document.querySelectorAll('.scr').forEach(el => screens[el.dataset.s] = el);
+let curScreen = null;
+function setScreen(name){
+  if (curScreen === name) return;
+  if (curScreen && screens[curScreen]) screens[curScreen].classList.remove('on');
+  curScreen = name;
+  if (screens[name]) screens[name].classList.add('on');
+  if (name === 'auth') runAuthChecks();
+  if (name === 'starting') runStartChecks();
+}
+function stagger(ids, gap=650){
+  ids.forEach((id,i)=>{
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('ok');
+    setTimeout(()=>{ if (curScreen==='auth'||curScreen==='starting') el.classList.add('ok'); }, 300+i*gap);
+  });
+}
+function runAuthChecks(){
+  stagger(['k1','k2','k3']);
+  const b = document.getElementById('authbtn');
+  b.style.opacity = .3; b.textContent = 'Po kontrollohet…';
+  setTimeout(()=>{ if (curScreen==='auth'){ b.style.opacity = 1; b.textContent = '✓ Gati për të nisur'; } }, 2400);
+}
+function runStartChecks(){ stagger(['k5'], 700); }
+
+/* ===================== KAPITUJT ===================== */
+function goTo(i, instant=false){
+  i = Math.max(0, Math.min(N-1, i));
+  chapter = i;
+  progFrom = progress; progTo = i/(N-1); progT = instant ? 1 : 0;
+  if (instant){ progress = progTo; lookNow.copy(lookPts[i]); }
+  onChapter(i);
+  renderUI();
+}
+function onChapter(i){
+  setScreen(CHAPTERS[i].screen);
+
+  if (i <= 1){ S.phase='idle';    S.ledTarget.setHex(0xffffff); }
+  if (i === 2){ S.phase='auth';   S.ledTarget.setHex(0x2f9bff); }
+  if (i === 3){ S.phase='start';  S.ledTarget.setHex(0x2f9bff); }
+  if (i === 4){ S.phase='connect';S.ledTarget.setHex(0x2f9bff); S.idle=0; }
+  if (i === 5){ if (!S.connected) snapPlug(true); S.phase='charging'; S.ledTarget.setHex(P.brand); }
+  if (i === 6){ if (!S.connected) snapPlug(true);
+                S.phase='full'; S.soc=100; S.kwh=Math.max(S.kwh,(100-SOC_START)/100*BATTERY);
+                S.ledTarget.setHex(P.warn); }
+  if (i >= 7 && i <= 8){ S.phase='done'; S.ledTarget.setHex(0x2f9bff); }
+  if (i === 9){ S.phase='charging'; S.ledTarget.setHex(P.brand); }
+  if (i === 10){ S.phase='charging'; S.ledTarget.setHex(P.brand); }
+  if (i === 11){ S.phase='done';  S.ledTarget.setHex(0x2f9bff); }
+
+  const dh = document.getElementById('draghint');
+  dh.classList.toggle('show', i===4);
+  if (i===4 && !S.connected){ dh.classList.remove('done'); dh.textContent='Tërhiq spinën me maus drejt makinës →'; }
+}
+function snapPlug(silent=false){
+  S.connected = true;
+  plugPos.copy(heroCar.portWorld).add(new THREE.Vector3(-0.16,0,0));
+  refreshCable(true); plug.rotation.y = Math.PI/2;
+  if (!silent){
+    const dh = document.getElementById('draghint');
+    dh.classList.add('done'); dh.textContent = '✓ Lidhur — energjia nisi';
+  }
+}
+const clock = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+const L = n => Math.round(n).toLocaleString('sq-AL');
+
+function renderUI(){
+  const c = CHAPTERS[chapter];
+  document.getElementById('c-step').innerHTML = `${c.sec} · <b>${chapter+1}</b> / ${N}`;
+  document.getElementById('c-title').textContent = c.title;
+  document.getElementById('c-body').textContent  = c.body;
+  document.getElementById('c-tech').textContent   = c.tech;
+  document.getElementById('btn-prev').disabled = chapter===0;
+  document.getElementById('btn-next').disabled = chapter===N-1;
+  [...document.querySelectorAll('#dots i')].forEach((d,i)=> d.classList.toggle('on', i===chapter));
+}
+
+/* ===================== TERHEQJA E SPINES ===================== */
+const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+const dragPlane = new THREE.Plane(new THREE.Vector3(0,1,0), -0.9);
+const hit = new THREE.Vector3(), mouse = { x:0, y:0 };
+function toNdc(e){
+  const r = canvas.getBoundingClientRect();
+  ptr.x = ((e.clientX-r.left)/r.width)*2-1;
+  ptr.y = -((e.clientY-r.top)/r.height)*2+1;
+  mouse.x = ptr.x; mouse.y = ptr.y;
+}
+canvas.addEventListener('pointerdown', e=>{
+  if (chapter!==4 || S.connected) return;
+  toNdc(e); ray.setFromCamera(ptr, camera);
+  if (!ray.intersectObjects(plug.children,false).length){
+    const sp = plug.position.clone().project(camera);
+    if (Math.hypot(sp.x-ptr.x, sp.y-ptr.y) > 0.10) return;
+  }
+  S.dragging = true; S.idle = 0; canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener('pointermove', e=>{
+  toNdc(e);
+  if (!S.dragging) return;
+  ray.setFromCamera(ptr, camera);
+  if (ray.ray.intersectPlane(dragPlane, hit)){
+    plugPos.set(THREE.MathUtils.clamp(hit.x,-4.2,3.4), 0.9, THREE.MathUtils.clamp(hit.z,-2.6,3.4));
+    S.idle = 0;
+  }
+});
+function endDrag(e){
+  if (!S.dragging) return;
+  S.dragging = false;
+  if (e?.pointerId!==undefined && canvas.hasPointerCapture?.(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+  if (plugPos.distanceTo(heroCar.portWorld) < 0.55) snapPlug();
+  else { plugPos.copy(HOME); refreshCable(true); }
+}
+canvas.addEventListener('pointerup', endDrag);
+canvas.addEventListener('pointercancel', endDrag);
+
+/* ===================== KONTROLLET ===================== */
+document.getElementById('btn-next').onclick = ()=> goTo(chapter+1);
+document.getElementById('btn-prev').onclick = ()=> goTo(chapter-1);
+const dotsEl = document.getElementById('dots');
+CHAPTERS.forEach((c,i)=>{
+  if (i>0 && c.sec !== CHAPTERS[i-1].sec) dotsEl.appendChild(document.createElement('u'));
+  const d = document.createElement('i'); d.onclick = ()=> goTo(i); dotsEl.appendChild(d);
+});
+const KEYMAP = ['1','2','3','4','5','6','7','8','9','0','-','='];
+window.addEventListener('keydown', e=>{
+  if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); goTo(chapter+1); }
+  else if (e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(chapter-1); }
+  else if (KEYMAP.includes(e.key)) goTo(KEYMAP.indexOf(e.key));
+  else if (e.key==='f'||e.key==='F'){ document.fullscreenElement ? document.exitFullscreen() : document.body.requestFullscreen(); }
+  else if (e.key==='r'||e.key==='R') restart();
+  else if (e.key==='t'||e.key==='T') document.getElementById('chapcard').classList.toggle('showtech');
+});
+function restart(){
+  S.connected=false; S.kw=0; S.kwh=0; S.secs=0; S.soc=SOC_START;
+  S.graceLeft=GRACE_MIN*60; S.idleFee=0; S.autoDone=false;
+  plugPos.copy(HOME); plug.rotation.y=0; refreshCable(true);
+  curScreen = null; goTo(0, true);
+}
+
+/* ===================== LOOP ===================== */
+const clk = new THREE.Clock();
+let lastW = 0, lastH = 0;
+const PHONE_PAD = () => (window.innerWidth > 980 ? (window.innerWidth > 1280 ? 200 : 150) : 0);
+
+function frame(){
+  const dt = Math.min(clk.getDelta(), 0.1);
+
+  /* resize + hapesira e telefonit ne te djathte */
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (w!==lastW || h!==lastH){
+    lastW = w; lastH = h;
+    renderer.setSize(w,h,false);
+    const pad = PHONE_PAD();
+    if (pad > 0){
+      camera.aspect = (w + 2*pad)/Math.max(1,h);
+      camera.setViewOffset(w + 2*pad, h, 2*pad, 0, w, h);
+    } else {
+      camera.aspect = w/Math.max(1,h);
+      camera.clearViewOffset();
+    }
+    camera.updateProjectionMatrix();
+  }
+
+  /* kamera */
+  if (progT < 1){
+    progT = Math.min(1, progT + dt/PROG_DUR);
+    progress = progFrom + (progTo-progFrom)*easeIO(progT);
+  }
+  const base = camCurve.getPoint(progress);
+  camera.position.set(base.x + mouse.x*0.30, base.y - mouse.y*0.15, base.z);
+  const seg = progress*(N-1), si = Math.min(N-2, Math.floor(seg));
+  lookNow.lerpVectors(lookPts[si], lookPts[si+1], easeIO(Math.min(1, seg-si)));
+  camera.lookAt(lookNow);
+
+  /* LED-et */
+  S.ledColor.lerp(S.ledTarget, Math.min(1, dt*3.2));
+  const puls = S.phase==='charging' ? 1.35 + Math.sin(clk.elapsedTime*3.4)*0.45 : 1.5;
+  stations[0].led.material.emissive.copy(S.ledColor);
+  stations[0].led.material.emissiveIntensity = puls;
+  stations[0].glow.color.copy(S.ledColor);
+
+  /* stacioni me problem (kapitulli 11) */
+  S.fault += ((chapter===10 ? 1 : 0) - S.fault) * Math.min(1, dt*3);
+  const faultOn = S.fault > 0.5;
+  const blink = 0.7 + Math.sin(clk.elapsedTime*6)*0.6;
+  stations[2].led.material.emissive.setHex(faultOn ? P.bad : (S.side>0.4 ? P.brand : 0xffffff));
+  stations[2].led.material.emissiveIntensity = faultOn ? blink : 1.5;
+  stations[2].glow.color.setHex(faultOn ? P.bad : (S.side>0.4 ? P.brand : 0xffffff));
+  stations[1].led.material.emissive.setHex(S.side>0.4 ? P.brand : 0xffffff);
+  stations[1].glow.color.setHex(S.side>0.4 ? P.brand : 0xffffff);
+
+  /* kapitulli 5: ndihmesa e terheqjes */
+  const inConnect = chapter===4 && !S.connected;
+  if (inConnect && !S.dragging){
+    S.idle += dt;
+    if (S.idle > 8 && !S.autoDone){
+      S.autoDone = true;
+      const from = plugPos.clone(), to = heroCar.portWorld.clone().add(new THREE.Vector3(-0.16,0,0));
+      let t = 0;
+      const glide = ()=>{
+        t = Math.min(1, t+0.02);
+        plugPos.lerpVectors(from, to, easeIO(t));
+        plugPos.y = 0.9 + Math.sin(t*Math.PI)*0.18;
+        refreshCable();
+        t<1 ? requestAnimationFrame(glide) : snapPlug();
+      };
+      glide();
+    }
+  }
+  const wantRing = inConnect ? (0.60 + Math.sin(clk.elapsedTime*3)*0.30) : 0;
+  S.ring += (wantRing - S.ring) * Math.min(1, dt*5);
+  heroCar.ringMat.opacity = S.ring;
+  heroCar.ring.scale.setScalar(1 + Math.sin(clk.elapsedTime*3)*0.07);
+  heroCar.ring.lookAt(camera.position);
+  heroCar.markMat.opacity = S.ring*1.05;
+  heroCar.mark.visible = S.ring > 0.02;
+  heroCar.mark.position.y = 0.88 + Math.sin(clk.elapsedTime*2.4)*0.05;
+
+  /* spina + kablli */
+  plug.position.lerp(plugPos, Math.min(1, dt*(S.connected?10:18)));
+  refreshCable();
+
+  /* simulimi */
+  if (S.phase==='charging' && S.connected){
+    const free = S.soc > 80 ? 62 - (S.soc-80)*1.6 : 62;
+    S.kw += ((chapter>=9 ? 55 : free) - S.kw) * Math.min(1, dt*0.9);
+    S.kwh += S.kw * dt * SPEED / 3600;
+    S.secs += dt * SPEED;
+    S.soc = Math.min(100, SOC_START + (S.kwh/BATTERY)*100);
+    if (S.soc >= 100 && chapter===5) S.phase = 'topped';
+    S.pulse += (0.95 - S.pulse) * Math.min(1, dt*3);
+  } else if (S.phase==='full'){
+    if (S.graceLeft > 0) S.graceLeft = Math.max(0, S.graceLeft - dt*SPEED);
+    else S.idleFee += (dt*SPEED/60) * IDLE_FEE;
+    S.kw += (0 - S.kw) * Math.min(1, dt*2.5);
+    S.pulse += (0 - S.pulse) * Math.min(1, dt*3);
+  } else {
+    S.kw += (0 - S.kw) * Math.min(1, dt*2.5);
+    S.pulse += (0 - S.pulse) * Math.min(1, dt*3);
+  }
+
+  pulseMat.opacity = S.pulse;
+  if (S.pulse > 0.02 && cableCurve){
+    const sp = clk.elapsedTime*0.34;
+    pulses.forEach((p,i)=>{ p.position.copy(cableCurve.getPoint((sp+i/pulses.length)%1)); p.visible = true; });
+  } else pulses.forEach(p=> p.visible = false);
+
+  /* sesionet e tjera */
+  S.side += ((chapter>=9 ? 1 : 0) - S.side) * Math.min(1, dt*2.4);
+  sideCables.forEach(c=>{ c.material.opacity = S.side; c.visible = S.side>0.02; });
+
+  /* paneli */
+  S.panel += ((chapter===11 ? 1 : 0) - S.panel) * Math.min(1, dt*2.6);
+  panelMat.opacity = S.panel; frameMat.opacity = S.panel*0.95;
+  panel.visible = panelFrame.visible = S.panel > 0.02;
+  panel.position.y = 3.6 + Math.sin(clk.elapsedTime*0.8)*0.045;
+  panelFrame.position.y = panel.position.y;
+
+  /* karta RFID */
+  S.cardOp += ((chapter===2 ? 1 : 0) - S.cardOp) * Math.min(1, dt*3);
+  cardMat.opacity = stripeMat.opacity = S.cardOp;
+  card.visible = S.cardOp > 0.02;
+  if (card.visible){
+    const tap = (clk.elapsedTime*0.55) % 1;
+    card.position.lerpVectors(CARD_FAR, CARD_NEAR, easeIO(Math.min(1, tap/0.5)));
+    card.position.y += Math.sin(clk.elapsedTime*2.2)*0.012;
+    card.rotation.set(-0.14, -0.16, -0.05);
+    if (tap > 0.5){
+      const rp = (tap-0.5)/0.5;
+      tapRing.visible = true; tapMat.opacity = (1-rp)*0.8*S.cardOp;
+      tapRing.scale.setScalar(0.7 + rp*2.4);
+    } else tapRing.visible = false;
+  } else tapRing.visible = false;
+
+  /* ekranet e karikuesve */
+  const ID0 = 'RDX-014 · C1';
+  if      (S.phase==='idle')     stations[0].screen.draw('I LIRË','—','#10a2ac',ID0);
+  else if (S.phase==='auth')     stations[0].screen.draw('AFRO KARTËN','Po kontrollohet','#2f9bff',ID0);
+  else if (S.phase==='start')    stations[0].screen.draw('PO NIS','Prit një moment','#2f9bff',ID0);
+  else if (S.phase==='connect')  stations[0].screen.draw(S.connected?'LIDHUR':'LIDH SPINËN', S.connected?'Gati':'Fut spinën','#2f9bff',ID0);
+  else if (S.phase==='charging') stations[0].screen.draw('KARIKON', Math.round(S.kw)+' kW','#7fbc42',ID0);
+  else if (S.phase==='topped'||S.phase==='full') stations[0].screen.draw('BATERIA PLOT','100%','#f0a33a',ID0);
+  else                           stations[0].screen.draw('MBARUAR', S.kwh.toFixed(1)+' kWh','#10a2ac',ID0);
+
+  const on = S.side > 0.4;
+  stations[1].screen.draw(on?'KARIKON':'I LIRË', on?'52 kW':'—', on?'#7fbc42':'#10a2ac','RDX-014 · C2');
+  stations[2].screen.draw(faultOn?'PA LIDHJE': (on?'KARIKON':'I LIRË'),
+                          faultOn?'Nuk përgjigjet': (on?'43 kW':'—'),
+                          faultOn?'#e2564a': (on?'#7fbc42':'#10a2ac'), 'RDX-021 · C1');
+
+  /* ===== TELEFONI: numrat live ===== */
+  const cost = S.kwh*TARIFF;
+  if (curScreen === 'charging'){
+    document.getElementById('ph-soc').textContent  = Math.round(S.soc);
+    document.getElementById('ph-arc').style.strokeDashoffset = String(427*(1-S.soc/100));
+    document.getElementById('ph-kw').textContent   = Math.round(S.kw)+' kW';
+    document.getElementById('ph-kwh').textContent  = S.kwh.toFixed(1)+' kWh';
+    document.getElementById('ph-time2').textContent= clock(S.secs);
+    document.getElementById('ph-cost').textContent = L(cost)+' L';
+  }
+  if (curScreen === 'full'){
+    document.getElementById('ph-grace').textContent = clock(S.graceLeft);
+    document.getElementById('ph-kwh2').textContent  = S.kwh.toFixed(1)+' kWh';
+    document.getElementById('ph-cost2').textContent = L(cost)+' L';
+    document.getElementById('ph-idle').textContent  = L(S.idleFee)+' L';
+  }
+  if (curScreen === 'paid'){
+    document.getElementById('ph-total').textContent  = L(cost)+' L';
+    document.getElementById('ph-wallet').textContent = L(Math.max(0, WALLET-cost))+' L';
+  }
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+/* ===================== NISJA ===================== */
+document.getElementById('ph-time').textContent =
+  new Intl.DateTimeFormat('sq-AL',{hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
+goTo(0, true);
+requestAnimationFrame(frame);
+setTimeout(()=> document.getElementById('boot').classList.add('hide'), 420);
+
+window.__demo = { goTo, restart, snapPlug, S, CHAPTERS, camera, scene, renderer, plug, plugPos, heroCar, stations,
+                  setScreen, get screen(){ return curScreen; } };
+
+window.addEventListener('beforeunload', ()=>{
+  track.forEach(o => o.dispose && o.dispose());
+  cableMesh?.geometry.dispose();
+  renderer.dispose();
+});
+</script>
+</body>
+</html>
