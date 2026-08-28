@@ -122,6 +122,36 @@ dhe ekranet e app-it ndryshohen si një faqe web normale.
 
 ---
 
+## Hosting (Vercel / Netlify)
+
+Live: **https://radx-3d-demo.vercel.app/** · repo: `github.com/riza-radx/radx-3d-demo`
+
+`vercel.json` bën që `/` të shërbejë `radx-prezantim.html` (nuk ka `index.html` në root).
+
+### Kurthi që na kushtoi një deploy
+
+Vercel-i, kur pa **`server.js` në root**, e ndërtoi projektin si **aplikacion Node**
+në vend të faqes statike. Rezultati: `/` kthente HTML-in e saktë, por `vendor/three.module.js`
+kthente **404**, kështu që faqja mbetej te ekrani "PO NGARKOHET".
+
+Shenja që e identifikon: trupi i 404-s është `404 — /vendor/three.module.js` —
+ai tekst është nga `server.js`, jo nga Vercel. Domethënë serveri lokal po ekzekutohej në cloud.
+
+Zgjidhja: **`.vercelignore`** që përjashton `server.js`, `nis.cmd`, `build-single.js` dhe `dist/`.
+Ata i duhen vetëm prezantimit lokal. **Mos e hiq `.vercelignore`.**
+
+### Alternativa: një skedar i vetëm
+
+```bash
+node build-single.js
+```
+Prodhon `dist/index.html` — Three.js i futur brenda, pa asnjë varësi. Tërhiqe
+dosjen `dist/` te [app.netlify.com/drop](https://app.netlify.com/drop) dhe merr link
+menjëherë, ose `cd dist && npx vercel --prod`. `dist/` është në `.gitignore` —
+rigjenerohet, nuk ruhet në repo.
+
+---
+
 ## Debug
 
 ```js
