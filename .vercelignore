@@ -5,3 +5,7 @@ server.js
 nis.cmd
 build-single.js
 dist/
+
+# Burimet e dizajnit — 27 MB qe Vercel-i nuk i shperndan kurre.
+PDF-Presentation.pdf
+Render Me_2.mp4

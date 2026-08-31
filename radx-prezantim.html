@@ -10,13 +10,13 @@
   :root{
     --brand:#7fbc42;
     --brand-dk:#4e7a26;
-    --teal:#10a2ac;
+    --teal:#00a3b9;      /* vlera e sakte e markes (PDF + piksel i pamjeve) */
     --navy:#022636;
-    --navy-2:#04384d;
+    --navy-2:#08435d;    /* vlera e sakte e markes */
     --ink:#eaf4f7;
     --dim:#8fb0bb;
     --warn:#f0a33a;
-    --bad:#e2564a;
+    --bad:#ff7979;       /* vlera e sakte e markes */
     --card:rgba(2,38,54,.84);
     --line:rgba(143,176,187,.22);
     --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",monospace;
@@ -33,9 +33,13 @@
   .clickable{pointer-events:auto}
 
   /* ================= LOGO ================= */
-  .brandmark{position:absolute;top:26px;left:34px;display:flex;align-items:baseline;gap:12px}
-  .brandmark b{font-size:25px;font-weight:700;letter-spacing:-.5px}
-  .brandmark b i{color:var(--brand);font-style:normal}
+  /* Logo: unaza me pika + fjala RADX, si te video-ja e brandit.
+     Fonti origjinal (gjeometrik, A pa traversë) nuk e kemi — e afrojme me
+     letter-spacing te hapur; teksti mbetet i bardhe, unaza gjithashtu. */
+  .brandmark{position:absolute;top:24px;left:34px;display:flex;align-items:center;gap:11px}
+  .rmark{width:1em;height:1em;fill:currentColor;flex:0 0 auto}
+  .brandmark .rmark{font-size:27px;color:#fff}
+  .brandmark b{font-size:23px;font-weight:600;letter-spacing:.09em;line-height:1}
   .brandmark span{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
 
   /* ================= KARTA E KAPITULLIT ================= */
@@ -79,12 +83,65 @@
      kane nevoje vetem per transform-in e vet. */
   body.wide .phone{opacity:0;pointer-events:none;transform:translateY(-50%) translateX(54px) scale(.97)}
 
+  /* Telefoni tani ESHTE pamja e app-it: pamjet te assets/app/ permbajne edhe
+     trupin e pajisjes, keshtu qelqi, notch-i dhe shiriti i vjeter u hoqen.
+     Rregullat e vjetra te brendesise (.glass, .sbar, .appbar, .row, .pin …)
+     mbeten ne CSS por nuk kane me element — nuk prekin gje. */
   .phone{
     position:absolute;right:40px;top:50%;transform:translateY(-50%);
     transition:opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1);
-    width:322px;height:648px;border-radius:42px;
-    background:linear-gradient(160deg,#1a2b33,#0a161c);
-    padding:11px;box-shadow:0 40px 90px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.07);
+    width:322px;height:648px;padding:0;background:none;border-radius:0;
+    filter:drop-shadow(0 38px 60px rgba(0,0,0,.62));
+  }
+
+  /* Kutia me raportin e sakte te pamjes (978x2000). Shtresat e numrave live
+     pozicionohen ne % te KESAJ kutie, jo te .phone — kështu nuk varen nga
+     permasat e breakpoint-it. container-type e ben fontin te shkallohet. */
+  .pscreen{
+    position:absolute;inset:0;margin:auto;
+    aspect-ratio:489/1000;max-width:100%;max-height:100%;
+    container-type:size;
+  }
+  .pimg{
+    position:absolute;inset:0;width:100%;height:100%;display:block;
+    opacity:0;transition:opacity .45s ease;
+  }
+  .pimg.on{opacity:1}
+
+  /* --- Shtresa e karikimit: mbulon ishullin e zi dhe e rishkruan me numra
+         qe rrjedhin. Zona nga 8% ne 29% e lartesise eshte #000000 e plote
+         (matur me skanim pikselesh), keshtu buzet nuk dallohen. --- */
+  .ov{position:absolute;opacity:0;transition:opacity .3s;pointer-events:none}
+  .ov.on{opacity:1}
+
+  .ov-charge{
+    left:7%;width:86%;top:8%;height:21%;
+    background:#000;color:#fff;font-weight:700;
+  }
+  .ov-big{
+    position:absolute;left:5%;top:24%;
+    font-size:19px;font-size:6.1cqw;letter-spacing:-.5px;line-height:1;white-space:nowrap;
+  }
+  .ov-sub{
+    position:absolute;left:5%;top:47%;
+    font-size:8px;font-size:2.5cqw;font-weight:500;color:#d7dee1;white-space:nowrap;
+  }
+  .ov-ring{position:absolute;right:5%;top:12%;width:20%;aspect-ratio:1}
+  .ov-btn{
+    position:absolute;left:5%;right:5%;bottom:3%;height:23%;
+    background:#07435d;border-radius:999px;display:grid;place-items:center;
+    font-size:9px;font-size:2.9cqw;letter-spacing:.2px;
+  }
+
+  /* --- Shtresa e fundit: mbulon vetem rreshtin e vlerave te kartes se bardhe.
+         Etiketat mbi te (Energy deliverd / Total Payed) mbeten te pamjes. --- */
+  .ov-done{
+    left:11.5%;width:67%;top:71.4%;height:3.4%;
+    background:#fff;display:grid;grid-template-columns:68% 32%;align-items:center;
+  }
+  .ov-done b{
+    font-size:15px;font-size:4.7cqw;font-weight:600;color:#08435d;
+    letter-spacing:-.3px;line-height:1;white-space:nowrap;
   }
   .phone .glass{
     position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;
@@ -217,9 +274,15 @@
 
   #boot{position:fixed;inset:0;z-index:9;display:grid;place-items:center;background:var(--navy);transition:opacity .6s}
   #boot.hide{opacity:0;pointer-events:none}
-  #boot b{font-size:34px;letter-spacing:-1px}
-  #boot b i{color:var(--brand);font-style:normal}
-  #boot p{margin-top:10px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);text-align:center}
+  #boot .block{display:flex;align-items:center;gap:16px;justify-content:center}
+  #boot .rmark{font-size:44px;color:#fff}
+  #boot b{font-size:40px;font-weight:600;letter-spacing:.1em;line-height:1}
+  /* Tagline-i i video-s, me shkelqimin e vet. */
+  #boot p.tag{
+    margin-top:16px;font-size:13px;letter-spacing:.26em;text-transform:uppercase;
+    color:#eaf4f7;text-align:center;
+    text-shadow:0 0 26px rgba(234,244,247,.55), 0 0 60px rgba(0,163,185,.45);
+  }
 
   /* butoni i ekranit të plotë — vetëm në pajisje me prekje */
   .fs{
@@ -239,11 +302,12 @@
          (orientation:landscape) and (max-height:520px){
     .keys{display:none}
     .fs{display:grid}
-    .brandmark{top:13px;left:16px}
-    .brandmark b{font-size:19px}
+    .brandmark{top:13px;left:16px;gap:8px}
+    .brandmark .rmark{font-size:21px}
+    .brandmark b{font-size:18px}
     .brandmark span{display:none}
 
-    .phone{width:262px;right:auto;padding:9px;border-radius:34px}
+    .phone{width:262px;right:auto;padding:0}
     .phone .glass{border-radius:27px}
     .phone .notch{width:74px;height:17px;top:7px}
     .sbar{height:32px;padding:0 15px;font-size:10.5px}
@@ -332,8 +396,17 @@
 
 <canvas id="scene"></canvas>
 
+<!-- Unaza e logos RadX, njehere, e riperdorur me <use>. viewBox i korrigjuar:
+     asseti radx-white.svg ne RadX-Frontend e ka te gabuar dhe del bosh. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><path id="radx-ring" d="M350,443.5c-.3-1.9-1.3-3.1-3.1-3a2.79,2.79,0,0,0-2.9,3.1,2.84,2.84,0,0,0,3.1,2.9C349,446.4,349.8,445.1,350,443.5Zm.7-7.8a1.79,1.79,0,0,0,1.5-2.1,1.87,1.87,0,0,0-2.2-1.9,1.81,1.81,0,0,0-1.7,2C348.3,434.9,348.9,435.8,350.7,435.7Zm-65-66.1a8.86,8.86,0,0,0-8.8-9,9.14,9.14,0,0,0-9.1,8.8,9,9,0,0,0,9.1,9.1A8.71,8.71,0,0,0,285.7,369.6Zm16,111.6a9,9,0,0,0,9-8.8,9,9,0,1,0-9,8.8Zm-73.1-48.3a9,9,0,0,0,17.9.3,9.16,9.16,0,0,0-8.9-9.1A8.73,8.73,0,0,0,228.6,432.9Zm112.5-15.1a9,9,0,1,0-9-8.8A8.92,8.92,0,0,0,341.1,417.8Zm2.6,12.9c0-4-3.3-7.6-7.2-7.6a7.51,7.51,0,0,0-7.4,7.4,7.3,7.3,0,0,0,14.6.2ZM242,418.6a7.39,7.39,0,0,0,7.5-7,7.36,7.36,0,1,0-7.5,7Zm63.8-44.2a7.91,7.91,0,0,0-7.5-7.5,7.77,7.77,0,0,0-7.3,7.3,7.4,7.4,0,0,0,14.8.2ZM323,474.9a7.53,7.53,0,0,0,7.3-7.2,7.4,7.4,0,0,0-14.8-.1A7.52,7.52,0,0,0,323,474.9Zm-80.9-28.1a7.35,7.35,0,1,0,.2,14.7,7.53,7.53,0,0,0,7.3-7.2A7.69,7.69,0,0,0,242.1,446.8Zm101.6-59a7.35,7.35,0,0,0-14.7,0,7,7,0,0,0,7.4,7.2A7.13,7.13,0,0,0,343.7,387.8Zm-56.2,79.9a7.3,7.3,0,1,0-14.6-.1,7.12,7.12,0,0,0,7.4,7.3A7.37,7.37,0,0,0,287.5,467.7Zm-24.6-93.3a7.51,7.51,0,0,0-7.4-7.4,7.6,7.6,0,0,0-7.2,7.3,7.3,7.3,0,1,0,14.6.1Zm67.2,71.3a5.1,5.1,0,1,0-5,5.1A5,5,0,0,0,330.1,445.7Zm-76.6-44.4a5.12,5.12,0,0,0,5.1-5.1,5.28,5.28,0,0,0-5-5.3,5.2,5.2,0,0,0-.1,10.4Zm84.8,49.9a4.91,4.91,0,0,0-5,5.1,5.06,5.06,0,0,0,5.2,5,5.42,5.42,0,0,0,5.1-5.2A5.34,5.34,0,0,0,338.3,451.2ZM325,377.5a5.1,5.1,0,0,0,5.1-5,4.92,4.92,0,0,0-5-5.1,5.06,5.06,0,0,0-5.2,5A5.19,5.19,0,0,0,325,377.5Zm-16.5,7.7a5.19,5.19,0,0,0,4.6,5.5,5,5,0,0,0,5.5-4.6,5.09,5.09,0,0,0-4.6-5.6A5.49,5.49,0,0,0,308.5,385.2Zm-54.9,79.2a5.12,5.12,0,0,0-5.1,5.1,5,5,0,0,0,5,5.1,5.26,5.26,0,0,0,5.2-5A5.42,5.42,0,0,0,253.6,464.4Zm-13.5-83.8a5.1,5.1,0,0,0,.1,10.2,5.33,5.33,0,0,0,5.1-5.1A5.21,5.21,0,0,0,240.1,380.6Zm24.7,70.6a5,5,0,0,0-5,5.1,5.12,5.12,0,0,0,5.2,5,5.19,5.19,0,0,0,5-5.2A4.92,4.92,0,0,0,264.8,451.2Zm50.4-87.8c-.3-1.8-1.4-2.9-3.2-2.8a2.76,2.76,0,0,0-2.8,2.9,2.86,2.86,0,0,0,3.1,3C314,366.6,315.1,365.4,315.2,363.4Zm6.5,31.9c-1.6.3-2.9,1.3-2.8,3.2a3,3,0,1,0,6-.1A3,3,0,0,0,321.7,395.3Zm-6.5,58.8c-.2-1.9-1.2-3.1-3.1-3a3,3,0,0,0,0,5.9A2.89,2.89,0,0,0,315.2,454.1Zm-86.6-55.6a3,3,0,0,0,6-.1,2.79,2.79,0,0,0-3.1-3.1C229.6,395.4,228.6,396.5,228.6,398.5Zm37.5,82.8c2,0,3.2-1,3.2-2.9a2.92,2.92,0,0,0-2.9-3.2,2.78,2.78,0,0,0-3.1,2.9C263.3,480,264.3,481.2,266.1,481.3Zm.6-90.4a2.69,2.69,0,0,0,2.6-3,3,3,0,1,0-5.9.2C263.5,389.9,264.5,390.9,266.7,390.9Zm-9.9,49.5c-1.7.3-3,1.1-3,3a2.66,2.66,0,0,0,2.9,3,2.89,2.89,0,0,0,3.1-2.9C259.8,441.8,258.6,440.8,256.8,440.4Zm-28.4-30.2c1.3-.2,2-.9,1.9-2.2a1.84,1.84,0,0,0-2-1.8,1.87,1.87,0,0,0-2.1,2A2.19,2.19,0,0,0,228.4,410.2Zm96.6-4.1a2,2,0,1,0,0,4,1.76,1.76,0,0,0,1.9-1.8A2,2,0,0,0,325,406.1Zm-47.1,75.2a1.8,1.8,0,0,0-2.1-1.9,1.76,1.76,0,0,0-1.8,1.9,1.87,1.87,0,0,0,2,2.1A1.85,1.85,0,0,0,277.9,481.3Zm26.8-120.7c-.2-1.2-.7-2.1-2.1-2.1a1.9,1.9,0,0,0-2,1.8,2,2,0,0,0,1.8,2.3C303.8,362.7,304.3,361.8,304.7,360.6Zm-49,73.4a2,2,0,0,0-1.8-2.3,1.92,1.92,0,0,0-2.2,1.9,1.89,1.89,0,0,0,1.7,2.1C254.7,435.9,255.4,435.3,255.7,434Zm20-51c-1.1.1-1.6.9-1.5,2.2a1.84,1.84,0,0,0,2,1.8,1.87,1.87,0,0,0,2-2.1C278.1,383.7,277.3,382.9,275.7,383Zm29,73.9c-.3-1-.7-2-1.9-2a2,2,0,0,0-2.2,2.2,1.84,1.84,0,0,0,2,1.8C303.9,459,304.4,458.1,304.7,456.9Z"/></defs>
+</svg>
+
 <div id="ui">
-  <div class="brandmark"><b>Rad<i>X</i></b><span>Prezantim</span></div>
+  <div class="brandmark">
+    <svg class="rmark" viewBox="226.19 358.50 126.04 124.91" aria-hidden="true"><use href="#radx-ring"/></svg>
+    <b>RADX</b><span>Prezantim</span>
+  </div>
   <button class="fs clickable" id="btn-fs" aria-label="Ekran i plotë">⛶</button>
 
   <div class="keys">
@@ -342,221 +415,39 @@
   </div>
 
   <!-- ===================== TELEFONI ===================== -->
+  <!-- ===================== TELEFONI =====================
+       Ekranet jane pamjet reale te app-it RadX, nxjerre nga PDF-ja e dizajnit
+       (assets/app/ — shih README-n atje). Vendim i Rizes: bazohemi mbi ato,
+       nuk shpikim ekrane. Numrat mbi ekranet e app-it jane dummy; te dy
+       ekranet ku numrat duhen te rrjedhin i mbulojme me shtresa HTML. -->
   <div class="phone">
-    <div class="glass">
-      <div class="notch"></div>
-      <div class="sbar">
-        <span id="ph-time">14:27</span>
-        <span class="rt"><span>◾◾◾</span><span class="bat"></span></span>
+    <div class="pscreen">
+      <img class="pimg" data-s="map"      src="./assets/app/01-harta.jpg" alt="">
+      <img class="pimg" data-s="charger"  src="./assets/app/02-detaji-pikes.jpg" alt="">
+      <img class="pimg" data-s="sheet"    src="./assets/app/03-fleta-pikes.jpg" alt="">
+      <img class="pimg" data-s="charging" src="./assets/app/07-karikimi.jpg" alt="">
+      <img class="pimg" data-s="done"     src="./assets/app/08-karikimi-mbaroi.jpg" alt="">
+      <img class="pimg" data-s="wallet"   src="./assets/app/09-portofoli.jpg" alt="">
+      <img class="pimg" data-s="list"     src="./assets/app/04-lista-pikave.jpg" alt="">
+      <img class="pimg" data-s="myev"     src="./assets/app/11-makina-ime.jpg" alt="">
+
+      <div class="ov ov-charge" id="ov-charge">
+        <div class="ov-big" id="ov-big">50% — 150 Km</div>
+        <div class="ov-sub" id="ov-sub">01:29:58 to finish</div>
+        <svg class="ov-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="41" fill="none" stroke="#2a3134" stroke-width="11"/>
+          <circle id="ov-arc" cx="50" cy="50" r="41" fill="none" stroke="#00a3b9" stroke-width="11"
+                  stroke-linecap="round" stroke-dasharray="257.6" stroke-dashoffset="129"
+                  transform="rotate(-90 50 50)"/>
+          <rect x="42" y="38" width="16" height="24" rx="3" fill="none" stroke="#8b989c" stroke-width="3"/>
+          <rect id="ov-batt" x="44" y="50" width="12" height="10" fill="#00a3b9"/>
+        </svg>
+        <div class="ov-btn" id="ov-btn">Stop Charging ⚡</div>
       </div>
-      <div class="appbar"><b>Rad<i>X</i></b><span id="ph-ctx">Tiranë</span></div>
 
-      <div class="screens">
-
-        <!-- 1 · harta -->
-        <div class="scr" data-s="map">
-          <div class="map">
-            <div class="road" style="left:0;right:0;top:118px;height:9px"></div>
-            <div class="road" style="left:0;right:0;top:300px;height:7px"></div>
-            <div class="road" style="top:0;bottom:0;left:96px;width:9px"></div>
-            <div class="road" style="top:0;bottom:0;left:198px;width:7px"></div>
-            <div class="pin free" style="left:74px;top:150px"><s>2</s></div>
-            <div class="pin busy" style="left:168px;top:92px"><s>0</s></div>
-            <div class="pin free" style="left:212px;top:246px"><s>4</s></div>
-            <div class="pin busy" style="left:52px;top:322px"><s>0</s></div>
-            <div class="pin free" style="left:158px;top:372px"><s>1</s></div>
-            <div class="pin me" style="left:110px;top:196px"><s>◎</s></div>
-          </div>
-          <div class="maptop"><span>Pika karikimi pranë meje</span><b style="font-family:var(--mono)">12</b></div>
-          <div class="mapbot">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div><b style="font-size:14px">RDX-014 · Rruga e Kavajës</b>
-                   <div style="font-size:11.5px;color:var(--dim);margin-top:3px">240 m · 2 vende të lira</div></div>
-              <span class="pill">I LIRË</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2 · detaji i karikuesit -->
-        <div class="scr" data-s="charger">
-          <div class="h">Pika e karikimit</div>
-          <div style="font-size:19px;font-weight:700;line-height:1.2">RDX-014</div>
-          <div style="font-size:12.5px;color:var(--dim);margin-top:4px">Rruga e Kavajës · 240 m</div>
-          <div style="display:flex;gap:7px;margin:13px 0"><span class="pill">2 VENDE</span><span class="pill t">1 I LIRË</span></div>
-          <div class="sep"></div>
-          <div class="row big"><span>Çmimi për ty</span><b>35<u style="font-size:11px;color:var(--dim);text-decoration:none"> L/kWh</u></b></div>
-          <div class="row"><span>Vlen për orën</span><b>14:00–16:00</b></div>
-          <div class="row"><span>Fuqia maksimale</span><b>60 kW</b></div>
-          <div class="row"><span>Portofoli i tij</span><b>2,400 L</b></div>
-          <div class="btn">Nis karikimin</div>
-        </div>
-
-        <!-- 3 · kontrolli -->
-        <div class="scr" data-s="auth">
-          <div class="h">Po kontrollohet</div>
-          <div class="chk" id="k1"><em>✓</em><div>Kush është<u>Kartela e njohur · llogari aktive</u></div></div>
-          <div class="chk" id="k2"><em>✓</em><div>Çfarë çmimi i takon<u>35 L/kWh sipas marrëveshjes së kompanisë</u></div></div>
-          <div class="chk" id="k3"><em>✓</em><div>Sa para ka<u>2,400 L — mbulon karikimin</u></div></div>
-          <div class="sep"></div>
-          <div style="font-size:12px;color:var(--dim);line-height:1.5">
-            Nëse ndonjëra bie, karikimi nuk nis — dhe shoferi merr arsyen e saktë, nuk mbetet duke pyetur.
-          </div>
-          <div class="btn" id="authbtn" style="opacity:.3">Gati</div>
-        </div>
-
-        <!-- 4 · nisja -->
-        <div class="scr" data-s="starting">
-          <div class="h">Po nis</div>
-          <div style="margin-top:24px">
-            <div class="chk ok"><em>✓</em><div>Kërkesa iku te karikuesi<u>brenda një sekonde</u></div></div>
-            <div class="chk ok" id="k4"><em>✓</em><div>Karikuesi u përgjigj<u>e pranoi — vendi është i tij tani</u></div></div>
-            <div class="chk" id="k5"><em>✓</em><div>Sesioni u hap<u>ora dhe matësi nisën</u></div></div>
-          </div>
-          <div class="sep"></div>
-          <div style="font-size:12px;color:var(--dim);line-height:1.5">
-            Vendi rezervohet për të për 60 sekonda, sa të lidhë spinën.
-          </div>
-        </div>
-
-        <!-- 5 · lidh spinën -->
-        <div class="scr" data-s="connect">
-          <div class="h">Hapi i radhës</div>
-          <div style="text-align:center;margin-top:40px">
-            <div style="font-size:52px">🔌</div>
-            <div style="font-size:19px;font-weight:700;margin-top:14px">Lidh spinën</div>
-            <div style="font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.5">
-              Karikuesi po pret. Kur spina hyn, energjia nis vetë.
-            </div>
-            <div class="pill w" style="margin-top:18px">DUKE PRITUR</div>
-          </div>
-        </div>
-
-        <!-- 6 · karikimi -->
-        <div class="scr" data-s="charging">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="h" style="margin:0">Po karikon</div><span class="pill" id="ph-live">● LIVE</span>
-          </div>
-          <div class="ring">
-            <svg width="158" height="158">
-              <circle cx="79" cy="79" r="68" fill="none" stroke="rgba(143,176,187,.16)" stroke-width="13"/>
-              <circle id="ph-arc" cx="79" cy="79" r="68" fill="none" stroke="#7fbc42" stroke-width="13"
-                      stroke-linecap="round" stroke-dasharray="427" stroke-dashoffset="427"/>
-            </svg>
-            <div class="mid"><b id="ph-soc">22</b><span>Bateria</span></div>
-          </div>
-          <div class="row"><span>Fuqia tani</span><b id="ph-kw">0 kW</b></div>
-          <div class="row"><span>Energjia</span><b id="ph-kwh">0.0 kWh</b></div>
-          <div class="row"><span>Kohëzgjatja</span><b id="ph-time2">00:00</b></div>
-          <div class="row"><span>Kostoja</span><b id="ph-cost">0 L</b></div>
-          <div class="btn ghost">Ndalo karikimin</div>
-        </div>
-
-        <!-- 7 · bateria plot -->
-        <div class="scr" data-s="full">
-          <div class="push">
-            <b>Bateria është 100%</b>
-            <span>Ke <b id="ph-grace" style="font-family:var(--mono)">10:00</b> pa pagesë për të lëvizur makinën.</span>
-          </div>
-          <div class="sep"></div>
-          <div class="row"><span>Energjia e marrë</span><b id="ph-kwh2">33.0 kWh</b></div>
-          <div class="row"><span>Kostoja e karikimit</span><b id="ph-cost2">1,155 L</b></div>
-          <div class="sep"></div>
-          <div class="row"><span>Tarifa e vendit</span><b id="ph-idle">0 L</b></div>
-          <div style="font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:6px">
-            Pas 10 minutash, 4 L për minutë — për vendin që zë, jo për energji.
-          </div>
-          <div class="btn">Shkëpute dhe largohu</div>
-        </div>
-
-        <!-- 8 · pagesa -->
-        <div class="scr" data-s="paid">
-          <div class="h">Sesioni u mbyll</div>
-          <div style="text-align:center;margin:16px 0 6px">
-            <div style="font-size:44px">✅</div>
-            <div style="font-family:var(--mono);font-size:34px;font-weight:700;letter-spacing:-1.5px;margin-top:8px" id="ph-total">1,155 L</div>
-            <div style="font-size:11.5px;color:var(--dim);margin-top:4px">u zbrit nga portofoli</div>
-          </div>
-          <div class="sep"></div>
-          <div class="row"><span>Portofoli më parë</span><b>2,400 L</b></div>
-          <div class="row"><span>Portofoli tani</span><b id="ph-wallet" style="color:var(--brand)">1,245 L</b></div>
-          <div class="sep"></div>
-          <div style="font-size:11.5px;color:var(--dim);line-height:1.5">
-            Nëse portofoli nuk mbulonte të gjithë, diferenca mbetej e regjistruar si detyrim —
-            karikimi nuk ndalej në gjysmë.
-          </div>
-        </div>
-
-        <!-- 9 · fatura -->
-        <div class="scr" data-s="invoice">
-          <div class="h">Fatura</div>
-          <div class="inv">
-            <div class="t">Faturë zyrtare</div>
-            <div class="r"><span>Energjia</span><b>33.0 kWh</b></div>
-            <div class="r"><span>Çmimi</span><b>35 L / kWh</b></div>
-            <div class="r"><span>Pika</span><b>RDX-014</b></div>
-            <div class="r"><span>Data</span><b>28.08.2026</b></div>
-            <div class="r tot"><span>Total</span><b>1,155 L</b></div>
-          </div>
-          <div style="display:flex;gap:7px;margin-top:12px"><span class="pill">✓ E LËSHUAR</span><span class="pill t">DËRGUAR ME EMAIL</span></div>
-          <div style="font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:11px">
-            Brenda të njëjtës ditë, pa e shkruar njeri me dorë.
-          </div>
-        </div>
-
-        <!-- 10 · fuqia e ndarë -->
-        <div class="scr" data-s="shared">
-          <div class="h">Pika është plot</div>
-          <div class="push" style="border-color:rgba(240,163,58,.45)">
-            <b>Fuqia u ndau mes tre makinave</b>
-            <span>Karikimi vazhdon më ngadalë, por nuk ndalet.</span>
-          </div>
-          <div style="margin-top:14px">
-            <div class="sh"><div class="lb"><span>Makina e tij</span><b>55 kW</b></div><div class="tr"><i style="width:37%;background:#7fbc42"></i></div></div>
-            <div class="sh"><div class="lb"><span>Makina 2</span><b>52 kW</b></div><div class="tr"><i style="width:35%;background:#10a2ac"></i></div></div>
-            <div class="sh"><div class="lb"><span>Makina 3</span><b>43 kW</b></div><div class="tr"><i style="width:28%;background:#f0a33a"></i></div></div>
-          </div>
-          <div class="sep"></div>
-          <div class="row"><span>Sa mban pika</span><b>150 kW</b></div>
-          <div class="row"><span>Sa po jep tani</span><b style="color:var(--brand)">150 kW</b></div>
-        </div>
-
-        <!-- 11 · problem -->
-        <div class="scr" data-s="problem">
-          <div class="h">Nuk u nis</div>
-          <div class="push" style="border-color:rgba(226,86,74,.5)">
-            <b>Karikuesi nuk përgjigjet</b>
-            <span>Nuk u hoq gjë nga portofoli. Provo pikën më të afërt.</span>
-          </div>
-          <div class="mapbot" style="position:static;margin-top:14px">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div><b style="font-size:13.5px">RDX-021 · Bulevardi</b>
-                   <div style="font-size:11.5px;color:var(--dim);margin-top:3px">200 m · 3 vende të lira</div></div>
-              <span class="pill">I LIRË</span>
-            </div>
-          </div>
-          <div class="sep"></div>
-          <div class="row"><span>Operatori u njoftua</span><b class="pill b" style="font-family:var(--sans)">MENJËHERË</b></div>
-          <div style="font-size:11.5px;color:var(--dim);line-height:1.5;margin-top:8px">
-            Me gjithë gjurmën e çfarë ndodhi, kur, dhe në cilin vend.
-          </div>
-        </div>
-
-        <!-- 12 · fund -->
-        <div class="scr" data-s="thanks">
-          <div class="h">Historiku</div>
-          <div class="row"><span>Sot · RDX-014</span><b>1,155 L</b></div>
-          <div class="row"><span>22.08 · RDX-007</span><b>860 L</b></div>
-          <div class="row"><span>14.08 · RDX-014</span><b>1,420 L</b></div>
-          <div class="sep"></div>
-          <div style="text-align:center;margin-top:26px">
-            <div style="font-size:15px;font-weight:700">Gjithçka e njëjtë</div>
-            <div style="font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.5">
-              Numrat që shikon shoferi janë të njëjtët që shikon operatori.
-              Një e vërtetë, dy pamje.
-            </div>
-          </div>
-        </div>
-
+      <div class="ov ov-done" id="ov-done">
+        <b><span id="ov-kwh">33.0</span> kWh</b>
+        <b><span id="ov-cost">1155</span> ALL</b>
       </div>
     </div>
   </div>
@@ -576,7 +467,13 @@
   </div>
 </div>
 
-<div id="boot"><div><b>Rad<i>X</i></b><p>Po ngarkohet</p></div></div>
+<div id="boot"><div>
+  <div class="block">
+    <svg class="rmark" viewBox="226.19 358.50 126.04 124.91" aria-hidden="true"><use href="#radx-ring"/></svg>
+    <b>RADX</b>
+  </div>
+  <p class="tag">Charge the future</p>
+</div></div>
 
 <script type="importmap">
 { "imports": { "three":"./vendor/three.module.js", "three/addons/":"./vendor/jsm/" } }
@@ -588,9 +485,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 /* ===================== PALETA 3D ===================== */
 const P = {
-  brand:0x7fbc42, teal:0x10a2ac, navy:0x022636, asphalt:0x0e2b38,
+  brand:0x7fbc42, teal:0x00a3b9, navy:0x022636, asphalt:0x0e2b38,
   line:0x9fb8c1, metal:0xdfe9ec, dark:0x0a1f29, glass:0x0d3a4a,
-  warn:0xf0a33a, bad:0xe2564a,
+  warn:0xf0a33a, bad:0xff7979,
   carA:0xe8eef0, carB:0x2d5c6b, carC:0x8a97a0,
 };
 
@@ -1305,33 +1202,54 @@ const S = {
   camDirty:false,   // largimi i telefonit ndryshon hapesiren -> setViewOffset duhet rillogaritur
 };
 
-/* ===================== TELEFONI: NDERRIMI I EKRANEVE ===================== */
+/* ===================== TELEFONI: NDERRIMI I EKRANEVE =====================
+   Fusha 'screen' te CHAPTERS mbeti e paprekur; ketu perkthehet ne pamje app-i.
+   Disa kapituj ndajne te njejten pamje sepse ne app-in real ekrani i karikimit
+   ESHTE i njejti — ndryshon vetem gjendja, dhe gjendjen e thote shtresa. */
+const SCREEN_MAP = {
+  map:      { img:'map' },
+  charger:  { img:'charger' },
+  auth:     { img:'sheet' },
+  starting: { img:'charging', ov:'charge', big:'Starting…',  sub:'Waiting for the charger' },
+  connect:  { img:'charging', ov:'charge', big:'Plug in',    sub:'Connect the cable to start' },
+  charging: { img:'charging', ov:'charge', live:'charging' },
+  full:     { img:'charging', ov:'charge', live:'full' },
+  paid:     { img:'done',     ov:'done' },
+  invoice:  { img:'wallet' },
+  shared:   { img:'map' },
+  problem:  { img:'list' },
+  thanks:   { img:'myev' },
+};
+const RANGE_KM = 300;            // autonomia e plote e bateries 42 kWh
 const screens = {};
-document.querySelectorAll('.scr').forEach(el => screens[el.dataset.s] = el);
-let curScreen = null;
+document.querySelectorAll('.pimg').forEach(el => screens[el.dataset.s] = el);
+const ovs = { charge:document.getElementById('ov-charge'), done:document.getElementById('ov-done') };
+let curScreen = null, curMap = null;
 function setScreen(name){
   if (curScreen === name) return;
-  if (curScreen && screens[curScreen]) screens[curScreen].classList.remove('on');
   curScreen = name;
-  if (screens[name]) screens[name].classList.add('on');
-  if (name === 'auth') runAuthChecks();
-  if (name === 'starting') runStartChecks();
+  const m = SCREEN_MAP[name];
+  curMap = m || null;
+
+  Object.values(screens).forEach(el => el.classList.remove('on'));
+  if (m && screens[m.img]) screens[m.img].classList.add('on');
+
+  ovs.charge.classList.toggle('on', !!m && m.ov === 'charge');
+  ovs.done.classList.toggle('on',   !!m && m.ov === 'done');
+
+  /* gjendjet pa numra qe rrjedhin shkruhen njehere, ketu */
+  if (m && m.ov === 'charge' && !m.live){
+    document.getElementById('ov-big').textContent = m.big;
+    document.getElementById('ov-sub').textContent = m.sub;
+    setArc(0);
+  }
 }
-function stagger(ids, gap=650){
-  ids.forEach((id,i)=>{
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.remove('ok');
-    setTimeout(()=>{ if (curScreen==='auth'||curScreen==='starting') el.classList.add('ok'); }, 300+i*gap);
-  });
+/* 2πr per r=41 → 257.6 */
+function setArc(frac){
+  document.getElementById('ov-arc').style.strokeDashoffset = String(257.6 * (1 - frac));
+  document.getElementById('ov-batt').setAttribute('height', String(Math.max(1, 22 * frac)));
+  document.getElementById('ov-batt').setAttribute('y', String(60 - Math.max(1, 22 * frac)));
 }
-function runAuthChecks(){
-  stagger(['k1','k2','k3']);
-  const b = document.getElementById('authbtn');
-  b.style.opacity = .3; b.textContent = 'Po kontrollohet…';
-  setTimeout(()=>{ if (curScreen==='auth'){ b.style.opacity = 1; b.textContent = '✓ Gati për të nisur'; } }, 2400);
-}
-function runStartChecks(){ stagger(['k5'], 700); }
 
 /* ===================== KAPITUJT ===================== */
 function goTo(i, instant=false){
@@ -1387,6 +1305,9 @@ function snapPlug(silent=false){
   }
 }
 const clock = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
+/* Ekrani i app-it e shfaq si h:mm:ss ("01:29:58 to finish"), jo mm:ss. */
+const clockH = t => { t = Math.max(0, Math.round(t));
+  return [Math.floor(t/3600), Math.floor(t%3600/60), t%60].map(v => String(v).padStart(2,'0')).join(':'); };
 const L = n => Math.round(n).toLocaleString('sq-AL');
 
 function renderUI(){
@@ -1475,7 +1396,7 @@ function restart(){
   S.connected=false; S.kw=0; S.kwh=0; S.secs=0; S.soc=SOC_START;
   S.graceLeft=GRACE_MIN*60; S.idleFee=0; S.autoDone=false;
   plugPos.copy(HOME); plug.rotation.y=0; refreshCable(true);
-  curScreen = null; goTo(0, true);
+  curScreen = null; curMap = null; goTo(0, true);
 }
 
 /* ===================== LOOP ===================== */
@@ -1659,25 +1580,26 @@ function frame(){
                           faultOn?'Nuk përgjigjet': (on?'43 kW':'—'),
                           faultOn?'#e2564a': (on?'#7fbc42':'#10a2ac'), 'RDX-021 · C1');
 
-  /* ===== TELEFONI: numrat live ===== */
+  /* ===== TELEFONI: numrat live mbi pamjet e app-it =====
+     App-i real shfaq perqindje, kilometra dhe kohe-per-te-mbaruar — jo kW e kosto.
+     Kete gjuhe ndjekim: teksti i kapitullit e mban shpjegimin, ekrani mban numrin. */
   const cost = S.kwh*TARIFF;
-  if (curScreen === 'charging'){
-    document.getElementById('ph-soc').textContent  = Math.round(S.soc);
-    document.getElementById('ph-arc').style.strokeDashoffset = String(427*(1-S.soc/100));
-    document.getElementById('ph-kw').textContent   = Math.round(S.kw)+' kW';
-    document.getElementById('ph-kwh').textContent  = S.kwh.toFixed(1)+' kWh';
-    document.getElementById('ph-time2').textContent= clock(S.secs);
-    document.getElementById('ph-cost').textContent = L(cost)+' L';
+  if (curMap && curMap.live === 'charging'){
+    const km = Math.round(S.soc/100*RANGE_KM);
+    document.getElementById('ov-big').textContent = Math.round(S.soc)+'% — '+km+' Km';
+    const left = Math.max(0, (100-S.soc)/100*BATTERY);
+    document.getElementById('ov-sub').textContent =
+      S.kw > 0.5 ? clockH(left/S.kw*3600)+' to finish' : 'starting…';
+    setArc(S.soc/100);
   }
-  if (curScreen === 'full'){
-    document.getElementById('ph-grace').textContent = clock(S.graceLeft);
-    document.getElementById('ph-kwh2').textContent  = S.kwh.toFixed(1)+' kWh';
-    document.getElementById('ph-cost2').textContent = L(cost)+' L';
-    document.getElementById('ph-idle').textContent  = L(S.idleFee)+' L';
+  if (curMap && curMap.live === 'full'){
+    document.getElementById('ov-big').textContent = '100% — '+RANGE_KM+' Km';
+    document.getElementById('ov-sub').textContent = clock(S.graceLeft)+' free to move';
+    setArc(1);
   }
-  if (curScreen === 'paid'){
-    document.getElementById('ph-total').textContent  = L(cost)+' L';
-    document.getElementById('ph-wallet').textContent = L(Math.max(0, WALLET-cost))+' L';
+  if (curMap && curMap.ov === 'done'){
+    document.getElementById('ov-kwh').textContent  = S.kwh.toFixed(1);
+    document.getElementById('ov-cost').textContent = L(cost);
   }
 
   renderer.render(scene, camera);
@@ -1685,8 +1607,6 @@ function frame(){
 }
 
 /* ===================== NISJA ===================== */
-document.getElementById('ph-time').textContent =
-  new Intl.DateTimeFormat('sq-AL',{hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date());
 goTo(0, true);
 requestAnimationFrame(frame);
 setTimeout(()=> document.getElementById('boot').classList.add('hide'), 420);
