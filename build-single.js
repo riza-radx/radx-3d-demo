@@ -35,13 +35,22 @@ const app = modMatch[1]
   .replace(/^\s*import \* as THREE from 'three';\s*$/m, '')
   .replace(/^\s*import \{ RoomEnvironment \}[^\n]*\n/m, '');
 
+/* Ne ndertimin nje-skedar te tre burimet ndajne NJE scope moduli, ndersa ne
+   zhvillim app-i e merr THREE si namespace me import. Prandaj identifikuesit e
+   brendshem te three.js (TOUCH, Cache, Path, Box, Sphere, Color…) mund te
+   perplasen me te app-it — dhe u perplasen: "Identifier 'TOUCH' has already
+   been declared". Kodi i app-it futet ne nje bllok, keshtu const/let/class/
+   function te tij mbeten te tijat. THREE dhe RoomEnvironment lexohen normalisht
+   nga scope-i i jashtem, dhe window.__demo del jashte si me pare. */
 const bundle = [
   '/* ===== Three.js r160 (MIT) — i futur brenda per te punuar pa internet ===== */',
   three,
   '/* ===== RoomEnvironment (MIT) ===== */',
   room,
-  '/* ===== Prezantimi RadX ===== */',
+  '/* ===== Prezantimi RadX — ne bllok, kunder perplasjes se emrave ===== */',
+  '{',
   app,
+  '}',
 ].join('\n');
 
 /* ---- 4. Ndërto skedarin standalone ---- */
@@ -50,6 +59,21 @@ const style = (src.match(/<style>[\s\S]*?<\/style>/) || [''])[0];
 const bodyInner = src
   .slice(src.indexOf('<canvas id="scene">'), src.indexOf('<script type="importmap">'))
   .trim();
+
+/* ---- 3b. Pamjet e app-it futen brenda si data: URI ----
+   Telefoni shfaq pamjet reale te app-it nga assets/app/. Nje skedar i vetem
+   nuk mund te kerkoje asete jashte tij, keshtu cdo src="./assets/..."
+   shkembehet me base64. ~1 MB JPEG -> ~1.3 MB base64. */
+let inlined = 0, inlinedKB = 0;
+const bodyWithImgs = bodyInner.replace(/src="\.\/(assets\/[^"]+)"/g, (m, rel) => {
+  const p = path.join(ROOT, rel);
+  if (!fs.existsSync(p)) { console.warn('  ! mungon ' + rel + ' — u lene si lidhje'); return m; }
+  const buf = fs.readFileSync(p);
+  const ext = path.extname(p).slice(1).toLowerCase();
+  const mime = ext === 'png' ? 'image/png' : ext === 'svg' ? 'image/svg+xml' : 'image/jpeg';
+  inlined++; inlinedKB += buf.length / 1024;
+  return 'src="data:' + mime + ';base64,' + buf.toString('base64') + '"';
+});
 
 fs.mkdirSync(OUT, { recursive: true });
 
@@ -62,7 +86,7 @@ ${head}
 ${style}
 </head>
 <body>
-${bodyInner}
+${bodyWithImgs}
 <script type="module">
 ${bundle}
 </${'script'}>
@@ -77,13 +101,15 @@ fs.copyFileSync(path.join(OUT,'radx-prezantim-single.html'), path.join(OUT,'inde
 fs.writeFileSync(path.join(OUT, 'artifact.html'),
 `<title>${title}</title>
 ${style}
-${bodyInner}
+${bodyWithImgs}
 <script type="module">
 ${bundle}
 </${'script'}>
 `);
 
 const kb = f => (fs.statSync(path.join(OUT,f)).size/1024).toFixed(0)+' KB';
+console.log('');
+console.log('  pamje te futura brenda  ' + inlined + '  (' + inlinedKB.toFixed(0) + ' KB JPEG)');
 console.log('');
 console.log('  dist/index.html                  ' + kb('index.html') + '   (kopje — per hosting)');
 console.log('  dist/radx-prezantim-single.html  ' + kb('radx-prezantim-single.html'));
