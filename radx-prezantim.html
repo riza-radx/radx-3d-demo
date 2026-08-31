@@ -456,7 +456,7 @@
     </div>
   </div>
 
-  <div class="draghint" id="draghint">Tërhiq spinën me maus drejt makinës →</div>
+  <div class="draghint done" id="draghint">✓ Lidhur — energjia nisi</div>
 
   <div class="chapter" id="chapcard">
     <div class="step" id="c-step">—</div>
@@ -938,9 +938,9 @@ function onChapter(i){
   if (i === 10){ S.phase='charging'; S.ledTarget.setHex(P.brand); }
   if (i === 11){ S.phase='done';  S.ledTarget.setHex(0x2f9bff); }
 
-  const dh = document.getElementById('draghint');
-  dh.classList.toggle('show', i===4);
-  if (i===4 && !S.connected){ dh.classList.remove('done'); dh.textContent='Tërhiq spinën me maus drejt makinës →'; }
+  // Udhëzimi u hoq: porta shënohet nga unaza jeshile, teksti i kapitullit dhe
+  // ekrani i karikuesit e thonë çfarë duhet bërë. Mbetet vetëm konfirmimi.
+  document.getElementById('draghint').classList.remove('show');
 }
 function snapPlug(silent=false){
   S.connected = true;
@@ -948,7 +948,9 @@ function snapPlug(silent=false){
   refreshCable(true); plug.rotation.y = Math.PI/2;
   if (!silent){
     const dh = document.getElementById('draghint');
-    dh.classList.add('done'); dh.textContent = '✓ Lidhur — energjia nisi';
+    dh.classList.add('show');
+    clearTimeout(dh._t);
+    dh._t = setTimeout(() => dh.classList.remove('show'), 2600);
   }
 }
 const clock = s => String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0');
