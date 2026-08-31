@@ -23,12 +23,12 @@
     --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;overflow:hidden}
+  html,body{height:100%;height:100dvh;overflow:hidden}
   body{
     font-family:var(--sans);color:var(--ink);
     background:radial-gradient(120% 90% at 42% 0%, #0b5566 0%, #04384d 42%, #022636 100%);
   }
-  #scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  #scene{position:fixed;inset:0;width:100%;height:100%;height:100dvh;display:block;touch-action:none}
   #ui{position:fixed;inset:0;pointer-events:none;z-index:2}
   .clickable{pointer-events:auto}
 
@@ -64,7 +64,9 @@
     background:rgba(143,176,187,.12);border:1px solid var(--line);
     border-radius:9px;padding:8px 15px;cursor:pointer;transition:.15s;
   }
-  .navrow button:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#0b2a06}
+  @media (hover:hover){
+    .navrow button:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#0b2a06}
+  }
   .navrow button:disabled{opacity:.3;cursor:default}
   .dots{display:flex;gap:6px;margin-left:auto;align-items:center}
   .dots i{width:7px;height:7px;border-radius:50%;background:rgba(143,176,187,.3);cursor:pointer;pointer-events:auto;transition:.2s}
@@ -72,8 +74,14 @@
   .dots u{width:11px;display:block}
 
   /* ================= TELEFONI ================= */
+  /* Seksioni RadX: telefoni largohet dhe skena merr gjithe ekranin.
+     Vetem opacity + transform — layout-i nuk luan, keshtu portret/landscape
+     kane nevoje vetem per transform-in e vet. */
+  body.wide .phone{opacity:0;pointer-events:none;transform:translateY(-50%) translateX(54px) scale(.97)}
+
   .phone{
     position:absolute;right:40px;top:50%;transform:translateY(-50%);
+    transition:opacity .5s ease, transform .5s cubic-bezier(.2,.8,.2,1);
     width:322px;height:648px;border-radius:42px;
     background:linear-gradient(160deg,#1a2b33,#0a161c);
     padding:11px;box-shadow:0 40px 90px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.07);
@@ -213,14 +221,110 @@
   #boot b i{color:var(--brand);font-style:normal}
   #boot p{margin-top:10px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);text-align:center}
 
-  @media (max-width:1280px){
-    .phone{width:268px;height:540px;right:22px}
+  /* butoni i ekranit të plotë — vetëm në pajisje me prekje */
+  .fs{
+    display:none;position:absolute;top:14px;right:14px;width:42px;height:42px;
+    place-items:center;font-size:17px;color:var(--ink);
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    backdrop-filter:blur(10px);cursor:pointer;
+  }
+
+  @media (max-width:1280px) and (orientation:landscape){
+    .phone{width:280px;height:562px;right:22px}
     .chapter{width:min(430px,38vw)}
   }
-  @media (max-width:980px){
-    .phone{display:none}
-    .chapter{width:calc(100% - 40px);left:20px}
+
+  /* ======================= MOBILE - te perbashketa ======================= */
+  @media (orientation:portrait) and (max-width:1100px),
+         (orientation:landscape) and (max-height:520px){
     .keys{display:none}
+    .fs{display:grid}
+    .brandmark{top:13px;left:16px}
+    .brandmark b{font-size:19px}
+    .brandmark span{display:none}
+
+    .phone{width:262px;right:auto;padding:9px;border-radius:34px}
+    .phone .glass{border-radius:27px}
+    .phone .notch{width:74px;height:17px;top:7px}
+    .sbar{height:32px;padding:0 15px;font-size:10.5px}
+    .appbar{top:32px;height:39px;padding:0 14px}
+    .appbar b{font-size:14px}
+    .screens{top:71px}
+    .scr{padding:12px 14px}
+    .h{margin-bottom:8px}
+    .row{padding:5px 0}
+    .ring{transform:scale(.78);transform-origin:top center;margin:0 auto -28px}
+    .btn{margin-top:10px;padding:11px;font-size:14px}
+    .sep{margin:8px 0}
+    .mapbot{padding:10px 12px}
+
+    .navrow .w{display:none}
+    .navrow button{min-width:46px;min-height:46px;padding:0 13px;font-size:18px;font-weight:700}
+    .dots{display:none}
+    .draghint{left:50%;font-size:14px;padding:11px 20px}
+
+    /* Teksti: shirit i mbyllur, hapet me tap. Ne mobile skena dhe telefoni
+       kane perparesi mbi tekstin — teksti lexohet kur e kerkon lexuesi. */
+    .chapter{
+      max-height:64px;overflow:hidden;padding:11px 16px 12px;
+      transition:max-height .28s cubic-bezier(.2,.8,.2,1);
+    }
+    .chapter .step{font-size:10px;margin-bottom:3px}
+    .chapter h1{
+      font-size:17px;letter-spacing:-.2px;margin:0;padding-right:112px;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .chapter.open h1{white-space:normal;padding-right:0;margin-bottom:8px}
+    .chapter p{display:none}
+    .chapter.open p{display:block;font-size:14.5px;min-height:0;line-height:1.5}
+    .chapter .navrow{position:absolute;right:13px;top:11px;margin:0;gap:8px}
+    .chapter.open .navrow{position:static;margin-top:14px}
+  }
+
+  /* ======================= MOBILE - portret i shtresuar ======================= */
+  @media (orientation:portrait) and (max-width:1100px){
+    #scene{
+      height:38dvh;bottom:auto;
+      border-bottom:1px solid rgba(143,176,187,.18);
+      box-shadow:0 14px 34px rgba(0,0,0,.35);
+    }
+
+    .phone{
+      position:fixed;top:calc(38dvh + 12px);left:50%;
+      transform:translateX(-50%);
+      height:min(440px, calc(62dvh - 84px));
+    }
+    body.wide .phone{transform:translateX(-50%) translateY(26px) scale(.97)}
+    body.wide #scene{height:100dvh}   /* pa telefon, skena merr gjithe ekranin */
+
+    .chapter{
+      position:fixed;left:0;right:0;bottom:0;width:auto;
+      border-radius:15px 15px 0 0;border-left:0;border-right:0;border-bottom:0;
+    }
+    .chapter.open{max-height:56dvh;overflow-y:auto;padding-bottom:18px}
+    .draghint{bottom:80px}
+  }
+
+  /* ======================= MOBILE - telefon horizontal ======================= */
+  @media (orientation:landscape) and (max-height:520px){
+    .phone{
+      position:absolute;right:12px;top:50%;transform:translateY(-50%);
+      height:min(336px, calc(100dvh - 18px));
+    }
+    body.wide .phone{transform:translateY(-50%) translateX(40px) scale(.97)}
+    .phone .btn{display:none}          /* nuk ka hapesire; butoni nuk mban info */
+    .ring{transform:scale(.58);margin:0 auto -60px}
+    .row{padding:3px 0}
+    .h{margin-bottom:5px}
+    .sep{margin:6px 0}
+    .push{padding:10px 12px}
+
+    .fs{top:13px;left:78px;right:auto}   /* te mos bjere mbi telefonin */
+
+    .chapter{
+      left:16px;bottom:14px;width:min(370px,44vw);border-radius:15px;
+    }
+    .chapter.open{max-height:min(80dvh, 330px);overflow-y:auto;padding-bottom:16px}
   }
 </style>
 </head>
@@ -230,9 +334,10 @@
 
 <div id="ui">
   <div class="brandmark"><b>Rad<i>X</i></b><span>Prezantim</span></div>
+  <button class="fs clickable" id="btn-fs" aria-label="Ekran i plotë">⛶</button>
 
   <div class="keys">
-    <div><kbd>←</kbd> <kbd>→</kbd> hapat · <kbd>1</kbd>…<kbd>9</kbd><kbd>0</kbd><kbd>-</kbd><kbd>=</kbd> kapitujt</div>
+    <div><kbd>←</kbd> <kbd>→</kbd> hapat · <kbd>1</kbd>…<kbd>=</kbd> kapitujt 1–12 · <kbd>[</kbd>…<kbd>/</kbd> kapitujt 13–20</div>
     <div><kbd>F</kbd> ekran i plotë · <kbd>R</kbd> nga fillimi · <kbd>T</kbd> shtresa teknike</div>
   </div>
 
@@ -464,8 +569,8 @@
     <p id="c-body">—</p>
     <div class="tech" id="c-tech">—</div>
     <div class="navrow">
-      <button class="clickable" id="btn-prev">← Mbrapa</button>
-      <button class="clickable" id="btn-next">Vazhdo →</button>
+      <button class="clickable" id="btn-prev">←<span class="w"> Mbrapa</span></button>
+      <button class="clickable" id="btn-next"><span class="w">Vazhdo </span>→</button>
       <div class="dots clickable" id="dots"></div>
     </div>
   </div>
@@ -587,20 +692,96 @@ const CHAPTERS = [
     tech:'Timeout / offline / 0 kWh; lock atomik kundër StopTransaction të dyfishtë; audit log.',
     cam:[14.8, 5.8, 9.0], look:[7.4, 1.20, -2.0] },
 
-  { sec:'Operimi', screen:'thanks',
+  { sec:'Operimi', screen:'thanks', panel:'overview',
     title:'Nga lart: paneli i operatorit',
     body:'Gjithçka që pa shoferi, operatori e shikon nga lart: cilat pika punojnë, kush karikon tani, '+
          'sa energji shkoi, çfarë kërkon ndërhyrje. Nga i njëjti panel rinis një karikues nga distanca — '+
          'pa dërguar njeri në terren.',
     tech:'Reset · ChangeAvailability · UnlockConnector · GetDiagnostics · RemoteStop, sipas scope-it të rolit.',
     cam:[1.2, 4.3, 9.8], look:[0.4, 3.50, -1.6] },
+
+  /* ===== Seksioni RadX =====
+     Publiku ndryshon: nga "si karikohet" te "cfare marr une si kompani".
+     Gjuha mbetet e thjeshte — ana teknike qendron te fusha tech, pas tastit T.
+     Telefoni largohet (sec==='RadX'), paneli 3D behet kryesori dhe ndryshon faqe. */
+
+  { sec:'RadX', panel:'intro',
+    title:'Ajo që pa shoferi është sipërfaqja',
+    body:'Një karikim i vetëm. Poshtë tij punuan çmimi, kontrolli, matja, portofoli, fatura '+
+         'dhe raporti — pa i kërkuar njeri. Ky është RadX: sistemi që mban rrjetin në punë, '+
+         'dhe që kompania e drejton vetë nga një ekran.',
+    tech:'Radx-API (Node/Sequelize/MySQL) + RadX-OCPP (Central System) + paneli Angular. Një instancë, shumë kompani.',
+    cam:[0.50, 4.90, 7.25], look:[0.4, 3.30, -1.6] },
+
+  { sec:'RadX', panel:'brand',
+    title:'Marka është e jotja',
+    body:'Klienti shikon logon, ngjyrat dhe emrin e kompanisë — nuk shikon tonat. '+
+         'Vega Charging dhe Flex Charge janë të njëjti sistem me dy marka. Ndryshojnë '+
+         'ngjyra, logo dhe adresa; ana që punon nuk ndryshon fare.',
+    tech:'Një kod, konfigurim për brand: company_id, paleta SCSS, favicon, environment.prod. Gjurma: FlexCharge/BRANDING.md.',
+    cam:[0.55, 3.90, 5.51], look:[0.4, 3.55, -1.6] },
+
+  { sec:'RadX', panel:'price',
+    title:'Çmimin e vendos ti',
+    body:'Klienti i rastit paguan një çmim, një kompani me marrëveshje një tjetër, natën '+
+         'më lirë. Këto rregulla i shkruan kompania nga paneli dhe hyjnë në fuqi menjëherë — '+
+         'pa pritur njeri, pa kërkuar ndryshim në program.',
+    tech:'rates + rate_per_days + user_group; zinxhiri user → charger → company default, me toggle përmbysjeje për charger-in.',
+    cam:[0.20, 3.05, 5.28], look:[0.4, 3.55, -1.6] },
+
+  { sec:'RadX', panel:'chargers',
+    title:'Karikuesit, kushdo t\'i ka bërë',
+    body:'Sistemi flet një gjuhë standarde që e kuptojnë të gjithë karikuesit e certifikuar. '+
+         'Kompania blen atë që i përshtatet çmimit dhe nevojës, nga prodhues të ndryshëm, '+
+         'dhe të gjithë hyjnë në të njëjtin panel. Një pikë e re shtohet dhe shfaqet në aplikacion.',
+    tech:'OCPP 1.6J (+2.0.1). Prodhuesi nuk ndikon në faturim — matja vjen nga MeterValues.',
+    cam:[0.50, 5.60, 5.62], look:[0.5, 3.30, -1.6] },
+
+  { sec:'RadX', panel:'customers',
+    title:'Klientët, si i duash t\'i organizosh',
+    body:'Një shofer i rastit, një flotë taksish, punonjësit e një kompanie — të gjithë në '+
+         'të njëjtin rrjet, me kushte të ndryshme. Kompania krijon grupe dhe i jep secilit '+
+         'çmimin e vetin, dhe administratori i grupit i mbush vetë llogaritë e njerëzve të tij.',
+    tech:'users + user_group + partner/partner_member; portofol i ndarë, transfertë nga admini i grupit.',
+    cam:[0.50, 3.70, 5.11], look:[0.4, 3.60, -1.6] },
+
+  { sec:'RadX', panel:'money',
+    title:'Paratë ecin vetë',
+    body:'Rimbushja, zbritja nga portofoli, fatura zyrtare, taksat — ndodhin brenda sistemit, '+
+         'në momentin që duhen. Nuk ka Excel në mes dhe nuk ka njeri që shkruan fatura me dorë. '+
+         'Kompania shikon sa hyri, sa doli dhe çfarë mbetet.',
+    tech:'recharge → transaction → charging; fiskalizim (IIC/NIVF) me retry; kapja e faturave të harruara.',
+    cam:[0.25, 2.80, 5.46], look:[0.4, 3.70, -1.6] },
+
+  { sec:'RadX', panel:'alerts',
+    title:'Nuk pyet — ta thotë',
+    body:'Një karikues që bie, një sesion që nis e nuk jep energji, një faturë që nuk del — '+
+         'sistemi i kap i pari dhe njofton. Raportet vijnë vetë me email, ditë për ditë. '+
+         'Kompania nuk ka nevojë të ulet e t\'i kërkojë.',
+    tech:'alarm + audit_log; cronReportService / reportEmailService; abandonedInvoiceCheckService.',
+    cam:[0.60, 5.00, 5.58], look:[0.4, 3.50, -1.6] },
+
+  { sec:'RadX', panel:'scale',
+    title:'Rritja nuk kërkon rifillim',
+    body:'Pesë pika ose pesëqind, një qytet ose një vend i tërë — i njëjti sistem, pa u rindërtuar. '+
+         'Dhe kur kompania do një markë të dytë, si ndodhi me Flex Charge, ajo është një '+
+         'konfigurim i ri — nuk është një projekt nga zero.',
+    tech:'Multi-company mbi një instancë; izolim i tenant-it default-deny sipas rolit.',
+    cam:[0.70, 5.70, 7.43], look:[0.4, 3.10, -1.6] },
 ];
 const N = CHAPTERS.length;
 
 /* ===================== RENDERER ===================== */
 const canvas = document.getElementById('scene');
+
+/* Pajisja: prekje ne vend te mausit, dhe ekran i vogel (ndikon dpr, hijet, kabllon). */
+const TOUCH = matchMedia('(hover:none)').matches;
+const SMALL = Math.min(window.innerWidth, window.innerHeight) < 820;
+const PICK_TOL = TOUCH ? 0.18 : 0.10;   // gishti eshte me i pasakte se mausi
+const AUTO_S   = TOUCH ? 5 : 8;         // sekonda para se spina te lidhet vete
+
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, SMALL ? 1.5 : 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
@@ -619,7 +800,7 @@ pmrem.dispose();
 const key = new THREE.DirectionalLight(0xffffff, 2.1);
 key.position.set(7, 11, 6);
 key.castShadow = true;
-key.shadow.mapSize.set(2048, 2048);
+key.shadow.mapSize.set(SMALL ? 1024 : 2048, SMALL ? 1024 : 2048);
 key.shadow.camera.near = 1; key.shadow.camera.far = 44;
 key.shadow.camera.left = -16; key.shadow.camera.right = 16;
 key.shadow.camera.top = 16;   key.shadow.camera.bottom = -16;
@@ -794,7 +975,7 @@ function refreshCable(force=false){
     a.clone().lerp(b,0.68).add(new THREE.Vector3(0,-sag*0.72,0)),
     b,
   ]);
-  const g = new THREE.TubeGeometry(cableCurve, 44, 0.035, 10, false);
+  const g = new THREE.TubeGeometry(cableCurve, SMALL ? 28 : 44, 0.035, SMALL ? 8 : 10, false);
   if (cableMesh){ cableMesh.geometry.dispose(); cableMesh.geometry = g; }
   else { cableMesh = new THREE.Mesh(g, cableMat); cableMesh.castShadow = true; scene.add(cableMesh); }
 }
@@ -814,7 +995,7 @@ function sideCable(st, car){
     st.outlet.clone().lerp(car.portWorld,.7).add(new THREE.Vector3(0,-0.3,0)),
     car.portWorld,
   ]);
-  const m = new THREE.Mesh(geo(new THREE.TubeGeometry(c,34,0.033,8,false)),
+  const m = new THREE.Mesh(geo(new THREE.TubeGeometry(c, SMALL ? 22 : 34, 0.033, 8, false)),
     mat({ color:0x101d24, roughness:.72, transparent:true, opacity:0 }));
   m.castShadow = true; scene.add(m); return m;
 }
@@ -855,15 +1036,253 @@ function dashboardTexture(){
   x.fillText('87.6%',1355,574); x.textAlign='left';
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; track.push(t); return t;
 }
-const panelMat = new THREE.MeshBasicMaterial({ map:dashboardTexture(), transparent:true, opacity:0, toneMapped:false });
+/* ---- Faqet e panelit ----
+   Ne seksionin RadX telefoni largohet dhe paneli behet kryesori, keshtu i duhet
+   me shume nga nje faqe. Cdo faqe vizatohet me canvas: pa asete, teksti i madh
+   sa lexohet ne projektor, dhe ndryshimi i faqes kushton vetem nje texture swap.
+   Gjuha e faqeve mbetet e njejta si e kapitujve — pa terma teknike. */
+const PANEL_W = 1600, PANEL_H = 900;
+const PANEL_INK = '#022636', PANEL_DIM = '#7b939c', PANEL_EDGE = '#dfe7ea';
+const PANEL_OK = '#4e7a26', PANEL_WARN = '#b06f10';
+
+function drawPage(x, p){
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, PANEL_W, PANEL_H);
+
+  /* shiriti i marks */
+  x.fillStyle = p.brand || '#10a2ac'; x.fillRect(0, 0, PANEL_W, 74);
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+  x.fillStyle = '#fff'; x.font = '600 30px sans-serif';
+  x.fillText(p.app || 'RadX · Paneli i rrjetit', 40, 48);
+  if (p.pageName){
+    x.textAlign = 'right'; x.font = '500 26px sans-serif';
+    x.fillText(p.pageName, PANEL_W - 40, 47); x.textAlign = 'left';
+  }
+
+  /* fjalia kryesore — kjo mban peshen e faqes */
+  x.fillStyle = PANEL_INK; x.fillRect(40, 104, 1520, 86);
+  x.fillStyle = '#fff'; x.font = '600 34px sans-serif';
+  x.fillText(p.headline, 66, 160);
+
+  /* Karta e kapitullit ze qoshen poshte-majtas te ekranit. Ne distancat e
+     seksionit RadX kjo mbulon cdo gje nen ~y 700 te panelit, keshtu faqja
+     mbaron atje: maks 4 rreshta dhe asnje tekst ne fund. */
+  let y = 252;
+  if (p.cards){
+    const n = p.cards.length, gap = 20, cw = (1520 - gap * (n - 1)) / n;
+    p.cards.forEach(([k, v, col], i) => {
+      const px = 40 + i * (cw + gap);
+      x.fillStyle = '#fff'; x.fillRect(px, y, cw, 124);
+      x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(px, y, cw, 124);
+      x.fillStyle = PANEL_DIM; x.font = '500 19px sans-serif'; x.fillText(k, px + 20, y + 36);
+      x.fillStyle = col || PANEL_INK; x.font = '700 40px monospace'; x.fillText(v, px + 20, y + 94);
+    });
+    y += 148;
+  }
+
+  if (p.note){
+    x.fillStyle = '#e9eff2'; x.fillRect(0, 706, PANEL_W, PANEL_H - 706);
+    x.strokeStyle = PANEL_EDGE; x.beginPath(); x.moveTo(0, 706); x.lineTo(PANEL_W, 706); x.stroke();
+    x.textAlign = 'right'; x.fillStyle = '#5b7783'; x.font = '400 28px sans-serif';
+    x.fillText(p.note, PANEL_W - 44, 806); x.textAlign = 'left';
+  }
+
+  if (p.rows){
+    const step = 56, boxH = 70 + p.rows.length * step;
+    x.fillStyle = '#fff'; x.fillRect(40, y, 1520, boxH);
+    x.strokeStyle = PANEL_EDGE; x.strokeRect(40, y, 1520, boxH);
+    if (p.rowsTitle){
+      x.fillStyle = PANEL_INK; x.font = '600 27px sans-serif'; x.fillText(p.rowsTitle, 68, y + 42);
+    }
+    const top = y + (p.rowsTitle ? 92 : 52);
+    p.rows.forEach(([a, b, tag, col], i) => {
+      const ry = top + i * step;
+      x.fillStyle = PANEL_INK; x.font = '500 27px sans-serif'; x.fillText(a, 68, ry);
+      if (b){ x.fillStyle = PANEL_DIM; x.font = '400 23px sans-serif'; x.fillText(b, 780, ry); }
+      if (tag){
+        x.textAlign = 'right'; x.fillStyle = col || PANEL_OK;
+        x.font = '700 25px monospace'; x.fillText(tag, 1532, ry); x.textAlign = 'left';
+      }
+      if (i < p.rows.length - 1){
+        x.strokeStyle = '#eef3f5'; x.beginPath();
+        x.moveTo(68, ry + 22); x.lineTo(1532, ry + 22); x.stroke();
+      }
+    });
+  }
+
+}
+
+/* Faqja e markes nuk hyn ne skemen e mesipermes: argumenti i white-label shihet
+   vetem kur te dyja markat jane njeheresh ne ekran, njera prane tjetres.
+   Gjithe permbajtja mbahet mbi y 700 sepse karta e kapitullit ze fundin-majtas
+   te ekranit; fjalia e fundit shkon djathtas, ku karta nuk arrin. */
+function drawBrandPage(x){
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, PANEL_W, PANEL_H);
+  x.textAlign = 'center'; x.fillStyle = PANEL_INK; x.font = '700 40px sans-serif';
+  x.fillText('I NJËJTI SISTEM POSHTË', PANEL_W / 2, 74);
+
+  const half = (ox, brand, name, sub) => {
+    const w = 748;
+    x.fillStyle = '#fff'; x.fillRect(ox, 112, w, 588);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(ox, 112, w, 588);
+    x.fillStyle = brand; x.fillRect(ox, 112, w, 68);
+    x.textAlign = 'left';
+    x.fillStyle = '#fff'; x.font = '600 31px sans-serif'; x.fillText(name, ox + 24, 157);
+    x.fillStyle = PANEL_DIM; x.font = '500 21px sans-serif'; x.fillText(sub, ox + 24, 212);
+
+    [['ENERGJIA SOT', '6,780 kWh'], ['KARIKON TANI', '17']].forEach(([k, v], i) => {
+      const cy = 232 + i * 112;
+      x.fillStyle = '#f7fafb'; x.fillRect(ox + 24, cy, w - 48, 96);
+      x.strokeStyle = '#e6edf0'; x.strokeRect(ox + 24, cy, w - 48, 96);
+      x.fillStyle = PANEL_DIM; x.font = '500 18px sans-serif'; x.fillText(k, ox + 44, cy + 32);
+      x.fillStyle = PANEL_INK; x.font = '700 35px monospace'; x.fillText(v, ox + 44, cy + 78);
+    });
+
+    x.fillStyle = brand; x.fillRect(ox + 24, 464, w - 48, 58);
+    x.textAlign = 'center'; x.fillStyle = '#fff'; x.font = '700 25px sans-serif';
+    x.fillText('Nis karikimin', ox + w / 2, 502); x.textAlign = 'left';
+
+    [['Çmimi', '35 L/kWh'], ['Faturimi', 'automatik'], ['Karikuesit', 'të njëjtët']].forEach(([a, b], i) => {
+      const ry = 566 + i * 42;
+      x.fillStyle = PANEL_INK; x.font = '500 23px sans-serif'; x.fillText(a, ox + 44, ry);
+      x.textAlign = 'right'; x.fillStyle = PANEL_DIM; x.fillText(b, ox + w - 44, ry); x.textAlign = 'left';
+    });
+  };
+
+  half(40,  '#7fbc42', 'Vega Charging', 'marka e klientit A');
+  half(812, '#931623', 'Flex Charge',   'marka e klientit B');
+
+  x.fillStyle = '#e9eff2'; x.fillRect(0, 706, PANEL_W, PANEL_H - 706);
+  x.strokeStyle = PANEL_EDGE; x.beginPath(); x.moveTo(0, 706); x.lineTo(PANEL_W, 706); x.stroke();
+  x.textAlign = 'right'; x.fillStyle = '#5b7783'; x.font = '400 28px sans-serif';
+  x.fillText('Ndryshojnë ngjyra, logo dhe emri — asgjë tjetër.', PANEL_W - 44, 782);
+  x.fillText('Çmimi, matja, faturimi dhe karikuesit janë të njëjtët.', PANEL_W - 44, 826);
+  x.textAlign = 'left';
+}
+
+/* Numrat e faqeve jane te skriptuar, si gjithe prezantimi — jo te dhena reale. */
+const PANEL_PAGES = {
+  intro: {
+    pageName:'Përmbledhje',
+    headline:'Gjithçka që pa shoferi, e mban një sistem i vetëm.',
+    cards:[['PIKA','24'],['KARIKON TANI','17'],['KLIENTË','4,170'],['PUNË ME DORË','0']],
+    rowsTitle:'Çfarë punon pa e prekur njeri',
+    rows:[
+      ['Aplikacioni i klientit','harta, çmimi, nisja, ndalja','PUNON'],
+      ['Karikuesit','lidhja, matja, komandat','PUNON'],
+      ['Paratë','portofol, zbritje, fatura zyrtare','PUNON'],
+      ['Raportet','ditore dhe javore, me email','PUNON'],
+    ],
+    note:'Kompania e drejton nga paneli. Nuk i duhet programues për punën e ditës.',
+  },
+  price: {
+    pageName:'Çmimet',
+    headline:'Nuk ka një çmim. Ka rregullat e tua.',
+    cards:[['ÇMIME AKTIVE','6'],['GRUPE','9'],['ULJE NATE','−20%'],['HYJNË NË FUQI','MENJËHERË']],
+    rowsTitle:'Kush paguan sa',
+    rows:[
+      ['Klientë të rastit','pa marrëveshje','42 L/kWh'],
+      ['Kompania "Alfa" · flotë','marrëveshje vjetore','35 L/kWh'],
+      ['Taksi Tiranë · grup partner','volum i lartë','30 L/kWh'],
+      ['Orët 22:00–06:00','për të gjithë','−20%'],
+    ],
+    note:'Ndryshohen nga paneli, në çdo moment. Klienti e shikon çmimin e tij para se të nisë.',
+  },
+  chargers: {
+    pageName:'Pikat',
+    headline:'Bli atë karikues që të përshtatet. Sistemi i njeh të gjithë.',
+    cards:[['PIKA','24'],['PRODHUES TË NDRYSHËM','4'],['ONLINE','23'],['FUQIA MAKS.','150 kW']],
+    rowsTitle:'Rrjeti tani',
+    rows:[
+      ['RDX-014 · Rruga e Kavajës','2 vende · 60 kW','ONLINE'],
+      ['RDX-021 · Qendër','1 vend · 22 kW','ONLINE'],
+      ['RDX-030 · Autostradë','4 vende · 150 kW','KARIKON 3'],
+      ['RDX-007 · Parking','2 vende · 22 kW','OFFLINE 12 min', PANEL_WARN],
+    ],
+    note:'Gjuhë standarde, e hapur — kompania nuk mbetet peng i një shitësi të vetëm.',
+  },
+  customers: {
+    pageName:'Klientët',
+    headline:'Të gjithë në një rrjet, secili me kushtet e tij.',
+    cards:[['INDIVIDË','4,120'],['KOMPANI','38'],['GRUPE PARTNERE','12'],['KARTELA','3,860']],
+    rowsTitle:'Si janë të organizuar',
+    rows:[
+      ['Individë','paguajnë vetë, portofol personal','42 L/kWh'],
+      ['Kompania "Alfa" · 64 punonjës','kompania rimbush, punonjësi karikon','35 L/kWh'],
+      ['Taksi Tiranë · 120 shoferë','admini i grupit i mbush vetë','30 L/kWh'],
+      ['Mysafirë · pa llogari','paguajnë në moment','45 L/kWh'],
+    ],
+    note:'Admini i një grupi i mbush llogaritë e njerëzve të tij — pa kaluar nga ne.',
+  },
+  money: {
+    pageName:'Financat',
+    headline:'Rimbushja, zbritja, fatura, taksa — brenda sistemit.',
+    cards:[['TË ARDHURAT SOT','259K ALL'],['RIMBUSHJE','86'],['FATURA TË DËRGUARA','249'],['NË PRITJE','0']],
+    rowsTitle:'Rruga e një pagese, nga fillimi në fund',
+    rows:[
+      ['1 · Klienti rimbush portofolin','kartë ose transfertë','VETË'],
+      ['2 · Karikimi mbaron','matja e fundit vjen nga karikuesi','VETË'],
+      ['3 · Kostoja zbritet','çfarë mbetet pa mbulim, regjistrohet','VETË'],
+      ['4 · Fatura zyrtare del','dërgohet me email brenda ditës','VETË'],
+    ],
+    note:'Pa Excel në mes, pa fatura me dorë. Dhe nëse një faturë dështon, sistemi riprovon vetë.',
+  },
+  alerts: {
+    pageName:'Kujdesi',
+    headline:'Sistemi i kap i pari, pa i kërkuar njeri.',
+    cards:[['KËRKOJNË KUJDES','3'],['DISPONUESHMËRIA','87.6%'],['RAPORTI JAVOR','DËRGUAR'],['PA GJURMË','0']],
+    rowsTitle:'Sot',
+    rows:[
+      ['RDX-007 nuk përgjigjet','12 minuta · operatori u njoftua','NJOFTUAR', PANEL_WARN],
+      ['Sesion pa energji','u mbyll vetë, klienti nuk u faturua','ZGJIDHUR'],
+      ['Faturë e padërguar','riprovim 2 nga 3','NË PROCES', PANEL_WARN],
+      ['Raporti javor','u dërgua me email te 4 adresa','DËRGUAR'],
+    ],
+    note:'Çdo ndryshim mban gjurmë: kush, kur dhe çfarë.',
+  },
+  scale: {
+    pageName:'Rritja',
+    headline:'Pesë pika ose pesëqind — i njëjti sistem.',
+    cards:[['PIKA','24 → 500'],['QYTETE','3'],['MARKA','2'],['KOD I RI','ASNJË']],
+    rowsTitle:'Çfarë duhet për një markë të dytë',
+    rows:[
+      ['Emri, logo, ngjyrat','skedarët e brandit + domain','KONFIGURIM'],
+      ['Çmimet e kompanisë','rregulla në panel','KONFIGURIM'],
+      ['Faturimi, matja, karikuesit','pa ndryshim','GATI'],
+      ['Kod i shkruar nga zero','—','ASNJË'],
+    ],
+    note:'Flex Charge u ngrit pikërisht kështu, mbi të njëjtin sistem si Vega Charging.',
+  },
+};
+
+let overviewTex = dashboardTexture();
+const panelCache = {};
+function panelTex(name){
+  if (name === 'overview') return overviewTex;
+  if (panelCache[name]) return panelCache[name];
+  const c = document.createElement('canvas'); c.width = PANEL_W; c.height = PANEL_H;
+  const x = c.getContext('2d');
+  if (name === 'brand') drawBrandPage(x); else drawPage(x, PANEL_PAGES[name]);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  track.push(t); panelCache[name] = t; return t;
+}
+function setPanelPage(name){
+  const t = panelTex(name);
+  if (t && panelMat.map !== t){ panelMat.map = t; panelMat.needsUpdate = true; }
+}
+
+const panelMat = new THREE.MeshBasicMaterial({ map:overviewTex, transparent:true, opacity:0, toneMapped:false });
 track.push(panelMat);
 const panel = new THREE.Mesh(geo(new THREE.PlaneGeometry(6.4,3.6)), panelMat);
 panel.position.set(0.4,3.6,-1.6); panel.rotation.x = -0.06; scene.add(panel);
 const frameMat = mat({ color:0x02222e, roughness:.4, metalness:.3, transparent:true, opacity:0 });
 const panelFrame = box(6.66,3.86,0.08,frameMat,0.4,3.6,-1.68);
 panelFrame.rotation.x = -0.06; panelFrame.castShadow = false;
+/* Screenshot-i i vertete, nese hidhet te assets/, zevendeson vetem faqen 'overview'. */
 new THREE.TextureLoader().load('./assets/dashboard.png', tex=>{
-  tex.colorSpace = THREE.SRGBColorSpace; panelMat.map = tex; panelMat.needsUpdate = true; track.push(tex);
+  tex.colorSpace = THREE.SRGBColorSpace; track.push(tex);
+  const wasShowing = panelMat.map === overviewTex;
+  overviewTex = tex;
+  if (wasShowing){ panelMat.map = tex; panelMat.needsUpdate = true; }
 }, undefined, ()=>{});
 
 /* ===================== SHTEGU I KAMERES ===================== */
@@ -883,6 +1302,7 @@ const S = {
   dragging:false, idle:0, autoDone:false,
   ledColor:new THREE.Color(0xffffff), ledTarget:new THREE.Color(0xffffff),
   ring:0, pulse:0, side:0, panel:0, cardOp:0, fault:0,
+  camDirty:false,   // largimi i telefonit ndryshon hapesiren -> setViewOffset duhet rillogaritur
 };
 
 /* ===================== TELEFONI: NDERRIMI I EKRANEVE ===================== */
@@ -917,13 +1337,24 @@ function runStartChecks(){ stagger(['k5'], 700); }
 function goTo(i, instant=false){
   i = Math.max(0, Math.min(N-1, i));
   chapter = i;
+  document.getElementById('chapcard').classList.remove('open');   // portret: mbylle shiritin
   progFrom = progress; progTo = i/(N-1); progT = instant ? 1 : 0;
   if (instant){ progress = progTo; lookNow.copy(lookPts[i]); }
   onChapter(i);
   renderUI();
 }
 function onChapter(i){
-  setScreen(CHAPTERS[i].screen);
+  const c = CHAPTERS[i];
+  setScreen(c.screen);
+
+  /* Seksioni RadX: telefoni largohet, skena merr gjithe ekranin dhe paneli
+     ndryshon faqe. Kamera duhet rillogaritur sepse hapesira e telefonit bie. */
+  const wide = c.sec === 'RadX';
+  if (document.body.classList.contains('wide') !== wide){
+    document.body.classList.toggle('wide', wide);
+    S.camDirty = true;
+  }
+  if (c.panel) setPanelPage(c.panel);
 
   if (i <= 1){ S.phase='idle';    S.ledTarget.setHex(0xffffff); }
   if (i === 2){ S.phase='auth';   S.ledTarget.setHex(0x2f9bff); }
@@ -937,6 +1368,8 @@ function onChapter(i){
   if (i === 9){ S.phase='charging'; S.ledTarget.setHex(P.brand); }
   if (i === 10){ S.phase='charging'; S.ledTarget.setHex(P.brand); }
   if (i === 11){ S.phase='done';  S.ledTarget.setHex(0x2f9bff); }
+  /* Ne seksionin RadX rrjeti duhet te dukej i gjalle poshte panelit, jo i fjetur. */
+  if (i >= 12){ S.phase='charging'; S.ledTarget.setHex(P.brand); }
 
   // Udhëzimi u hoq: porta shënohet nga unaza jeshile, teksti i kapitullit dhe
   // ekrani i karikuesit e thonë çfarë duhet bërë. Mbetet vetëm konfirmimi.
@@ -982,7 +1415,7 @@ canvas.addEventListener('pointerdown', e=>{
   toNdc(e); ray.setFromCamera(ptr, camera);
   if (!ray.intersectObjects(plug.children,false).length){
     const sp = plug.position.clone().project(camera);
-    if (Math.hypot(sp.x-ptr.x, sp.y-ptr.y) > 0.10) return;
+    if (Math.hypot(sp.x-ptr.x, sp.y-ptr.y) > PICK_TOL) return;
   }
   S.dragging = true; S.idle = 0; canvas.setPointerCapture(e.pointerId);
 });
@@ -1013,7 +1446,23 @@ CHAPTERS.forEach((c,i)=>{
   if (i>0 && c.sec !== CHAPTERS[i-1].sec) dotsEl.appendChild(document.createElement('u'));
   const d = document.createElement('i'); d.onclick = ()=> goTo(i); dotsEl.appendChild(d);
 });
-const KEYMAP = ['1','2','3','4','5','6','7','8','9','0','-','='];
+/* Portret: shiriti i tekstit hapet me tap. Butonat brenda tij nuk e ndryshojne gjendjen. */
+const chapcard = document.getElementById('chapcard');
+const isCompact = () => matchMedia(
+  '(orientation:portrait) and (max-width:1100px), (orientation:landscape) and (max-height:520px)'
+).matches;
+chapcard.addEventListener('click', e => {
+  if (!isCompact() || e.target.closest('button')) return;
+  chapcard.classList.toggle('open');
+});
+
+document.getElementById('btn-fs').onclick = () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else (document.body.requestFullscreen || document.body.webkitRequestFullscreen)?.call(document.body);
+};
+
+const KEYMAP = ['1','2','3','4','5','6','7','8','9','0','-','=',
+                '[',']','\\',';',"'",',','.','/'];
 window.addEventListener('keydown', e=>{
   if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); goTo(chapter+1); }
   else if (e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(chapter-1); }
@@ -1032,17 +1481,40 @@ function restart(){
 /* ===================== LOOP ===================== */
 const clk = new THREE.Clock();
 let lastW = 0, lastH = 0;
-const PHONE_PAD = () => (window.innerWidth > 980 ? (window.innerWidth > 1280 ? 200 : 150) : 0);
+/* Hapesira e telefonit ne te djathte. Ne portret telefoni shkon POSHTE skenes,
+   kështu nuk duhet zhvendosje horizontale. */
+function phonePad(){
+  if (document.body.classList.contains('wide')) return 0;   // seksioni RadX: pa telefon
+  const portrait = window.innerHeight > window.innerWidth;
+  if (portrait && window.innerWidth <= 1100) return 0;   // layout i shtresuar
+  if (window.innerHeight <= 520) return 105;             // telefon horizontal
+  if (window.innerWidth  <= 1280) return 150;
+  return 200;
+}
+
+/* Skena renditet horizontalisht (3 vende parkimi). Kur aspekti ngushtohet, ne vend
+   qe te presim gjeresine, zgjerojme fov-in vertikal — kuadrimi horizontal mbetet i njejti.
+   Ne 16:9 dhe me gjere mbetet 42°, keshtu desktop-i nuk preket fare. */
+const HFOV_REF = 2*Math.atan(Math.tan(42*Math.PI/360)*(16/9));
+const fitFov = a => Math.min(74, 2*Math.atan(Math.tan(HFOV_REF/2)/a)*180/Math.PI);
+
+/* Sa here duhet terhequr kamera qe kuadrimi horizontal te barazoje referencen.
+   1.0 kur fov-i nuk ka rene ne kapin e 74°, pra ne desktop dhe ne landscape. */
+let camPull = 1;
+function updateCamPull(){
+  const hfov = 2*Math.atan(Math.tan(camera.fov*Math.PI/360)*camera.aspect);
+  camPull = Math.max(1, Math.tan(HFOV_REF/2)/Math.tan(hfov/2));
+}
 
 function frame(){
   const dt = Math.min(clk.getDelta(), 0.1);
 
   /* resize + hapesira e telefonit ne te djathte */
   const w = canvas.clientWidth, h = canvas.clientHeight;
-  if (w!==lastW || h!==lastH){
-    lastW = w; lastH = h;
+  if (w!==lastW || h!==lastH || S.camDirty){
+    lastW = w; lastH = h; S.camDirty = false;
     renderer.setSize(w,h,false);
-    const pad = PHONE_PAD();
+    const pad = phonePad();
     if (pad > 0){
       camera.aspect = (w + 2*pad)/Math.max(1,h);
       camera.setViewOffset(w + 2*pad, h, 2*pad, 0, w, h);
@@ -1050,7 +1522,9 @@ function frame(){
       camera.aspect = w/Math.max(1,h);
       camera.clearViewOffset();
     }
+    camera.fov = camera.aspect < 16/9 ? fitFov(camera.aspect) : 42;
     camera.updateProjectionMatrix();
+    updateCamPull();
   }
 
   /* kamera */
@@ -1059,9 +1533,14 @@ function frame(){
     progress = progFrom + (progTo-progFrom)*easeIO(progT);
   }
   const base = camCurve.getPoint(progress);
-  camera.position.set(base.x + mouse.x*0.30, base.y - mouse.y*0.15, base.z);
   const seg = progress*(N-1), si = Math.min(N-2, Math.floor(seg));
   lookNow.lerpVectors(lookPts[si], lookPts[si+1], easeIO(Math.min(1, seg-si)));
+  /* Terheqja aplikohet vetem ne seksionin RadX, dhe vetem kur portreti e ka
+     ngushtuar kuadrimin. Jashte tij base mbetet pikerisht vlera e CHAPTERS. */
+  if (camPull > 1.001 && CHAPTERS[chapter].sec === 'RadX'){
+    base.sub(lookNow).multiplyScalar(camPull).add(lookNow);
+  }
+  camera.position.set(base.x + mouse.x*0.30, base.y - mouse.y*0.15, base.z);
   camera.lookAt(lookNow);
 
   /* LED-et */
@@ -1085,7 +1564,7 @@ function frame(){
   const inConnect = chapter===4 && !S.connected;
   if (inConnect && !S.dragging){
     S.idle += dt;
-    if (S.idle > 8 && !S.autoDone){
+    if (S.idle > AUTO_S && !S.autoDone){
       S.autoDone = true;
       const from = plugPos.clone(), to = heroCar.portWorld.clone().add(new THREE.Vector3(-0.16,0,0));
       let t = 0;
@@ -1142,7 +1621,7 @@ function frame(){
   sideCables.forEach(c=>{ c.material.opacity = S.side; c.visible = S.side>0.02; });
 
   /* paneli */
-  S.panel += ((chapter===11 ? 1 : 0) - S.panel) * Math.min(1, dt*2.6);
+  S.panel += ((chapter>=11 ? 1 : 0) - S.panel) * Math.min(1, dt*2.6);
   panelMat.opacity = S.panel; frameMat.opacity = S.panel*0.95;
   panel.visible = panelFrame.visible = S.panel > 0.02;
   panel.position.y = 3.6 + Math.sin(clk.elapsedTime*0.8)*0.045;
@@ -1212,7 +1691,7 @@ goTo(0, true);
 requestAnimationFrame(frame);
 setTimeout(()=> document.getElementById('boot').classList.add('hide'), 420);
 
-window.__demo = { goTo, restart, snapPlug, S, CHAPTERS, camera, scene, renderer, plug, plugPos, heroCar, stations,
+window.__demo = { goTo, restart, snapPlug, S, CHAPTERS, camera, scene, renderer, plug, plugPos, heroCar, stations, panel, setPanelPage,
                   setScreen, get screen(){ return curScreen; } };
 
 window.addEventListener('beforeunload', ()=>{
