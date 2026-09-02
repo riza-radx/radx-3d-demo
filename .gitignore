@@ -4,4 +4,4 @@ dist/
 # Burimet e dizajnit — te rendat, dhe hostimi nuk i duhen.
 # Pamjet e nxjerra prej tyre qendrojne te assets/app/ (2.1 MB) dhe ndjeken normalisht.
 PDF-Presentation.pdf
-Render Me_2.mp4
+*.mp4
