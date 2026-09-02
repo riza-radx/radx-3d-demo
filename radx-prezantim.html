@@ -72,10 +72,16 @@
     .navrow button:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#0b2a06}
   }
   .navrow button:disabled{opacity:.3;cursor:default}
-  .dots{display:flex;gap:6px;margin-left:auto;align-items:center}
-  .dots i{width:7px;height:7px;border-radius:50%;background:rgba(143,176,187,.3);cursor:pointer;pointer-events:auto;transition:.2s}
-  .dots i.on{background:var(--brand);transform:scale(1.5)}
-  .dots u{width:11px;display:block}
+  .dots{
+    display:flex;gap:5px;align-items:center;margin-top:15px;
+    padding-top:13px;border-top:1px solid rgba(143,176,187,.14);
+  }
+  .dots i{
+    width:6px;height:6px;border-radius:50%;background:rgba(143,176,187,.28);
+    cursor:pointer;pointer-events:auto;transition:.2s;flex:0 0 auto;
+  }
+  .dots i.on{background:var(--brand);transform:scale(1.6)}
+  .dots u{width:9px;display:block;flex:0 0 auto}
 
   /* ================= TELEFONI ================= */
   /* Seksioni RadX: telefoni largohet dhe skena merr gjithe ekranin.
@@ -105,7 +111,10 @@
   .pimg{
     position:absolute;inset:0;width:100%;height:100%;display:block;
     opacity:0;transition:opacity .45s ease;
+    border-radius:16.9cqw;          /* rreze e matur nga SMask-i i PDF-se */
+    border-radius:53px;             /* rezerve per browser pa cqw */
   }
+  @supports (width:1cqw){ .pimg{border-radius:16.9cqw} }
   .pimg.on{opacity:1}
 
   /* --- Shtresa e karikimit: mbulon ishullin e zi dhe e rishkruan me numra
@@ -120,17 +129,17 @@
   }
   .ov-big{
     position:absolute;left:5%;top:24%;
-    font-size:19px;font-size:6.1cqw;letter-spacing:-.5px;line-height:1;white-space:nowrap;
+    font-size:16px;font-size:5.1cqw;letter-spacing:-.4px;line-height:1;white-space:nowrap;
   }
   .ov-sub{
     position:absolute;left:5%;top:47%;
-    font-size:8px;font-size:2.5cqw;font-weight:500;color:#d7dee1;white-space:nowrap;
+    font-size:7px;font-size:2.2cqw;font-weight:500;color:#d7dee1;white-space:nowrap;
   }
   .ov-ring{position:absolute;right:5%;top:12%;width:20%;aspect-ratio:1}
   .ov-btn{
     position:absolute;left:5%;right:5%;bottom:3%;height:23%;
     background:#07435d;border-radius:999px;display:grid;place-items:center;
-    font-size:9px;font-size:2.9cqw;letter-spacing:.2px;
+    font-size:8px;font-size:2.6cqw;letter-spacing:.2px;
   }
 
   /* --- Shtresa e fundit: mbulon vetem rreshtin e vlerave te kartes se bardhe.
@@ -140,7 +149,7 @@
     background:#fff;display:grid;grid-template-columns:68% 32%;align-items:center;
   }
   .ov-done b{
-    font-size:15px;font-size:4.7cqw;font-weight:600;color:#08435d;
+    font-size:13px;font-size:4.1cqw;font-weight:600;color:#08435d;
     letter-spacing:-.3px;line-height:1;white-space:nowrap;
   }
   .phone .glass{
@@ -356,7 +365,7 @@
     .phone{
       position:fixed;top:calc(38dvh + 12px);left:50%;
       transform:translateX(-50%);
-      height:min(440px, calc(62dvh - 84px));
+      height:min(560px, calc(62dvh - 84px));
     }
     body.wide .phone{transform:translateX(-50%) translateY(26px) scale(.97)}
     body.wide #scene{height:100dvh}   /* pa telefon, skena merr gjithe ekranin */
@@ -367,6 +376,13 @@
     }
     .chapter.open{max-height:56dvh;overflow-y:auto;padding-bottom:18px}
     .draghint{bottom:80px}
+  }
+
+  /* Ekrane te shkurtra ne portret (SE dhe te ngjashem): nuk hyjne te dyja
+     ne 38/62. Skena leshon vend, sepse pa telefon te lexueshem humbet poenti. */
+  @media (orientation:portrait) and (max-width:1100px) and (max-height:680px){
+    #scene{height:30dvh}
+    .phone{top:calc(30dvh + 10px);height:calc(70dvh - 76px)}
   }
 
   /* ======================= MOBILE - telefon horizontal ======================= */
@@ -383,7 +399,7 @@
     .sep{margin:6px 0}
     .push{padding:10px 12px}
 
-    .fs{top:13px;left:78px;right:auto}   /* te mos bjere mbi telefonin */
+    .fs{top:13px;left:116px;right:auto}  /* pas logos, dhe larg telefonit ne te djathte */
 
     .chapter{
       left:16px;bottom:14px;width:min(370px,44vw);border-radius:15px;
@@ -423,7 +439,7 @@
   <div class="phone">
     <div class="pscreen">
       <img class="pimg" data-s="map"      src="./assets/app/01-harta.jpg" alt="">
-      <img class="pimg" data-s="charger"  src="./assets/app/02-detaji-pikes.jpg" alt="">
+      <img class="pimg" data-s="route"    src="./assets/app/06-rruga.jpg" alt="">
       <img class="pimg" data-s="sheet"    src="./assets/app/03-fleta-pikes.jpg" alt="">
       <img class="pimg" data-s="charging" src="./assets/app/07-karikimi.jpg" alt="">
       <img class="pimg" data-s="done"     src="./assets/app/08-karikimi-mbaroi.jpg" alt="">
@@ -462,8 +478,8 @@
     <div class="navrow">
       <button class="clickable" id="btn-prev">←<span class="w"> Mbrapa</span></button>
       <button class="clickable" id="btn-next"><span class="w">Vazhdo </span>→</button>
-      <div class="dots clickable" id="dots"></div>
     </div>
+    <div class="dots clickable" id="dots" role="tablist" aria-label="Kapitujt"></div>
   </div>
 </div>
 
@@ -1056,6 +1072,252 @@ function drawBrandPage(x){
   x.textAlign = 'left';
 }
 
+/* ===================== PANELI NE PORTRET =====================
+   Ne portret paneli 16:9 del 51–70% i gjeresise dhe teksti i rreshtave bie ne
+   3.7–5.1px: i palexueshem. Zmadhimi i kameres nuk e zgjidh — paneli i gjere
+   thjesht nuk i pershtatet ekranit te larte, dhe px-et e shtuar shkojne ne
+   gjeresi ku nuk ka nevoje. Keshtu ne portret paneli behet i larte
+   (1000x1560) dhe permbajtja rirreshtohet: kartat 2x2, nenrreshti poshte
+   rreshtit, dy markat njera mbi tjetren. Faqja landscape nuk preket fare. */
+const PORT_W = 1000, PORT_H = 1560;
+
+/* Mbeshtjell tekstin ne rreshta brenda gjeresise. */
+function wrapTx(x, text, maxW){
+  const out = []; let line = '';
+  for (const w of String(text).split(' ')){
+    const t = line ? line + ' ' + w : w;
+    if (line && x.measureText(t).width > maxW){ out.push(line); line = w; }
+    else line = t;
+  }
+  if (line) out.push(line);
+  return out;
+}
+/* Vendos fontin sa te hyje ne gjeresi — emrat dhe numrat ndryshojne gjatesi. */
+function fitTx(x, text, maxW, size, weight, fam){
+  let sz = size;
+  x.font = weight + ' ' + sz + 'px ' + fam;
+  while (sz > 14 && x.measureText(text).width > maxW){
+    sz -= 2; x.font = weight + ' ' + sz + 'px ' + fam;
+  }
+  return sz;
+}
+
+function drawPagePortrait(x, p){
+  const W = PORT_W, H = PORT_H, M = 30, IW = W - 2*M;
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, W, H);
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+
+  /* shiriti i marks */
+  x.fillStyle = p.brand || '#10a2ac'; x.fillRect(0, 0, W, 100);
+  x.fillStyle = '#fff'; x.font = '600 36px sans-serif';
+  x.fillText(p.app || 'RadX · Paneli i rrjetit', M, 64);
+  if (p.pageName){
+    x.textAlign = 'right'; x.font = '500 30px sans-serif';
+    x.fillText(p.pageName, W - M, 63); x.textAlign = 'left';
+  }
+
+  /* fjalia kryesore — mbeshtjellet, sepse 1000px nuk mban nje rresht te vetem */
+  x.font = '600 46px sans-serif';
+  const hl = wrapTx(x, p.headline, IW - 52);
+  const hlH = 30 + hl.length * 58;
+  x.fillStyle = PANEL_INK; x.fillRect(M, 128, IW, hlH);
+  x.fillStyle = '#fff';
+  hl.forEach((l, i) => x.fillText(l, M + 26, 128 + 58 + i*58));
+  let y = 128 + hlH + 30;
+
+  /* Shiriti i fundit vizatohet i pari: rreshtat mbushin hapesiren deri tek ai,
+     keshtu faqja nuk mbetet bosh ne fund. */
+  let noteTop = H;
+  if (p.note){
+    x.font = '400 32px sans-serif';
+    const nl = wrapTx(x, p.note, IW - 20);
+    const bandH = 34 + nl.length * 44;
+    noteTop = H - bandH;
+    x.fillStyle = '#e9eff2'; x.fillRect(0, noteTop, W, bandH);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1;
+    x.beginPath(); x.moveTo(0, noteTop); x.lineTo(W, noteTop); x.stroke();
+    x.textAlign = 'right'; x.fillStyle = '#5b7783';
+    nl.forEach((l, i) => x.fillText(l, W - M, noteTop + 52 + i*44));
+    x.textAlign = 'left';
+  }
+
+  /* kartat: dy kolona */
+  if (p.cards){
+    const cw = (IW - 22)/2, ch = 152;
+    p.cards.forEach(([k, v, col], i) => {
+      const px = M + (i % 2)*(cw + 22), py = y + Math.floor(i/2)*(ch + 22);
+      x.fillStyle = '#fff'; x.fillRect(px, py, cw, ch);
+      x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(px, py, cw, ch);
+      x.fillStyle = PANEL_DIM; fitTx(x, k, cw - 44, 26, '500', 'sans-serif');
+      x.fillText(k, px + 22, py + 48);
+      x.fillStyle = col || PANEL_INK; fitTx(x, v, cw - 44, 54, '700', 'monospace');
+      x.fillText(v, px + 22, py + 118);
+    });
+    y += Math.ceil(p.cards.length/2)*(ch + 22) + 10;
+  }
+
+  /* rreshtat: kutia mbush deri 26px mbi shiritin e fundit, ndarja barabar */
+  if (p.rows){
+    const boxH = Math.max(260, noteTop - 26 - y);
+    x.fillStyle = '#fff'; x.fillRect(M, y, IW, boxH);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, y, IW, boxH);
+    let bandTop = y + 24;
+    if (p.rowsTitle){
+      x.fillStyle = PANEL_INK; x.font = '600 34px sans-serif';
+      x.fillText(p.rowsTitle, M + 26, y + 54);
+      bandTop = y + 86;
+    }
+    const n = p.rows.length;
+    const slot = Math.min(172, (y + boxH - 18 - bandTop)/Math.max(1, n));
+    p.rows.forEach(([a, b, tag, col], i) => {
+      const ry = Math.round(bandTop + i*slot + (slot - 78)/2 + 28);
+      let tw = 0;
+      if (tag){
+        fitTx(x, tag, 320, 30, '700', 'monospace');
+        tw = x.measureText(tag).width;
+        x.textAlign = 'right'; x.fillStyle = col || PANEL_OK;
+        x.fillText(tag, W - M - 26, ry); x.textAlign = 'left';
+      }
+      x.fillStyle = PANEL_INK;
+      fitTx(x, a, IW - 72 - tw - (tag ? 22 : 0), 36, '600', 'sans-serif');
+      x.fillText(a, M + 26, ry);
+      if (b){
+        x.fillStyle = PANEL_DIM; fitTx(x, b, IW - 72, 29, '400', 'sans-serif');
+        x.fillText(b, M + 26, ry + 42);
+      }
+      if (i < n - 1){
+        x.strokeStyle = '#eef3f5'; x.lineWidth = 1; x.beginPath();
+        x.moveTo(M + 26, bandTop + (i+1)*slot); x.lineTo(W - M - 26, bandTop + (i+1)*slot); x.stroke();
+      }
+    });
+  }
+}
+
+/* Argumenti i white-label ne portret: dy markat njera MBI tjetren.
+   Krahasimi mbetet i njejti — vetem boshti ndryshon. */
+function drawBrandPagePortrait(x){
+  const W = PORT_W, H = PORT_H, M = 30, IW = W - 2*M;
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, W, H);
+  x.textBaseline = 'alphabetic'; x.textAlign = 'center';
+  x.fillStyle = PANEL_INK; x.font = '700 46px sans-serif';
+  x.fillText('I NJËJTI SISTEM POSHTË', W/2, 68);
+
+  const halfH = 596;
+  const half = (oy, brand, name, sub) => {
+    x.fillStyle = '#fff'; x.fillRect(M, oy, IW, halfH);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, oy, IW, halfH);
+    x.fillStyle = brand; x.fillRect(M, oy, IW, 82);
+    x.textAlign = 'left';
+    x.fillStyle = '#fff'; x.font = '600 38px sans-serif'; x.fillText(name, M + 26, oy + 55);
+    x.fillStyle = PANEL_DIM; x.font = '500 27px sans-serif'; x.fillText(sub, M + 26, oy + 128);
+
+    const cw = (IW - 52 - 20)/2;
+    [['ENERGJIA SOT','6,780 kWh'], ['KARIKON TANI','17']].forEach(([k, v], i) => {
+      const cx = M + 26 + i*(cw + 20), cy = oy + 156;
+      x.fillStyle = '#f7fafb'; x.fillRect(cx, cy, cw, 118);
+      x.strokeStyle = '#e6edf0'; x.lineWidth = 1; x.strokeRect(cx, cy, cw, 118);
+      x.fillStyle = PANEL_DIM; fitTx(x, k, cw - 36, 24, '500', 'sans-serif');
+      x.fillText(k, cx + 20, cy + 40);
+      x.fillStyle = PANEL_INK; fitTx(x, v, cw - 36, 42, '700', 'monospace');
+      x.fillText(v, cx + 20, cy + 96);
+    });
+
+    x.fillStyle = brand; x.fillRect(M + 26, oy + 300, IW - 52, 66);
+    x.textAlign = 'center'; x.fillStyle = '#fff'; x.font = '700 30px sans-serif';
+    x.fillText('Nis karikimin', W/2, oy + 344); x.textAlign = 'left';
+
+    [['Çmimi','35 L/kWh'], ['Faturimi','automatik'], ['Karikuesit','të njëjtët']].forEach(([a, b], i) => {
+      const ry = oy + 424 + i*52;
+      x.fillStyle = PANEL_INK; x.font = '500 29px sans-serif'; x.fillText(a, M + 46, ry);
+      x.textAlign = 'right'; x.fillStyle = PANEL_DIM; x.fillText(b, W - M - 46, ry); x.textAlign = 'left';
+    });
+  };
+  half(100, '#7fbc42', 'Vega Charging', 'marka e klientit A');
+  half(100 + halfH + 26, '#931623', 'Flex Charge', 'marka e klientit B');
+
+  const nl = ['Ndryshojnë ngjyra, logo dhe emri — asgjë tjetër.',
+              'Çmimi, matja, faturimi dhe karikuesit janë të njëjtët.'];
+  x.font = '400 30px sans-serif';
+  const bandH = 34 + nl.length*44, by = H - bandH;
+  x.fillStyle = '#e9eff2'; x.fillRect(0, by, W, bandH);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1;
+  x.beginPath(); x.moveTo(0, by); x.lineTo(W, by); x.stroke();
+  x.textAlign = 'right'; x.fillStyle = '#5b7783';
+  nl.forEach((l, i) => x.fillText(l, W - M, by + 52 + i*44));
+  x.textAlign = 'left';
+}
+
+/* Paneli i operatorit (kapitulli 12) ne portret: KPI-te 2x2, grafiku dhe
+   unaza e shendetit njera nen tjetren. Nje KPI hiqet — 87.6% e thote unaza. */
+function dashboardTexturePortrait(){
+  const W = PORT_W, H = PORT_H, M = 30, IW = W - 2*M;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d');
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, W, H);
+  x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+  x.fillStyle = '#10a2ac'; x.fillRect(0, 0, W, 100);
+  x.fillStyle = '#fff'; x.font = '600 36px sans-serif';
+  x.fillText('RadX · Paneli i rrjetit', M, 64);
+  x.fillStyle = PANEL_INK; x.fillRect(M, 128, IW, 92);
+  x.fillStyle = '#fff'; x.font = '600 38px sans-serif';
+  x.fillText('Rrjeti punon. 3 gjëra kërkojnë kujdes.', M + 26, 186);
+
+  const cw = (IW - 22)/2, ch = 150;
+  [['ENERGJIA SOT','6,780 kWh'], ['TË ARDHURAT','259K ALL'],
+   ['SESIONE','249'], ['KARIKON TANI','17']].forEach(([k, v], i) => {
+    const px = M + (i % 2)*(cw + 22), py = 250 + Math.floor(i/2)*(ch + 22);
+    x.fillStyle = '#fff'; x.fillRect(px, py, cw, ch);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(px, py, cw, ch);
+    x.fillStyle = PANEL_DIM; fitTx(x, k, cw - 44, 26, '500', 'sans-serif');
+    x.fillText(k, px + 22, py + 48);
+    x.fillStyle = PANEL_INK; fitTx(x, v, cw - 44, 52, '700', 'monospace');
+    x.fillText(v, px + 22, py + 118);
+  });
+
+  const gy = 594, gh = 386;
+  x.fillStyle = '#fff'; x.fillRect(M, gy, IW, gh);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, gy, IW, gh);
+  x.fillStyle = PANEL_INK; x.font = '600 32px sans-serif';
+  x.fillText('Ngarkesa e rrjetit sot', M + 26, gy + 50);
+  const pts = [.08,.13,.3,.34,.33,.55,.48,.5,.52,.42,.86,.88];
+  const gx0 = M + 40, gx1 = W - M - 40, gBase = gy + gh - 46, gTop = gy + 100;
+  const path = () => { x.beginPath(); pts.forEach((v, i) => {
+    const px = gx0 + i*(gx1 - gx0)/(pts.length - 1), py = gBase - v*(gBase - gTop);
+    i ? x.lineTo(px, py) : x.moveTo(px, py); }); };
+  path(); x.lineTo(gx1, gBase); x.lineTo(gx0, gBase); x.closePath();
+  x.fillStyle = 'rgba(16,162,172,.18)'; x.fill();
+  path(); x.strokeStyle = '#10a2ac'; x.lineWidth = 5; x.stroke();
+
+  const nl = ['24 pika · 17 karikojnë tani',
+              '3 gjëra kërkojnë kujdes — operatori u njoftua'];
+  x.font = '400 30px sans-serif';
+  const bandH = 34 + nl.length*44, by = H - bandH;
+
+  const hy = 1004, hh = by - 26 - hy;
+  x.fillStyle = '#fff'; x.fillRect(M, hy, IW, hh);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, hy, IW, hh);
+  x.fillStyle = PANEL_INK; x.font = '600 32px sans-serif';
+  x.fillText('Shëndeti i rrjetit', M + 26, hy + 50);
+  const rx = W/2, ry = hy + hh/2 + 30, rr = 104;
+  x.beginPath(); x.arc(rx, ry, rr, -1.57, 4.0); x.strokeStyle = '#7fbc42'; x.lineWidth = 30; x.stroke();
+  x.beginPath(); x.arc(rx, ry, rr, 4.0, 4.71); x.strokeStyle = '#f0a33a'; x.stroke();
+  x.fillStyle = PANEL_INK; x.font = '700 52px monospace'; x.textAlign = 'center';
+  x.fillText('87.6%', rx, ry + 18); x.textAlign = 'left';
+
+  x.fillStyle = '#e9eff2'; x.fillRect(0, by, W, bandH);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1;
+  x.beginPath(); x.moveTo(0, by); x.lineTo(W, by); x.stroke();
+  /* Fonti rivendoset: unaza e shendetit e la kontekstin ne 52px monospace,
+     dhe shiriti i fundit dilte jashte kuadrit. */
+  x.font = '400 30px sans-serif';
+  x.textAlign = 'right'; x.fillStyle = '#5b7783';
+  nl.forEach((l, i) => x.fillText(l, W - M, by + 52 + i*44));
+  x.textAlign = 'left';
+
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  track.push(t); return t;
+}
+
 /* Numrat e faqeve jane te skriptuar, si gjithe prezantimi — jo te dhena reale. */
 const PANEL_PAGES = {
   intro: {
@@ -1151,29 +1413,68 @@ const PANEL_PAGES = {
   },
 };
 
-let overviewTex = dashboardTexture();
-const panelCache = {};
+let panelPort = false;                    /* orientimi aktiv i panelit */
+const PANEL_AT = new THREE.Vector3(0.4, 3.6, -1.6);   /* qendra, ndryshon me orientimin */
+let overviewTex = dashboardTexture();     /* landscape; screenshot-i real zevendeson kete */
+let overviewPortTex = null;
+const panelCache = { land:{}, port:{} };
 function panelTex(name){
-  if (name === 'overview') return overviewTex;
-  if (panelCache[name]) return panelCache[name];
-  const c = document.createElement('canvas'); c.width = PANEL_W; c.height = PANEL_H;
+  if (name === 'overview'){
+    if (!panelPort) return overviewTex;
+    if (!overviewPortTex) overviewPortTex = dashboardTexturePortrait();
+    return overviewPortTex;
+  }
+  const cache = panelCache[panelPort ? 'port' : 'land'];
+  if (cache[name]) return cache[name];
+  const c = document.createElement('canvas');
+  c.width  = panelPort ? PORT_W : PANEL_W;
+  c.height = panelPort ? PORT_H : PANEL_H;
   const x = c.getContext('2d');
-  if (name === 'brand') drawBrandPage(x); else drawPage(x, PANEL_PAGES[name]);
+  if (name === 'brand') (panelPort ? drawBrandPagePortrait : drawBrandPage)(x);
+  else (panelPort ? drawPagePortrait : drawPage)(x, PANEL_PAGES[name]);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
-  track.push(t); panelCache[name] = t; return t;
+  track.push(t); cache[name] = t; return t;
 }
+/* Faqja aktuale mbahet mend: kur ndryshon orientimi, ajo rivizatohet. */
+let panelPageNow = 'overview';
 function setPanelPage(name){
-  const t = panelTex(name);
+  if (name) panelPageNow = name;
+  const t = panelTex(panelPageNow);
   if (t && panelMat.map !== t){ panelMat.map = t; panelMat.needsUpdate = true; }
 }
 
 const panelMat = new THREE.MeshBasicMaterial({ map:overviewTex, transparent:true, opacity:0, toneMapped:false });
 track.push(panelMat);
-const panel = new THREE.Mesh(geo(new THREE.PlaneGeometry(6.4,3.6)), panelMat);
-panel.position.set(0.4,3.6,-1.6); panel.rotation.x = -0.06; scene.add(panel);
+/* Permasat e planit ndjekin ato te teksturës. Qendra mbetet (0.4, 3.6, -1.6):
+   varianti i larte e mban fundin mbi toke (3.6 − 2.81 = 0.79). */
+/* Ne portret paneli i larte zbret deri ne y 1.79 dhe makina ne plan te pare
+   (kulmi ~1.5, shume me prane kameres) i preu shiritin e fundit. Keshtu qendra
+   ngrihet 3.6 → 4.6: fundi i panelit del mbi kulmin e makinave. */
+const PANEL_DIMS = {
+  land: { w:6.4, h:3.6,   fw:6.66, fh:3.86, y:3.6 },
+  port: { w:3.6, h:5.616, fw:3.86, fh:5.92, y:4.6 },
+};
+let panelDim = PANEL_DIMS.land;
+const panel = new THREE.Mesh(geo(new THREE.PlaneGeometry(panelDim.w, panelDim.h)), panelMat);
+panel.position.set(0.4, panelDim.y, -1.6); panel.rotation.x = -0.06; scene.add(panel);
 const frameMat = mat({ color:0x02222e, roughness:.4, metalness:.3, transparent:true, opacity:0 });
-const panelFrame = box(6.66,3.86,0.08,frameMat,0.4,3.6,-1.68);
+const panelFrame = box(panelDim.fw, panelDim.fh, 0.08, frameMat, 0.4, panelDim.y, -1.68);
 panelFrame.rotation.x = -0.06; panelFrame.castShadow = false;
+
+/* Kalimi portret ↔ landscape: plan i ri, kornize e re, faqja rivizatohet. */
+function applyPanelMode(port){
+  if (port === panelPort) return false;
+  panelPort = port;
+  panelDim = PANEL_DIMS[port ? 'port' : 'land'];
+  panel.geometry.dispose();
+  panel.geometry = geo(new THREE.PlaneGeometry(panelDim.w, panelDim.h));
+  panelFrame.geometry.dispose();
+  panelFrame.geometry = geo(new THREE.BoxGeometry(panelDim.fw, panelDim.fh, 0.08));
+  panel.position.y = panelFrame.position.y = panelDim.y;
+  PANEL_AT.y = panelDim.y;
+  setPanelPage(null);
+  return true;
+}
 /* Screenshot-i i vertete, nese hidhet te assets/, zevendeson vetem faqen 'overview'. */
 new THREE.TextureLoader().load('./assets/dashboard.png', tex=>{
   tex.colorSpace = THREE.SRGBColorSpace; track.push(tex);
@@ -1208,7 +1509,7 @@ const S = {
    ESHTE i njejti — ndryshon vetem gjendja, dhe gjendjen e thote shtresa. */
 const SCREEN_MAP = {
   map:      { img:'map' },
-  charger:  { img:'charger' },
+  charger:  { img:'list' },
   auth:     { img:'sheet' },
   starting: { img:'charging', ov:'charge', big:'Starting…',  sub:'Waiting for the charger' },
   connect:  { img:'charging', ov:'charge', big:'Plug in',    sub:'Connect the cable to start' },
@@ -1217,7 +1518,7 @@ const SCREEN_MAP = {
   paid:     { img:'done',     ov:'done' },
   invoice:  { img:'wallet' },
   shared:   { img:'map' },
-  problem:  { img:'list' },
+  problem:  { img:'route' },
   thanks:   { img:'myev' },
 };
 const RANGE_KM = 300;            // autonomia e plote e bateries 42 kWh
@@ -1251,6 +1552,18 @@ function setArc(frac){
   document.getElementById('ov-batt').setAttribute('y', String(60 - Math.max(1, 22 * frac)));
 }
 
+/* Telefoni largohet ne seksionin RadX. Ne portret largohet edhe te kapitulli
+   me panelin e operatorit: brenda 38dvh paneli del i palexueshem, dhe ekrani
+   i telefonit atje eshte dekor — teksti flet per panelin, jo per app-in. */
+function applyWide(){
+  const c = CHAPTERS[chapter];
+  const wide = c.sec === 'RadX' || !!(c.panel && wantPanelPort());
+  if (document.body.classList.contains('wide') !== wide){
+    document.body.classList.toggle('wide', wide);
+    S.camDirty = true;
+  }
+}
+
 /* ===================== KAPITUJT ===================== */
 function goTo(i, instant=false){
   i = Math.max(0, Math.min(N-1, i));
@@ -1265,13 +1578,7 @@ function onChapter(i){
   const c = CHAPTERS[i];
   setScreen(c.screen);
 
-  /* Seksioni RadX: telefoni largohet, skena merr gjithe ekranin dhe paneli
-     ndryshon faqe. Kamera duhet rillogaritur sepse hapesira e telefonit bie. */
-  const wide = c.sec === 'RadX';
-  if (document.body.classList.contains('wide') !== wide){
-    document.body.classList.toggle('wide', wide);
-    S.camDirty = true;
-  }
+  applyWide();
   if (c.panel) setPanelPage(c.panel);
 
   if (i <= 1){ S.phase='idle';    S.ledTarget.setHex(0xffffff); }
@@ -1319,6 +1626,7 @@ function renderUI(){
   document.getElementById('btn-prev').disabled = chapter===0;
   document.getElementById('btn-next').disabled = chapter===N-1;
   [...document.querySelectorAll('#dots i')].forEach((d,i)=> d.classList.toggle('on', i===chapter));
+  measureCard();   /* teksti sapo ndryshoi → lartesia e kartes mund te kete ndryshuar */
 }
 
 /* ===================== TERHEQJA E SPINES ===================== */
@@ -1375,7 +1683,12 @@ const isCompact = () => matchMedia(
 chapcard.addEventListener('click', e => {
   if (!isCompact() || e.target.closest('button')) return;
   chapcard.classList.toggle('open');
+  if (!chapcard.classList.contains('open')) setTimeout(measureCard, 340);
 });
+window.addEventListener('resize', () => { measureCard(); S.camDirty = true; });
+window.addEventListener('orientationchange', () => setTimeout(() => {
+  measureCard(); S.camDirty = true;
+}, 260));
 
 document.getElementById('btn-fs').onclick = () => {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -1427,6 +1740,43 @@ function updateCamPull(){
   camPull = Math.max(1, Math.tan(HFOV_REF/2)/Math.tan(hfov/2));
 }
 
+/* ===== Kuadrimi i panelit ne ekran te vogel =====
+   Ne desktop paneli ze 45–71% te gjeresise dhe teksti del 12–19px: lexohet.
+   Ne telefon i njejti kuadrim jep 3.7–9.1px. Keshtu ne ekran te vogel, dhe
+   VETEM per kapitujt me panel, distanca e kameres nuk merret nga CHAPTERS por
+   llogaritet: sa duhet qe paneli te mbushe kuadrin. Drejtimi — pjerresia e
+   kapitullit — mbetet i njejti. Desktop-i nuk e ndez kete rruge fare. */
+const smallScreen   = () => window.innerWidth <= 1100 || window.innerHeight <= 560;
+const wantPanelPort = () => smallScreen() && window.innerHeight > window.innerWidth;
+let cardClosedH = 0, vShift = 0;
+const dirTmp = new THREE.Vector3();
+
+/* Sa px te fundit i ze karta e tekstit. Paneli ngrihet mbi ate zone me
+   zhvendosje lente (setViewOffset), pa e pjerresuar kameren — ndryshe plani
+   do dilte trapez. Matja merret nga karta e MBYLLUR: hapja e tekstit gjate
+   leximit nuk duhet te levize kuadrimin. */
+function panelShift(){
+  /* Vetem te kapitujt me panel: kapitujt me telefon kane skenen ne 38dvh lart,
+     ku karta nuk e mbivendos fare — zhvendosja atje do ta prishte kuadrimin. */
+  if (!panelPort || !cardClosedH || !CHAPTERS[chapter].panel) return 0;
+  return Math.min(cardClosedH + 10, Math.round(window.innerHeight * 0.34));
+}
+function measureCard(){
+  if (!chapcard || chapcard.classList.contains('open')) return;
+  const ch = Math.round(chapcard.getBoundingClientRect().height);
+  if (ch && Math.abs(ch - cardClosedH) > 3){ cardClosedH = ch; S.camDirty = true; }
+}
+/* Distanca ne te cilen paneli mbush 94% te kuadrit te disponueshem. */
+function panelFitDist(w, h, vsh){
+  const fullH = h + vsh, availH = Math.max(80, h - vsh);
+  const k = fullH / (2 * Math.tan(camera.fov * Math.PI / 360));
+  /* 0.88 ne gjeresi, jo 0.94: paneli shihet nga lart dhe ka pjerresi -0.06,
+     keshtu buza e poshtme (me prane kameres) projektohet deri 8.5% me e gjere
+     se sa jep llogaria e planit ballas. Matur ne kapitullin 20, kamera me e larta. */
+  return Math.max(panelDim.h * k / (0.93 * availH),
+                  panelDim.w * k / (0.88 * Math.max(1, w)));
+}
+
 function frame(){
   const dt = Math.min(clk.getDelta(), 0.1);
 
@@ -1435,10 +1785,17 @@ function frame(){
   if (w!==lastW || h!==lastH || S.camDirty){
     lastW = w; lastH = h; S.camDirty = false;
     renderer.setSize(w,h,false);
+    applyPanelMode(wantPanelPort());
+    applyWide();
     const pad = phonePad();
+    const vsh = panelShift();
+    vShift = vsh;
     if (pad > 0){
       camera.aspect = (w + 2*pad)/Math.max(1,h);
       camera.setViewOffset(w + 2*pad, h, 2*pad, 0, w, h);
+    } else if (vsh > 0){
+      camera.aspect = w/Math.max(1, h + vsh);
+      camera.setViewOffset(w, h + vsh, 0, vsh, w, h);
     } else {
       camera.aspect = w/Math.max(1,h);
       camera.clearViewOffset();
@@ -1456,9 +1813,23 @@ function frame(){
   const base = camCurve.getPoint(progress);
   const seg = progress*(N-1), si = Math.min(N-2, Math.floor(seg));
   lookNow.lerpVectors(lookPts[si], lookPts[si+1], easeIO(Math.min(1, seg-si)));
-  /* Terheqja aplikohet vetem ne seksionin RadX, dhe vetem kur portreti e ka
-     ngushtuar kuadrimin. Jashte tij base mbetet pikerisht vlera e CHAPTERS. */
-  if (camPull > 1.001 && CHAPTERS[chapter].sec === 'RadX'){
+
+  /* Sa "kthyer nga paneli" jemi: 0 ne kapitujt pa panel, 1 ne ata me panel,
+     me kalim te zbutur brenda segmentit — pa kete kamera do kerceje ne 11→12. */
+  let panelFocus = 0;
+  if (smallScreen()){
+    const a = CHAPTERS[si].panel ? 1 : 0, b = CHAPTERS[si+1].panel ? 1 : 0;
+    panelFocus = a + (b - a)*easeIO(Math.min(1, Math.max(0, seg - si)));
+  }
+  if (panelFocus > 0.001){
+    dirTmp.copy(base).sub(PANEL_AT);
+    if (dirTmp.lengthSq() < 1e-6) dirTmp.set(0, 0.15, 1);
+    dirTmp.normalize().multiplyScalar(panelFitDist(w, h, vShift)).add(PANEL_AT);
+    base.lerp(dirTmp, panelFocus);
+    lookNow.lerp(PANEL_AT, panelFocus);
+  } else if (camPull > 1.001 && CHAPTERS[chapter].sec === 'RadX'){
+    /* Terheqja aplikohet vetem ne seksionin RadX, dhe vetem kur portreti e ka
+       ngushtuar kuadrimin. Jashte tij base mbetet pikerisht vlera e CHAPTERS. */
     base.sub(lookNow).multiplyScalar(camPull).add(lookNow);
   }
   camera.position.set(base.x + mouse.x*0.30, base.y - mouse.y*0.15, base.z);
@@ -1545,7 +1916,7 @@ function frame(){
   S.panel += ((chapter>=11 ? 1 : 0) - S.panel) * Math.min(1, dt*2.6);
   panelMat.opacity = S.panel; frameMat.opacity = S.panel*0.95;
   panel.visible = panelFrame.visible = S.panel > 0.02;
-  panel.position.y = 3.6 + Math.sin(clk.elapsedTime*0.8)*0.045;
+  panel.position.y = panelDim.y + Math.sin(clk.elapsedTime*0.8)*0.045;
   panelFrame.position.y = panel.position.y;
 
   /* karta RFID */
@@ -1607,12 +1978,18 @@ function frame(){
 }
 
 /* ===================== NISJA ===================== */
+measureCard();
 goTo(0, true);
 requestAnimationFrame(frame);
 setTimeout(()=> document.getElementById('boot').classList.add('hide'), 420);
 
 window.__demo = { goTo, restart, snapPlug, S, CHAPTERS, camera, scene, renderer, plug, plugPos, heroCar, stations, panel, setPanelPage,
-                  setScreen, get screen(){ return curScreen; } };
+                  setScreen, get screen(){ return curScreen; },
+                  get panelPort(){ return panelPort; },
+                  get panelDim(){ return panelDim; },
+                  get vShift(){ return vShift; },
+                  get cardClosedH(){ return cardClosedH; },
+                  panelFrame, THREE };
 
 window.addEventListener('beforeunload', ()=>{
   track.forEach(o => o.dispose && o.dispose());
