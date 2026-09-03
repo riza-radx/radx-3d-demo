@@ -101,6 +101,38 @@ Të gjithë numrat në telefon dhe në ekranin e karikuesit rrjedhin nga këta �
 **Ngjyrat:** `:root{}` në CSS (ndërfaqja) dhe `const P = {}` (3D) — të njëjtat vlera në dy vende.
 **Ekranet e telefonit:** `<div class="scr" data-s="...">` në HTML; lidhen me kapitujt nga fusha `screen`.
 
+### Sa i madh është teksti
+
+Karta e tekstit dhe fotoja e hapit 1 **zvogëlohen vetë sipas lartësisë së dritares**,
+sepse në dritare të ulëta karta e mbulonte foton dhe skenën:
+
+| Lartësia e dritares | Titulli | Teksti | Fotoja |
+|---|---|---|---|
+| mbi 800 px | 25 px | 14.5 px | gjerësi fikse, 520 px |
+| 661–800 px | 23 px | 13.8 px | 39% e lartësisë |
+| 521–660 px | 21 px | 13 px | 38% e lartësisë |
+
+Nën 521 px (ose telefon në portret) hyn CSS-i i mobile-it.
+Vlerat janë te `radx-prezantim.html`, kërko `LAPTOP / DRITARE E ULET`.
+
+> Nëse prezantimi del në projektor me rezolucion të madh, teksti kthehet vetë
+> në përmasën e plotë — zvogëlimi prek vetëm dritaret e ulëta.
+
+### Fotoja e kapitullit 1
+
+Kapitulli 1 hapet me një foto reale nga rrjeti VEGA Charging — `assets/hero-person.jpg`.
+
+Për ta ndërruar **nuk duhet prekur kodi**: zëvendëso atë skedar. Katër prerje
+gati janë te `assets/kandidate/` (shih `README.md` atje për tabelën me sekondat):
+
+```powershell
+copy /Y assets\kandidate-profili-me-kabllon.jpg assets\hero-person.jpg
+```
+
+Raporti i pritur është **720×466**. Në desktop shfaqet me atë raport të saktë;
+në mobile fotoja zë shiritin e skenës dhe prehet pak nga anët.
+Vendi në kod: `radx-prezantim.html`, kërko `PER TA NDRYSHUAR FOTON`.
+
 ### Screenshot-i i vërtetë i panelit (kapitulli 13)
 
 Hidh një screenshot 1600×900 te `assets/dashboard.png` — merret automatikisht.
