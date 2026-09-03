@@ -4,7 +4,7 @@ Dy prezantime në të njëjtën dosje. Të dyja punojnë **offline**, pa npm, pa
 
 | Skedar | Çfarë është |
 |---|---|
-| **`radx-prezantim.html`** | **Kryesori** — 12 kapituj, 3 seksione, me **telefonin gjithë kohës** në ekran që tregon pamjen e shoferit live |
+| **`radx-prezantim.html`** | **Kryesori** — 21 kapituj (13 rrëfim + 8 RadX), me **telefonin gjithë kohës** në ekran që tregon pamjen e shoferit live |
 | `radx-demo.html` | Versioni i para, 7 kapituj, pa telefon. E lënë si është |
 
 ---
@@ -26,7 +26,8 @@ Për ta ndalur: `Ctrl+C` në dritaren e zezë.
 |---|---|
 | `→` / `Space` | kapitulli tjetër |
 | `←` | mbrapa |
-| `1` `2` … `9` `0` `-` `=` | kërce direkt në kapitullin 1…12 |
+| `1` `2` … `9` `0` `-` `=` `[` | kërce direkt në kapitujt 1…13 (rrëfimi) |
+| `]` `\` `;` `'` `,` `.` `/` `` ` `` | kapitujt 14…21 (seksioni RadX) |
 | `F` | ekran i plotë |
 | `R` | nis nga fillimi |
 | `T` | **shtresa teknike** — shfaq nën tekstin e thjeshtë emrat e vërtetë (OCPP, rate chain, fiskalizim). Fshehur si default |
@@ -35,30 +36,47 @@ Për ta ndalur: `Ctrl+C` në dritaren e zezë.
 
 ---
 
-## 12 kapitujt
+## 21 kapitujt
+
+Kapitujt kanë `id` në kod (`CHAPTERS[].id`), dhe logjika e skenës lidhet me `id`,
+**jo me indeks** — kështu rendi mund të ndryshojë pa thyer kartën, spinën ose panelin.
 
 **Shoferi**
-1. Një aplikacion, të gjitha pikat — *telefoni: harta me pikat pranë*
-2. Çmimi dihet përpara — *telefoni: karta e pikës, 35 L/kWh, vendet e lira*
-3. Një sekondë kontroll — *telefoni: tre kontrollet jeshile* · karta RFID prek lexuesin në 3D
-4. Komanda shkon te karikuesi — *telefoni: "po nis", karikuesi përgjigjet*
-5. **Pjesa e vetme me dorë** — *interaktiv:* tërhiq spinën me maus
+1. `person` Nis nga njeriu, jo nga sistemi — *foto reale nga rrjeti* + telefoni: harta me pika;
+   klikimi (vetë pas 2.4 s, ose me klik mbi telefon) hap **faqen e pikës**
+2. `site` Një aplikacion, të gjitha pikat — pamja e gjerë me 3 pika e 3 makina
+3. `price` Çmimi dihet përpara — *telefoni: fleta e pikës, 35 L/kWh*
+4. `connect` **Pjesa e vetme me dorë** — *interaktiv:* lidh kabllon; karikuesi shkruan `LIDHUR · AFRO KARTELËN`
+5. `card` Kartela — dhe energjia nis — karta prek lexuesin **një herë**, pastaj unazë jeshile +
+   `✓ E PRANUAR` në karikues dhe `Card accepted` në telefon
+6. `appstart` **Ose pa kartelë fare** — rruga e dytë: butoni `Start Charging` në aplikacion
 
 **Karikimi**
-6. Numrat rrjedhin te dy anët — *telefoni: bateria %, kW, kWh, kosto — të njëjtat me ekranin e karikuesit*
-7. Bateria u mbush — vendi jo — *telefoni: njoftim + 10 min pa pagesë që numërohen, pastaj 4 L/min*
-8. Matja e fundit dhe pagesa — *telefoni: portofoli para/pas; detyrimi kur nuk mbulon*
-9. Fatura del vetë — *telefoni: fatura zyrtare, dërguar me email*
+7. `charging` Numrat rrjedhin te dy anët
+8. `full` Bateria u mbush — vendi jo (10 min pa pagesë, pastaj 4 L/min)
+9. `paid` Matja e fundit dhe pagesa
+10. `invoice` Fatura del vetë
 
 **Operimi**
-10. Kur karikojnë të gjithë njëherësh — 55 + 52 + 43 = 150 kW, pikërisht kufiri
-11. Kur diçka shkon keq — karikuesi i tretë bie, LED i kuq, telefoni jep pikën alternative
-12. Nga lart: paneli i operatorit — dashboard-i lundron mbi pikën
+11. `shared` Kur karikojnë të gjithë njëherësh — 55 + 52 + 43 = 150 kW
+12. `problem` Kur diçka shkon keq
+13. `panel` Nga lart: paneli i operatorit
 
-### Momenti interaktiv (kapitulli 5)
+**RadX** (14–21) — `rx-intro` · `rx-brand` · `rx-price` · `rx-chargers` ·
+`rx-customers` · `rx-money` · `rx-alerts` · `rx-scale`. Telefoni largohet, paneli 3D
+bëhet kryesori dhe ndryshon faqe.
+
+### Dy rrugët e nisjes
+
+Kapitujt 4→5 janë rruga kryesore: **kablloja lidhet, karta skanohet, karikimi nis.**
+Kapitulli 6 tregon rrugën e dytë për kur kartela është harruar: `Start Charging`
+nga aplikacioni. Të dyja mbarojnë në të njëjtën gjendje — statusi `Charging` në telefon.
+
+### Momenti interaktiv (kapitulli 4)
 
 Kliko spinën në karikues dhe tërhiqe te unaza jeshile në makinë. **Nuk bllokohesh:**
-pas 8 sekondash pa lëvizje lidhet vetë; edhe kapërcimi në kapitullin 6 e lidh vetë.
+pas 8 sekondash pa lëvizje lidhet vetë (5 s në pajisje me prekje), dhe çdo kapitull
+pas tij e lidh vetë nëse ka ngelur pa lidhur.
 
 ---
 
@@ -83,7 +101,39 @@ Të gjithë numrat në telefon dhe në ekranin e karikuesit rrjedhin nga këta �
 **Ngjyrat:** `:root{}` në CSS (ndërfaqja) dhe `const P = {}` (3D) — të njëjtat vlera në dy vende.
 **Ekranet e telefonit:** `<div class="scr" data-s="...">` në HTML; lidhen me kapitujt nga fusha `screen`.
 
-### Screenshot-i i vërtetë i panelit (kapitulli 12)
+### Sa i madh është teksti
+
+Karta e tekstit dhe fotoja e hapit 1 **zvogëlohen vetë sipas lartësisë së dritares**,
+sepse në dritare të ulëta karta e mbulonte foton dhe skenën:
+
+| Lartësia e dritares | Titulli | Teksti | Fotoja |
+|---|---|---|---|
+| mbi 800 px | 25 px | 14.5 px | gjerësi fikse, 520 px |
+| 661–800 px | 23 px | 13.8 px | 39% e lartësisë |
+| 521–660 px | 21 px | 13 px | 38% e lartësisë |
+
+Nën 521 px (ose telefon në portret) hyn CSS-i i mobile-it.
+Vlerat janë te `radx-prezantim.html`, kërko `LAPTOP / DRITARE E ULET`.
+
+> Nëse prezantimi del në projektor me rezolucion të madh, teksti kthehet vetë
+> në përmasën e plotë — zvogëlimi prek vetëm dritaret e ulëta.
+
+### Fotoja e kapitullit 1
+
+Kapitulli 1 hapet me një foto reale nga rrjeti VEGA Charging — `assets/hero-person.jpg`.
+
+Për ta ndërruar **nuk duhet prekur kodi**: zëvendëso atë skedar. Katër prerje
+gati janë te `assets/kandidate/` (shih `README.md` atje për tabelën me sekondat):
+
+```powershell
+copy /Y assets\kandidate-profili-me-kabllon.jpg assets\hero-person.jpg
+```
+
+Raporti i pritur është **720×466**. Në desktop shfaqet me atë raport të saktë;
+në mobile fotoja zë shiritin e skenës dhe prehet pak nga anët.
+Vendi në kod: `radx-prezantim.html`, kërko `PER TA NDRYSHUAR FOTON`.
+
+### Screenshot-i i vërtetë i panelit (kapitulli 13)
 
 Hidh një screenshot 1600×900 te `assets/dashboard.png` — merret automatikisht.
 Pa skedar, vizatohet një panel i imituar (pa error).
@@ -97,7 +147,7 @@ Pa skedar, vizatohet një panel i imituar (pa error).
 - [ ] Mirror display (jo *extend*), 16:9.
 - [ ] Fik njoftimet (Focus assist) dhe fjetjen e ekranit.
 - [ ] `F` ekran i plotë, `R` për të nisur pastër para grupit të radhës.
-- [ ] Ushtro kapitullin 5 me maus — i vetmi që kërkon dorë.
+- [ ] Ushtro kapitullin 4 me maus — i vetmi që kërkon dorë.
 - [ ] Vendos nëse `T` do të shfaqet apo jo, sipas sallës.
 
 ---
@@ -108,7 +158,7 @@ Pa skedar, vizatohet një panel i imituar (pa error).
 radx-3d-demo/
 ├─ nis.cmd                  ← kliko dy herë
 ├─ server.js                ← server statik, pa varësi
-├─ radx-prezantim.html      ← PREZANTIMI KRYESOR (12 kapituj + telefoni)
+├─ radx-prezantim.html      ← PREZANTIMI KRYESOR (21 kapituj + telefoni)
 ├─ radx-demo.html           ← versioni i para (7 kapituj)
 ├─ assets/dashboard.png     ← (opsional) screenshot-i i vërtetë
 └─ vendor/                  ← Three.js r160 lokal + RoomEnvironment
@@ -155,7 +205,7 @@ rigjenerohet, nuk ruhet në repo.
 ## Debug
 
 ```js
-__demo.goTo(6, true)   // kërce menjëherë në kapitullin 7
+__demo.goTo(__demo.CH.card, true)   // kërce menjëherë në kapitullin e kartës
 __demo.S               // kw, kwh, secs, soc, graceLeft, idleFee, connected, phase
 __demo.screen          // ekrani aktual i telefonit
 __demo.restart()
