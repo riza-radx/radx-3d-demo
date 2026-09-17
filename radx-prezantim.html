@@ -546,7 +546,7 @@
 <div id="scrim" aria-hidden="true"></div>
 <div id="hero" aria-hidden="true">
   <img src="./assets/hero-person.jpg" alt="">
-  <b>Pikë reale në rrjet · VEGA Charging</b>
+  <b>Pikë reale në rrjet · white label RadX</b>
 </div>
 
 <!-- Unaza e logos RadX, njehere, e riperdorur me <use>. viewBox i korrigjuar:
@@ -563,7 +563,7 @@
   <button class="fs clickable" id="btn-fs" aria-label="Ekran i plotë">⛶</button>
 
   <div class="keys">
-    <div><kbd>←</kbd> <kbd>→</kbd> hapat · <kbd>1</kbd>…<kbd>[</kbd> kapitujt 1–13 · <kbd>]</kbd>…<kbd>`</kbd> kapitujt 14–21</div>
+    <div><kbd>←</kbd> <kbd>→</kbd> hapat · <kbd>1</kbd>…<kbd>[</kbd> kapitujt 1–13 · <kbd>]</kbd>…<kbd>`</kbd> kapitujt 14–23</div>
     <div><kbd>F</kbd> ekran i plotë · <kbd>R</kbd> nga fillimi · <kbd>T</kbd> shtresa teknike</div>
   </div>
 
@@ -682,9 +682,9 @@ const CHAPTERS = [
 
   { id:'price', sec:'Shoferi', screen:'sheet',
     title:'Çmimi dihet përpara',
-    body:'Çmimi nuk është i njëjti për të gjithë: varet nga kompania e shoferit, nga ora e ditës '+
-         'dhe nga marrëveshja. Aplikacioni tregon çmimin e tij, jo një çmim të përgjithshëm. '+
-         'Pa surpriza kur mbaron.',
+    body:'Sistemi e di saktësisht çmimin që i takon këtij shoferi — për këtë pikë, në këtë orë, '+
+         'sipas marrëveshjes së tij. Aplikacioni ia tregon të plotë para se të nisë: '+
+         'ai që shikon në ekran është ai që paguan.',
     tech:'rate: user → charger → company default (toggle e përmbys); çmim për orë (rate_per_days).',
     cam:[-3.8, 2.7, 2.4], look:[-0.9, 1.25, -2.1] },
 
@@ -714,7 +714,7 @@ const CHAPTERS = [
   { id:'charging', sec:'Karikimi', screen:'charging',
     title:'Numrat rrjedhin te dy anët',
     body:'Karikuesi raporton vazhdimisht sa fuqi po jep, sa energji ka kaluar, sa është bateria. '+
-         'Shoferi shikon në telefon të njëjtët numra që operatori shikon në panel. '+
+         'Shoferi shikon në telefon të njëjtët numra që operatori shikon në dashboard. '+
          'Nuk ka dy të vërteta.',
     tech:'MeterValues: current, voltage, power, energy, SOC → sesioni dhe kostoja përditësohen.',
     cam:[-2.6, 2.3, 4.2], look:[0.1, 1.0, -0.90] },
@@ -738,31 +738,31 @@ const CHAPTERS = [
   { id:'invoice', sec:'Karikimi', screen:'invoice',
     title:'Fatura del vetë',
     body:'Fatura zyrtare krijohet dhe dërgohet brenda të njëjtës ditë, pa e shkruar njeri me dorë. '+
-         'Dhe nëse një faturë dështon të dalë, sistemi e kap vetë dhe raporton — '+
-         'nuk humbet pa u vënë re.',
+         'Fiskalizimi kryhet automatikisht dhe çdo faturë mbetet e regjistruar — '+
+         'gati për kontabilitetin, pa punë shtesë.',
     tech:'Fiskalizim përmes BC (IIC/NIVF) ose PDF i RadX sipas check_fisk; abandoned-invoice check.',
     cam:[5.2, 3.5, 7.2], look:[1.4, 1.10, -0.4] },
 
   { id:'shared', sec:'Operimi', screen:'shared',
     title:'Kur karikojnë të gjithë njëherësh',
-    body:'Një pikë mund të marrë vetëm një sasi fuqie. Kur mbushen të tre vendet, sistemi e ndan '+
-         'fuqinë mes tyre në vend që të fikë ndonjërin. Të tre karikojnë — më ngadalë, por karikojnë, '+
-         'dhe kufiri nuk kalohet kurrë.',
+    body:'Kur mbushen të tre vendet, pika i menaxhon vetë. Fuqia shpërndahet sipas nevojës mes tyre, '+
+         'brenda kufirit të lidhjes. Të tre karikojnë njëkohësisht dhe gjithçka mbetet nën kontroll — '+
+         'pa ndërhyrje nga njeri.',
     tech:'SetChargingProfile / load management; kufiri i lidhjes së pikës.',
     cam:[14.5, 7.2, 12.5], look:[5.6, 1.0, -1.2] },
 
   { id:'problem', sec:'Operimi', screen:'problem',
-    title:'Kur diçka shkon keq',
-    body:'Karikues që nuk përgjigjet, sesion që nis dhe nuk jep energji, matje që mbetet përgjysmë — '+
-         'kjo ndodh vërtet. Sistemi i kap, i thotë shoferit ku të shkojë, dhe njofton operatorin '+
-         'menjëherë. Asnjë pagesë e dyfishtë, asnjë gjë pa gjurmë.',
+    title:'Siguria, e ndërtuar brenda',
+    body:'RadX e mbikëqyr çdo sesion nga fillimi në fund. Sistemi mbron shoferin dhe kompaninë: '+
+         'çdo pagesë llogaritet një herë të vetme, çdo veprim mbetet i regjistruar, dhe operatori '+
+         'e di i pari nëse diçka kërkon vëmendje. Ti nuk ke pse të merresh — sistemi e mban atë peshë.',
     tech:'Timeout / offline / 0 kWh; lock atomik kundër StopTransaction të dyfishtë; audit log.',
     cam:[14.8, 5.8, 9.0], look:[7.4, 1.20, -2.0] },
 
   { id:'panel', sec:'Operimi', screen:'thanks', panel:'overview',
-    title:'Nga lart: paneli i operatorit',
+    title:'Nga lart: dashboard-i i operatorit',
     body:'Gjithçka që pa shoferi, operatori e shikon nga lart: cilat pika punojnë, kush karikon tani, '+
-         'sa energji shkoi, çfarë kërkon ndërhyrje. Nga i njëjti panel rinis një karikues nga distanca — '+
+         'sa energji shkoi, çfarë kërkon vëmendje. Nga i njëjti dashboard rinis një karikues nga distanca — '+
          'pa dërguar njeri në terren.',
     tech:'Reset · ChangeAvailability · UnlockConnector · GetDiagnostics · RemoteStop, sipas scope-it të rolit.',
     cam:[1.2, 4.3, 9.8], look:[0.4, 3.50, -1.6] },
@@ -777,21 +777,46 @@ const CHAPTERS = [
     body:'Një karikim i vetëm. Poshtë tij punuan çmimi, kontrolli, matja, portofoli, fatura '+
          'dhe raporti — pa i kërkuar njeri. Ky është RadX: sistemi që mban rrjetin në punë, '+
          'dhe që kompania e drejton vetë nga një ekran.',
-    tech:'Radx-API (Node/Sequelize/MySQL) + RadX-OCPP (Central System) + paneli Angular. Një instancë, shumë kompani.',
+    tech:'Radx-API (Node/Sequelize/MySQL) + RadX-OCPP (Central System) + dashboard-i Angular. Një instancë, shumë kompani.',
     cam:[0.50, 4.90, 7.25], look:[0.4, 3.30, -1.6] },
 
   { id:'rx-brand', sec:'RadX', panel:'brand',
-    title:'Marka është e jotja',
-    body:'Klienti shikon logon, ngjyrat dhe emrin e kompanisë — nuk shikon tonat. '+
-         'Vega Charging dhe Flex Charge janë të njëjti sistem me dy marka. Ndryshojnë '+
-         'ngjyra, logo dhe adresa; ana që punon nuk ndryshon fare.',
-    tech:'Një kod, konfigurim për brand: company_id, paleta SCSS, favicon, environment.prod. Gjurma: FlexCharge/BRANDING.md.',
+    title:'Marka është e jotja — white label',
+    body:'Klienti shikon logon, ngjyrat dhe emrin tënd. Kjo është white label: sipërfaqja është '+
+         'marka jote, motori poshtë është RadX. Ti del në treg me identitetin tënd, '+
+         'pa ndërtuar asnjë rresht kodi.',
+    tech:'Një kod, konfigurim për brand: company_id, paleta SCSS, favicon, environment.prod.',
     cam:[0.55, 3.90, 5.51], look:[0.4, 3.55, -1.6] },
+
+  { id:'rx-offer', sec:'RadX', panel:'offer',
+    title:'Si e merr markën tënde',
+    body:'White label do të thotë: sipërfaqja mban emrin tënd, motori poshtë është i yni. '+
+         'Aplikacioni, dashboard-i dhe adresa në internet dalin me logon dhe ngjyrat e tua. '+
+         'Matjen, çmimet, faturimin dhe karikuesit i mbajmë ne. Ti nuk ndërton asgjë nga zero — '+
+         'e merr gati, me emrin tënd sipër.',
+    tech:'company_id + paleta SCSS + favicon + environment.prod; domain i veçantë për markë. Një kod, shumë marka.',
+    cam:[0.35, 4.20, 5.70], look:[0.4, 3.45, -1.6] },
+
+  { id:'rx-groups', sec:'RadX', panel:'groups',
+    title:'Grupet — secili me kushtet e veta',
+    body:'Një shofer i rastit, një flotë taksish, punonjësit e një kompanie — të gjithë në '+
+         'të njëjtin rrjet, secili me çmimin e vet. Kompania i ndan klientët në grupe dhe i jep '+
+         'secilit grup kushtet e veta: çmimin, portofolin dhe kush i mbush llogaritë e njerëzve.',
+    tech:'users + user_group; split_wallet, transfertë nga admini i grupit; zinxhiri user → charger → company.',
+    cam:[0.50, 3.70, 5.11], look:[0.4, 3.60, -1.6] },
+
+  { id:'rx-partners', sec:'RadX', panel:'partners',
+    title:'Partneri yt mund të ketë partnerët e vet',
+    body:'Ti i jep një partneri një pjesë të rrjetit, dhe ai del me markën e vet: logo, ngjyra, emër. '+
+         'Ai vendos çmimet e njerëzve të tij, u mbush llogaritë, shton anëtarë dhe sheh raportet e veta. '+
+         'Dhe ai mund të bëjë të njëjtën për një partner nën vete — zinxhiri nuk ka fund të caktuar.',
+    tech:'partner / partner_member në thellësi; split_wallet për çdo nivel; scope default-deny sipas rolit.',
+    cam:[0.60, 4.60, 6.10], look:[0.4, 3.40, -1.6] },
 
   { id:'rx-price', sec:'RadX', panel:'price',
     title:'Çmimin e vendos ti',
     body:'Klienti i rastit paguan një çmim, një kompani me marrëveshje një tjetër, natën '+
-         'më lirë. Këto rregulla i shkruan kompania nga paneli dhe hyjnë në fuqi menjëherë — '+
+         'më lirë. Këto rregulla i shkruan kompania nga dashboard-i dhe hyjnë në fuqi menjëherë — '+
          'pa pritur njeri, pa kërkuar ndryshim në program.',
     tech:'rates + rate_per_days + user_group; zinxhiri user → charger → company default, me toggle përmbysjeje për charger-in.',
     cam:[0.20, 3.05, 5.28], look:[0.4, 3.55, -1.6] },
@@ -800,17 +825,9 @@ const CHAPTERS = [
     title:'Karikuesit, kushdo t\'i ka bërë',
     body:'Sistemi flet një gjuhë standarde që e kuptojnë të gjithë karikuesit e certifikuar. '+
          'Kompania blen atë që i përshtatet çmimit dhe nevojës, nga prodhues të ndryshëm, '+
-         'dhe të gjithë hyjnë në të njëjtin panel. Një pikë e re shtohet dhe shfaqet në aplikacion.',
+         'dhe të gjithë hyjnë në të njëjtin dashboard. Një pikë e re shtohet dhe shfaqet në aplikacion.',
     tech:'OCPP 1.6J (+2.0.1). Prodhuesi nuk ndikon në faturim — matja vjen nga MeterValues.',
     cam:[0.50, 5.60, 5.62], look:[0.5, 3.30, -1.6] },
-
-  { id:'rx-customers', sec:'RadX', panel:'customers',
-    title:'Klientët, si i duash t\'i organizosh',
-    body:'Një shofer i rastit, një flotë taksish, punonjësit e një kompanie — të gjithë në '+
-         'të njëjtin rrjet, me kushte të ndryshme. Kompania krijon grupe dhe i jep secilit '+
-         'çmimin e vetin, dhe administratori i grupit i mbush vetë llogaritë e njerëzve të tij.',
-    tech:'users + user_group + partner/partner_member; portofol i ndarë, transfertë nga admini i grupit.',
-    cam:[0.50, 3.70, 5.11], look:[0.4, 3.60, -1.6] },
 
   { id:'rx-money', sec:'RadX', panel:'money',
     title:'Paratë ecin vetë',
@@ -831,8 +848,8 @@ const CHAPTERS = [
   { id:'rx-scale', sec:'RadX', panel:'scale',
     title:'Rritja nuk kërkon rifillim',
     body:'Pesë pika ose pesëqind, një qytet ose një vend i tërë — i njëjti sistem, pa u rindërtuar. '+
-         'Dhe kur kompania do një markë të dytë, si ndodhi me Flex Charge, ajo është një '+
-         'konfigurim i ri — nuk është një projekt nga zero.',
+         'Dhe kur kompania do një markë të dytë, ajo është një konfigurim i ri — '+
+         'nuk është një projekt nga zero.',
     tech:'Multi-company mbi një instancë; izolim i tenant-it default-deny sipas rolit.',
     cam:[0.70, 5.70, 7.43], look:[0.4, 3.10, -1.6] },
 ];
@@ -1081,7 +1098,7 @@ function dashboardTexture(){
   const x = c.getContext('2d');
   x.fillStyle='#f2f6f8'; x.fillRect(0,0,1600,900);
   x.fillStyle='#10a2ac'; x.fillRect(0,0,1600,74);
-  x.fillStyle='#fff'; x.font='600 30px sans-serif'; x.fillText('RadX · Paneli i rrjetit', 40, 48);
+  x.fillStyle='#fff'; x.font='600 30px sans-serif'; x.fillText('RadX · Dashboard', 40, 48);
   x.fillStyle='#022636'; x.fillRect(40,104,1520,86);
   x.fillStyle='#fff'; x.font='600 26px sans-serif';
   x.fillText('Rrjeti punon. 3 gjëra kërkojnë kujdes.', 66, 156);
@@ -1126,7 +1143,7 @@ function drawPage(x, p){
   x.fillStyle = p.brand || '#10a2ac'; x.fillRect(0, 0, PANEL_W, 74);
   x.textAlign = 'left'; x.textBaseline = 'alphabetic';
   x.fillStyle = '#fff'; x.font = '600 30px sans-serif';
-  x.fillText(p.app || 'RadX · Paneli i rrjetit', 40, 48);
+  x.fillText(p.app || 'RadX · Dashboard', 40, 48);
   if (p.pageName){
     x.textAlign = 'right'; x.font = '500 26px sans-serif';
     x.fillText(p.pageName, PANEL_W - 40, 47); x.textAlign = 'left';
@@ -1185,51 +1202,74 @@ function drawPage(x, p){
 
 }
 
-/* Faqja e markes nuk hyn ne skemen e mesipermes: argumenti i white-label shihet
-   vetem kur te dyja markat jane njeheresh ne ekran, njera prane tjetres.
-   Gjithe permbajtja mbahet mbi y 700 sepse karta e kapitullit ze fundin-majtas
-   te ekranit; fjalia e fundit shkon djathtas, ku karta nuk arrin. */
+/* Faqja e markes: siperfaqja e klientit siper, motori RadX poshte. Argumenti i
+   white-label shihet kur te dyja shtresat jane njeheresh ne ekran — e jotja lart,
+   jona poshte. Permbajtja mbahet mbi y 700 sepse karta e kapitullit ze
+   fundin-majtas; fjalia e fundit shkon djathtas, ku karta nuk arrin. */
 function drawBrandPage(x){
   x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, PANEL_W, PANEL_H);
   x.textAlign = 'center'; x.fillStyle = PANEL_INK; x.font = '700 40px sans-serif';
-  x.fillText('I NJËJTI SISTEM POSHTË', PANEL_W / 2, 74);
+  x.fillText('WHITE LABEL', PANEL_W / 2, 66);
 
-  const half = (ox, brand, name, sub) => {
-    const w = 748;
-    x.fillStyle = '#fff'; x.fillRect(ox, 112, w, 588);
-    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(ox, 112, w, 588);
-    x.fillStyle = brand; x.fillRect(ox, 112, w, 68);
-    x.textAlign = 'left';
-    x.fillStyle = '#fff'; x.font = '600 31px sans-serif'; x.fillText(name, ox + 24, 157);
-    x.fillStyle = PANEL_DIM; x.font = '500 21px sans-serif'; x.fillText(sub, ox + 24, 212);
+  /* ---- Siperfaqja: karta qe shikon klienti ---- */
+  const cw = 760, ox = (PANEL_W - cw) / 2, oy = 96, brand = '#7fbc42';
+  x.fillStyle = '#fff'; x.fillRect(ox, oy, cw, 380);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(ox, oy, cw, 380);
+  x.fillStyle = brand; x.fillRect(ox, oy, cw, 72);
+  x.textAlign = 'left'; x.fillStyle = '#fff'; x.font = '700 32px sans-serif';
+  x.fillText('MARKA JOTE', ox + 26, oy + 47);
+  x.textAlign = 'right'; x.fillStyle = 'rgba(255,255,255,.85)'; x.font = '500 21px sans-serif';
+  x.fillText('logo · ngjyra · emri', ox + cw - 26, oy + 45);
+  x.textAlign = 'left';
 
-    [['ENERGJIA SOT', '6,780 kWh'], ['KARIKON TANI', '17']].forEach(([k, v], i) => {
-      const cy = 232 + i * 112;
-      x.fillStyle = '#f7fafb'; x.fillRect(ox + 24, cy, w - 48, 96);
-      x.strokeStyle = '#e6edf0'; x.strokeRect(ox + 24, cy, w - 48, 96);
-      x.fillStyle = PANEL_DIM; x.font = '500 18px sans-serif'; x.fillText(k, ox + 44, cy + 32);
-      x.fillStyle = PANEL_INK; x.font = '700 35px monospace'; x.fillText(v, ox + 44, cy + 78);
-    });
+  const bw = (cw - 72) / 2;
+  [['ENERGJIA SOT', '6,780 kWh'], ['KARIKON TANI', '17']].forEach(([k, v], i) => {
+    const bx = ox + 26 + i * (bw + 20), by = oy + 100;
+    x.fillStyle = '#f7fafb'; x.fillRect(bx, by, bw, 96);
+    x.strokeStyle = '#e6edf0'; x.strokeRect(bx, by, bw, 96);
+    x.fillStyle = PANEL_DIM; x.font = '500 18px sans-serif'; x.fillText(k, bx + 20, by + 32);
+    x.fillStyle = PANEL_INK; x.font = '700 35px monospace'; x.fillText(v, bx + 20, by + 78);
+  });
 
-    x.fillStyle = brand; x.fillRect(ox + 24, 464, w - 48, 58);
-    x.textAlign = 'center'; x.fillStyle = '#fff'; x.font = '700 25px sans-serif';
-    x.fillText('Nis karikimin', ox + w / 2, 502); x.textAlign = 'left';
+  x.fillStyle = brand; x.fillRect(ox + 26, oy + 222, cw - 52, 58);
+  x.textAlign = 'center'; x.fillStyle = '#fff'; x.font = '700 25px sans-serif';
+  x.fillText('Nis karikimin', ox + cw / 2, oy + 260);
+  x.fillStyle = PANEL_DIM; x.font = '500 21px sans-serif';
+  x.fillText('Klienti shikon vetëm këtë.', ox + cw / 2, oy + 330);
 
-    [['Çmimi', '35 L/kWh'], ['Faturimi', 'automatik'], ['Karikuesit', 'të njëjtët']].forEach(([a, b], i) => {
-      const ry = 566 + i * 42;
-      x.fillStyle = PANEL_INK; x.font = '500 23px sans-serif'; x.fillText(a, ox + 44, ry);
-      x.textAlign = 'right'; x.fillStyle = PANEL_DIM; x.fillText(b, ox + w - 44, ry); x.textAlign = 'left';
-    });
-  };
+  /* ---- Kufiri mes siperfaqes dhe motorit ---- */
+  const dy = 516;
+  x.strokeStyle = '#cfdde3'; x.lineWidth = 2; x.setLineDash([9, 7]);
+  x.beginPath(); x.moveTo(120, dy); x.lineTo(PANEL_W - 120, dy); x.stroke();
+  x.setLineDash([]);
+  x.fillStyle = '#f2f6f8'; x.fillRect(PANEL_W / 2 - 230, dy - 20, 460, 40);
+  x.textAlign = 'center'; x.fillStyle = '#5b7783'; x.font = '600 22px sans-serif';
+  x.fillText('sipër: marka jote · poshtë: RadX', PANEL_W / 2, dy + 8);
 
-  half(40,  '#7fbc42', 'Vega Charging', 'marka e klientit A');
-  half(812, '#931623', 'Flex Charge',   'marka e klientit B');
+  /* ---- Motori: RadX ---- */
+  const ey = 556, eh = 128;
+  x.fillStyle = '#022636'; x.fillRect(120, ey, PANEL_W - 240, eh);
+  x.textAlign = 'left'; x.fillStyle = '#7fbc42'; x.font = '700 30px sans-serif';
+  x.fillText('RadX', 152, ey + 48);
+  x.fillStyle = 'rgba(234,244,247,.62)'; x.font = '500 19px sans-serif';
+  x.fillText('motori që nuk e shikon klienti', 152, ey + 82);
+
+  x.font = '600 21px sans-serif';
+  let px = 470;
+  ['çmimi', 'matja', 'faturimi', 'portofoli', 'karikuesit'].forEach(t => {
+    const tw = x.measureText(t).width + 34;
+    x.fillStyle = 'rgba(127,188,66,.16)'; x.fillRect(px, ey + 44, tw, 42);
+    x.strokeStyle = 'rgba(127,188,66,.5)'; x.lineWidth = 1; x.strokeRect(px, ey + 44, tw, 42);
+    x.fillStyle = '#cfe8ad'; x.textAlign = 'center'; x.fillText(t, px + tw / 2, ey + 71);
+    x.textAlign = 'left'; px += tw + 14;
+  });
 
   x.fillStyle = '#e9eff2'; x.fillRect(0, 706, PANEL_W, PANEL_H - 706);
-  x.strokeStyle = PANEL_EDGE; x.beginPath(); x.moveTo(0, 706); x.lineTo(PANEL_W, 706); x.stroke();
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1;
+  x.beginPath(); x.moveTo(0, 706); x.lineTo(PANEL_W, 706); x.stroke();
   x.textAlign = 'right'; x.fillStyle = '#5b7783'; x.font = '400 28px sans-serif';
-  x.fillText('Ndryshojnë ngjyra, logo dhe emri — asgjë tjetër.', PANEL_W - 44, 782);
-  x.fillText('Çmimi, matja, faturimi dhe karikuesit janë të njëjtët.', PANEL_W - 44, 826);
+  x.fillText('Marka, ngjyrat dhe emri janë të tutë.', PANEL_W - 44, 782);
+  x.fillText('Çmimi, matja, faturimi dhe karikuesit i mban RadX.', PANEL_W - 44, 826);
   x.textAlign = 'left';
 }
 
@@ -1271,7 +1311,7 @@ function drawPagePortrait(x, p){
   /* shiriti i marks */
   x.fillStyle = p.brand || '#10a2ac'; x.fillRect(0, 0, W, 100);
   x.fillStyle = '#fff'; x.font = '600 36px sans-serif';
-  x.fillText(p.app || 'RadX · Paneli i rrjetit', M, 64);
+  x.fillText(p.app || 'RadX · Dashboard', M, 64);
   if (p.pageName){
     x.textAlign = 'right'; x.font = '500 30px sans-serif';
     x.fillText(p.pageName, W - M, 63); x.textAlign = 'left';
@@ -1354,50 +1394,73 @@ function drawPagePortrait(x, p){
   }
 }
 
-/* Argumenti i white-label ne portret: dy markat njera MBI tjetren.
-   Krahasimi mbetet i njejti — vetem boshti ndryshon. */
+/* E njejta shtrese ne portret: karta e markes siper, motori RadX poshte.
+   Boshti nuk ndryshon — vetem hapesira behet me e ngushte dhe me e larte. */
 function drawBrandPagePortrait(x){
   const W = PORT_W, H = PORT_H, M = 30, IW = W - 2*M;
   x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, W, H);
   x.textBaseline = 'alphabetic'; x.textAlign = 'center';
   x.fillStyle = PANEL_INK; x.font = '700 46px sans-serif';
-  x.fillText('I NJËJTI SISTEM POSHTË', W/2, 68);
+  x.fillText('WHITE LABEL', W/2, 68);
 
-  const halfH = 596;
-  const half = (oy, brand, name, sub) => {
-    x.fillStyle = '#fff'; x.fillRect(M, oy, IW, halfH);
-    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, oy, IW, halfH);
-    x.fillStyle = brand; x.fillRect(M, oy, IW, 82);
-    x.textAlign = 'left';
-    x.fillStyle = '#fff'; x.font = '600 38px sans-serif'; x.fillText(name, M + 26, oy + 55);
-    x.fillStyle = PANEL_DIM; x.font = '500 27px sans-serif'; x.fillText(sub, M + 26, oy + 128);
+  /* ---- Siperfaqja: karta qe shikon klienti ---- */
+  const oy = 110, ch = 470, brand = '#7fbc42';
+  x.fillStyle = '#fff'; x.fillRect(M, oy, IW, ch);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, oy, IW, ch);
+  x.fillStyle = brand; x.fillRect(M, oy, IW, 82);
+  x.textAlign = 'left'; x.fillStyle = '#fff'; x.font = '700 38px sans-serif';
+  x.fillText('MARKA JOTE', M + 26, oy + 55);
+  x.textAlign = 'right'; x.fillStyle = 'rgba(255,255,255,.85)'; x.font = '500 25px sans-serif';
+  x.fillText('logo · ngjyra · emri', W - M - 26, oy + 53);
+  x.textAlign = 'left';
 
-    const cw = (IW - 52 - 20)/2;
-    [['ENERGJIA SOT','6,780 kWh'], ['KARIKON TANI','17']].forEach(([k, v], i) => {
-      const cx = M + 26 + i*(cw + 20), cy = oy + 156;
-      x.fillStyle = '#f7fafb'; x.fillRect(cx, cy, cw, 118);
-      x.strokeStyle = '#e6edf0'; x.lineWidth = 1; x.strokeRect(cx, cy, cw, 118);
-      x.fillStyle = PANEL_DIM; fitTx(x, k, cw - 36, 24, '500', 'sans-serif');
-      x.fillText(k, cx + 20, cy + 40);
-      x.fillStyle = PANEL_INK; fitTx(x, v, cw - 36, 42, '700', 'monospace');
-      x.fillText(v, cx + 20, cy + 96);
-    });
+  const cw = (IW - 52 - 20)/2;
+  [['ENERGJIA SOT','6,780 kWh'], ['KARIKON TANI','17']].forEach(([k, v], i) => {
+    const cx = M + 26 + i*(cw + 20), cy = oy + 112;
+    x.fillStyle = '#f7fafb'; x.fillRect(cx, cy, cw, 118);
+    x.strokeStyle = '#e6edf0'; x.lineWidth = 1; x.strokeRect(cx, cy, cw, 118);
+    x.fillStyle = PANEL_DIM; fitTx(x, k, cw - 36, 24, '500', 'sans-serif');
+    x.fillText(k, cx + 20, cy + 40);
+    x.fillStyle = PANEL_INK; fitTx(x, v, cw - 36, 42, '700', 'monospace');
+    x.fillText(v, cx + 20, cy + 96);
+  });
 
-    x.fillStyle = brand; x.fillRect(M + 26, oy + 300, IW - 52, 66);
-    x.textAlign = 'center'; x.fillStyle = '#fff'; x.font = '700 30px sans-serif';
-    x.fillText('Nis karikimin', W/2, oy + 344); x.textAlign = 'left';
+  x.fillStyle = brand; x.fillRect(M + 26, oy + 258, IW - 52, 66);
+  x.textAlign = 'center'; x.fillStyle = '#fff'; x.font = '700 30px sans-serif';
+  x.fillText('Nis karikimin', W/2, oy + 302);
+  x.fillStyle = PANEL_DIM; x.font = '500 26px sans-serif';
+  x.fillText('Klienti shikon vetëm këtë.', W/2, oy + 386);
 
-    [['Çmimi','35 L/kWh'], ['Faturimi','automatik'], ['Karikuesit','të njëjtët']].forEach(([a, b], i) => {
-      const ry = oy + 424 + i*52;
-      x.fillStyle = PANEL_INK; x.font = '500 29px sans-serif'; x.fillText(a, M + 46, ry);
-      x.textAlign = 'right'; x.fillStyle = PANEL_DIM; x.fillText(b, W - M - 46, ry); x.textAlign = 'left';
-    });
-  };
-  half(100, '#7fbc42', 'Vega Charging', 'marka e klientit A');
-  half(100 + halfH + 26, '#931623', 'Flex Charge', 'marka e klientit B');
+  /* ---- Kufiri mes siperfaqes dhe motorit ---- */
+  const dy = 640;
+  x.strokeStyle = '#cfdde3'; x.lineWidth = 2; x.setLineDash([9, 7]);
+  x.beginPath(); x.moveTo(M, dy); x.lineTo(W - M, dy); x.stroke();
+  x.setLineDash([]);
+  x.fillStyle = '#f2f6f8'; x.fillRect(W/2 - 250, dy - 22, 500, 44);
+  x.textAlign = 'center'; x.fillStyle = '#5b7783'; x.font = '600 26px sans-serif';
+  x.fillText('sipër: marka jote · poshtë: RadX', W/2, dy + 9);
 
-  const nl = ['Ndryshojnë ngjyra, logo dhe emri — asgjë tjetër.',
-              'Çmimi, matja, faturimi dhe karikuesit janë të njëjtët.'];
+  /* ---- Motori: RadX ---- */
+  const ey = 700, eh = 300;
+  x.fillStyle = '#022636'; x.fillRect(M, ey, IW, eh);
+  x.textAlign = 'left'; x.fillStyle = '#7fbc42'; x.font = '700 42px sans-serif';
+  x.fillText('RadX', M + 30, ey + 62);
+  x.fillStyle = 'rgba(234,244,247,.62)'; x.font = '500 26px sans-serif';
+  x.fillText('motori që nuk e shikon klienti', M + 30, ey + 104);
+
+  x.font = '600 28px sans-serif';
+  let px = M + 30, py = ey + 140;
+  ['çmimi', 'matja', 'faturimi', 'portofoli', 'karikuesit'].forEach(t => {
+    const tw = x.measureText(t).width + 40;
+    if (px + tw > W - M - 30){ px = M + 30; py += 66; }
+    x.fillStyle = 'rgba(127,188,66,.16)'; x.fillRect(px, py, tw, 54);
+    x.strokeStyle = 'rgba(127,188,66,.5)'; x.lineWidth = 1; x.strokeRect(px, py, tw, 54);
+    x.fillStyle = '#cfe8ad'; x.textAlign = 'center'; x.fillText(t, px + tw/2, py + 36);
+    x.textAlign = 'left'; px += tw + 16;
+  });
+
+  const nl = ['Marka, ngjyrat dhe emri janë të tutë.',
+              'Çmimi, matja, faturimi dhe karikuesit i mban RadX.'];
   x.font = '400 30px sans-serif';
   const bandH = 34 + nl.length*44, by = H - bandH;
   x.fillStyle = '#e9eff2'; x.fillRect(0, by, W, bandH);
@@ -1418,7 +1481,7 @@ function dashboardTexturePortrait(){
   x.textAlign = 'left'; x.textBaseline = 'alphabetic';
   x.fillStyle = '#10a2ac'; x.fillRect(0, 0, W, 100);
   x.fillStyle = '#fff'; x.font = '600 36px sans-serif';
-  x.fillText('RadX · Paneli i rrjetit', M, 64);
+  x.fillText('RadX · Dashboard', M, 64);
   x.fillStyle = PANEL_INK; x.fillRect(M, 128, IW, 92);
   x.fillStyle = '#fff'; x.font = '600 38px sans-serif';
   x.fillText('Rrjeti punon. 3 gjëra kërkojnë kujdes.', M + 26, 186);
@@ -1492,7 +1555,20 @@ const PANEL_PAGES = {
       ['Paratë','portofol, zbritje, fatura zyrtare','PUNON'],
       ['Raportet','ditore dhe javore, me email','PUNON'],
     ],
-    note:'Kompania e drejton nga paneli. Nuk i duhet programues për punën e ditës.',
+    note:'Kompania e drejton nga dashboard-i. Nuk i duhet programues për punën e ditës.',
+  },
+  offer: {
+    pageName:'White label',
+    headline:'Marka jote sipër. RadX poshtë.',
+    cards:[['E JOTJA','marka'],['MOTORI','RadX'],['KOD I RI','ASNJË'],['GATI PËR','ditë']],
+    rowsTitle:'Kush mban çfarë',
+    rows:[
+      ['Logo, ngjyrat, emri','dalin në aplikacion dhe dashboard','E JOTJA'],
+      ['Adresa në internet','domain-i yt','E JOTJA'],
+      ['Matja, çmimet, faturimi','punojnë pa i prekur','RADX'],
+      ['Karikuesit dhe siguria','të mirëmbajtura nga ne','RADX'],
+    ],
+    note:'E merr gati, me emrin tënd sipër. Nuk ndërton asgjë nga zero.',
   },
   price: {
     pageName:'Çmimet',
@@ -1505,7 +1581,7 @@ const PANEL_PAGES = {
       ['Taksi Tiranë · grup partner','volum i lartë','30 L/kWh'],
       ['Orët 22:00–06:00','për të gjithë','−20%'],
     ],
-    note:'Ndryshohen nga paneli, në çdo moment. Klienti e shikon çmimin e tij para se të nisë.',
+    note:'Ndryshohen nga dashboard-i, në çdo moment. Klienti e shikon çmimin e tij para se të nisë.',
   },
   chargers: {
     pageName:'Pikat',
@@ -1520,10 +1596,10 @@ const PANEL_PAGES = {
     ],
     note:'Gjuhë standarde, e hapur — kompania nuk mbetet peng i një shitësi të vetëm.',
   },
-  customers: {
-    pageName:'Klientët',
+  groups: {
+    pageName:'Grupet',
     headline:'Të gjithë në një rrjet, secili me kushtet e tij.',
-    cards:[['INDIVIDË','4,120'],['KOMPANI','38'],['GRUPE PARTNERE','12'],['KARTELA','3,860']],
+    cards:[['INDIVIDË','4,120'],['KOMPANI','38'],['GRUPE','12'],['KARTELA','3,860']],
     rowsTitle:'Si janë të organizuar',
     rows:[
       ['Individë','paguajnë vetë, portofol personal','42 L/kWh'],
@@ -1566,13 +1642,151 @@ const PANEL_PAGES = {
     rowsTitle:'Çfarë duhet për një markë të dytë',
     rows:[
       ['Emri, logo, ngjyrat','skedarët e brandit + domain','KONFIGURIM'],
-      ['Çmimet e kompanisë','rregulla në panel','KONFIGURIM'],
+      ['Çmimet e kompanisë','rregulla në dashboard','KONFIGURIM'],
       ['Faturimi, matja, karikuesit','pa ndryshim','GATI'],
       ['Kod i shkruar nga zero','—','ASNJË'],
     ],
-    note:'Flex Charge u ngrit pikërisht kështu, mbi të njëjtin sistem si Vega Charging.',
+    note:'Një markë e dytë ngrihet pikërisht kështu, mbi të njëjtin sistem.',
   },
 };
+
+/* Zinxhiri i partnereve: rekursioni nuk hyn dot ne skemen e rreshtave, sepse
+   argumenti eshte thellesia — cdo nivel del me marken e vet dhe mund te hapi
+   nje nivel tjeter poshte tij. Prandaj vizatohet si kaskade kartash, secila me
+   ngjyren e vet, me lidhje kembe-qeni mes tyre. Permbajtja rri mbi y 700: karta
+   e kapitullit ze fundin-majtas. */
+const CHAIN = [
+  ['#7fbc42', 'KOMPANIA JOTE',        'marka jote'],
+  ['#00a3b9', 'PARTNERI YT',          'marka e tij'],
+  ['#f0a33a', 'PARTNERI I PARTNERIT', 'marka e vet'],
+];
+const CHAIN_RIGHTS = ['çmimet e anëtarëve', 'portofolin e tyre',
+                      'shtimin e anëtarëve', 'raportet dhe faturat'];
+
+function drawPartnerPage(x){
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, PANEL_W, PANEL_H);
+  x.textAlign = 'center'; x.fillStyle = PANEL_INK; x.font = '700 40px sans-serif';
+  x.fillText('WHITE LABEL, NË ZINXHIR', PANEL_W / 2, 66);
+
+  const cw = 560, chh = 92, x0 = 90, y0 = 116, dx = 104, dy = 132;
+
+  CHAIN.forEach(([col, name, sub], i) => {
+    const cx = x0 + i * dx, cy = y0 + i * dy;
+    if (i > 0){
+      const px = x0 + (i - 1) * dx + 34, py = y0 + (i - 1) * dy + chh;
+      x.strokeStyle = '#b9ccd4'; x.lineWidth = 2; x.beginPath();
+      x.moveTo(px, py); x.lineTo(px, cy + chh / 2); x.lineTo(cx, cy + chh / 2); x.stroke();
+    }
+    x.fillStyle = '#fff'; x.fillRect(cx, cy, cw, chh);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(cx, cy, cw, chh);
+    x.fillStyle = col; x.fillRect(cx, cy, 14, chh);
+    x.textAlign = 'left'; x.fillStyle = PANEL_INK; x.font = '700 28px sans-serif';
+    x.fillText(name, cx + 36, cy + 40);
+    x.fillStyle = col; x.font = '600 21px sans-serif';
+    x.fillText(sub, cx + 36, cy + 72);
+    x.textAlign = 'right'; x.fillStyle = PANEL_DIM; x.font = '500 20px sans-serif';
+    x.fillText('niveli ' + (i + 1), cx + cw - 24, cy + 40);
+    x.textAlign = 'left';
+  });
+
+  /* Niveli i katert nuk vizatohet si karte: eshte pohimi qe zinxhiri vazhdon. */
+  const gx = x0 + 3 * dx, gy = y0 + 3 * dy;
+  const px = x0 + 2 * dx + 34, py = y0 + 2 * dy + chh;
+  x.strokeStyle = '#cfdde3'; x.lineWidth = 2; x.setLineDash([7, 7]); x.beginPath();
+  x.moveTo(px, py); x.lineTo(px, gy + 26); x.lineTo(gx, gy + 26); x.stroke();
+  x.setLineDash([]);
+  x.fillStyle = '#8aa5b0'; x.font = '600 24px sans-serif'; x.textAlign = 'left';
+  x.fillText('… dhe kështu me radhë, pa fund të caktuar', gx + 8, gy + 34);
+
+  /* Kolona e djathte: cfare kontrollon secili nivel, i njejti grup te drejtash. */
+  const rx0 = 1000;
+  x.fillStyle = PANEL_INK; x.font = '700 24px sans-serif';
+  x.fillText('ÇDO NIVEL KONTROLLON VETË', rx0, y0 + 30);
+  x.font = '500 23px sans-serif';
+  CHAIN_RIGHTS.forEach((t, i) => {
+    const ry = y0 + 82 + i * 54;
+    x.fillStyle = '#7fbc42'; x.beginPath(); x.arc(rx0 + 9, ry - 8, 7, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#3c5560'; x.fillText(t, rx0 + 32, ry);
+  });
+  x.fillStyle = '#022636';
+  x.fillRect(rx0, y0 + 82 + CHAIN_RIGHTS.length * 54 + 14, 500, 96);
+  x.fillStyle = '#7fbc42'; x.font = '700 26px sans-serif';
+  x.fillText('RadX', rx0 + 26, y0 + 82 + CHAIN_RIGHTS.length * 54 + 56);
+  x.fillStyle = 'rgba(234,244,247,.66)'; x.font = '500 20px sans-serif';
+  x.fillText('poshtë çdo niveli, i njëjti motor', rx0 + 26, y0 + 82 + CHAIN_RIGHTS.length * 54 + 88);
+
+  x.fillStyle = '#e9eff2'; x.fillRect(0, 706, PANEL_W, PANEL_H - 706);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1;
+  x.beginPath(); x.moveTo(0, 706); x.lineTo(PANEL_W, 706); x.stroke();
+  x.textAlign = 'right'; x.fillStyle = '#5b7783'; x.font = '400 28px sans-serif';
+  x.fillText('Secili nivel del me markën e vet.', PANEL_W - 44, 782);
+  x.fillText('Matja, faturimi dhe karikuesit mbeten po ata — RadX.', PANEL_W - 44, 826);
+  x.textAlign = 'left';
+}
+
+function drawPartnerPagePortrait(x){
+  const W = PORT_W, H = PORT_H, M = 30, IW = W - 2*M;
+  x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, W, H);
+  x.textBaseline = 'alphabetic'; x.textAlign = 'center';
+  x.fillStyle = PANEL_INK; x.font = '700 44px sans-serif';
+  x.fillText('WHITE LABEL, NË ZINXHIR', W/2, 68);
+
+  const cw = IW - 96, chh = 130, x0 = M, y0 = 112, dx = 48, dy = 205;
+
+  CHAIN.forEach(([col, name, sub], i) => {
+    const cx = x0 + i * dx, cy = y0 + i * dy;
+    if (i > 0){
+      const px = x0 + (i - 1) * dx + 30, py = y0 + (i - 1) * dy + chh;
+      x.strokeStyle = '#b9ccd4'; x.lineWidth = 3; x.beginPath();
+      x.moveTo(px, py); x.lineTo(px, cy + chh / 2); x.lineTo(cx, cy + chh / 2); x.stroke();
+    }
+    x.fillStyle = '#fff'; x.fillRect(cx, cy, cw, chh);
+    x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(cx, cy, cw, chh);
+    x.fillStyle = col; x.fillRect(cx, cy, 16, chh);
+    x.textAlign = 'left'; x.fillStyle = PANEL_INK; x.font = '700 33px sans-serif';
+    x.fillText(name, cx + 40, cy + 56);
+    x.fillStyle = col; x.font = '600 25px sans-serif';
+    x.fillText(sub, cx + 40, cy + 98);
+    x.textAlign = 'right'; x.fillStyle = PANEL_DIM; x.font = '500 22px sans-serif';
+    x.fillText('niveli ' + (i + 1), cx + cw - 22, cy + 56);
+    x.textAlign = 'left';
+  });
+
+  const gy = y0 + 3 * dy, gx = x0 + 3 * dx;
+  const px = x0 + 2 * dx + 30, py = y0 + 2 * dy + chh;
+  x.strokeStyle = '#cfdde3'; x.lineWidth = 3; x.setLineDash([8, 8]); x.beginPath();
+  x.moveTo(px, py); x.lineTo(px, gy + 26); x.lineTo(gx, gy + 26); x.stroke();
+  x.setLineDash([]);
+  x.fillStyle = '#8aa5b0'; x.font = '600 27px sans-serif';
+  x.fillText('… dhe kështu me radhë, pa fund', gx + 10, gy + 36);
+
+  const ry0 = gy + 110;
+  x.fillStyle = PANEL_INK; x.font = '700 28px sans-serif';
+  x.fillText('ÇDO NIVEL KONTROLLON VETË', M, ry0);
+  x.font = '500 27px sans-serif';
+  CHAIN_RIGHTS.forEach((t, i) => {
+    const ry = ry0 + 60 + i * 64;
+    x.fillStyle = '#7fbc42'; x.beginPath(); x.arc(M + 10, ry - 9, 8, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#3c5560'; x.fillText(t, M + 36, ry);
+  });
+
+  const ey = ry0 + 60 + CHAIN_RIGHTS.length * 64 + 10;
+  x.fillStyle = '#022636'; x.fillRect(M, ey, IW, 120);
+  x.fillStyle = '#7fbc42'; x.font = '700 32px sans-serif'; x.fillText('RadX', M + 28, ey + 50);
+  x.fillStyle = 'rgba(234,244,247,.66)'; x.font = '500 25px sans-serif';
+  x.fillText('poshtë çdo niveli, i njëjti motor', M + 28, ey + 90);
+
+  const nl = ['Secili nivel del me markën e vet.',
+              'Matja, faturimi dhe karikuesit mbeten po ata — RadX.'];
+  x.font = '400 29px sans-serif';
+  const bandH = 34 + nl.length*44, by = H - bandH;
+  x.fillStyle = '#e9eff2'; x.fillRect(0, by, W, bandH);
+  x.strokeStyle = PANEL_EDGE; x.lineWidth = 1;
+  x.beginPath(); x.moveTo(0, by); x.lineTo(W, by); x.stroke();
+  x.textAlign = 'right'; x.fillStyle = '#5b7783';
+  nl.forEach((l, i) => x.fillText(l, W - M, by + 52 + i*44));
+  x.textAlign = 'left';
+}
 
 let panelPort = false;                    /* orientimi aktiv i panelit */
 const PANEL_AT = new THREE.Vector3(0.4, 3.6, -1.6);   /* qendra, ndryshon me orientimin */
@@ -1592,6 +1806,7 @@ function panelTex(name){
   c.height = panelPort ? PORT_H : PANEL_H;
   const x = c.getContext('2d');
   if (name === 'brand') (panelPort ? drawBrandPagePortrait : drawBrandPage)(x);
+  else if (name === 'partners') (panelPort ? drawPartnerPagePortrait : drawPartnerPage)(x);
   else (panelPort ? drawPagePortrait : drawPage)(x, PANEL_PAGES[name]);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
   track.push(t); cache[name] = t; return t;
@@ -1918,9 +2133,9 @@ document.getElementById('btn-fs').onclick = () => {
   else (document.body.requestFullscreen || document.body.webkitRequestFullscreen)?.call(document.body);
 };
 
-/* 13 kapitujt e rrefimit: 1..0, -, =, [ · 8 kapitujt RadX: ], \, ;, ', , . / ` */
+/* 13 kapitujt e rrefimit: 1..0, -, =, [ · 10 kapitujt RadX: ], \, ;, ', , . / ` z x */
 const KEYMAP = ['1','2','3','4','5','6','7','8','9','0','-','=','[',
-                ']','\\',';',"'",',','.','/','`'];
+                ']','\\',';',"'",',','.','/','`','z','x'];
 window.addEventListener('keydown', e=>{
   if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); goTo(chapter+1); }
   else if (e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(chapter-1); }
