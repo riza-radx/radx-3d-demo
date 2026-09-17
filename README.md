@@ -2,9 +2,12 @@
 
 Dy prezantime në të njëjtën dosje. Të dyja punojnë **offline**, pa npm, pa API, pa CDN.
 
+> **Do të prekësh kodin, ose po punon me një agjent AI?** Fillo nga [AGENTS.md](AGENTS.md) —
+> kufizimet, rregullat e kodit dhe kurthet. Ky README është për **prezantuesin**.
+
 | Skedar | Çfarë është |
 |---|---|
-| **`radx-prezantim.html`** | **Kryesori** — 21 kapituj (13 rrëfim + 8 RadX), me **telefonin gjithë kohës** në ekran që tregon pamjen e shoferit live |
+| **`radx-prezantim.html`** | **Kryesori** — 23 kapituj (13 rrëfim + 10 RadX), me **telefonin gjithë kohës** në ekran që tregon pamjen e shoferit live |
 | `radx-demo.html` | Versioni i para, 7 kapituj, pa telefon. E lënë si është |
 
 ---
@@ -27,7 +30,7 @@ Për ta ndalur: `Ctrl+C` në dritaren e zezë.
 | `→` / `Space` | kapitulli tjetër |
 | `←` | mbrapa |
 | `1` `2` … `9` `0` `-` `=` `[` | kërce direkt në kapitujt 1…13 (rrëfimi) |
-| `]` `\` `;` `'` `,` `.` `/` `` ` `` | kapitujt 14…21 (seksioni RadX) |
+| `]` `\` `;` `'` `,` `.` `/` `` ` `` `z` `x` | kapitujt 14…23 (seksioni RadX) |
 | `F` | ekran i plotë |
 | `R` | nis nga fillimi |
 | `T` | **shtresa teknike** — shfaq nën tekstin e thjeshtë emrat e vërtetë (OCPP, rate chain, fiskalizim). Fshehur si default |
@@ -36,7 +39,7 @@ Për ta ndalur: `Ctrl+C` në dritaren e zezë.
 
 ---
 
-## 21 kapitujt
+## 23 kapitujt
 
 Kapitujt kanë `id` në kod (`CHAPTERS[].id`), dhe logjika e skenës lidhet me `id`,
 **jo me indeks** — kështu rendi mund të ndryshojë pa thyer kartën, spinën ose panelin.
@@ -62,9 +65,18 @@ Kapitujt kanë `id` në kod (`CHAPTERS[].id`), dhe logjika e skenës lidhet me `
 12. `problem` Kur diçka shkon keq
 13. `panel` Nga lart: paneli i operatorit
 
-**RadX** (14–21) — `rx-intro` · `rx-brand` · `rx-price` · `rx-chargers` ·
-`rx-customers` · `rx-money` · `rx-alerts` · `rx-scale`. Telefoni largohet, paneli 3D
-bëhet kryesori dhe ndryshon faqe.
+**RadX** (14–23) — `rx-intro` · `rx-brand` · `rx-offer` · `rx-groups` ·
+`rx-partners` · `rx-price` · `rx-chargers` · `rx-money` · `rx-alerts` · `rx-scale`.
+Telefoni largohet, paneli 3D bëhet kryesori dhe ndryshon faqe.
+
+**Blloku i white label-it (15–18)** është argumenti tregtar, dhe kapitujt lexohen si një i vetëm:
+
+- `rx-brand` **çfarë është** — sipërfaqja është marka e klientit, motori poshtë është RadX
+- `rx-offer` **si e ofrojmë** — çfarë merr klienti (logo, ngjyra, emër, domain) dhe çfarë mbajmë ne
+- `rx-groups` **grupet** — kompania i ndan klientët në grupe, secili me çmimin dhe portofolin e vet
+- `rx-partners` **zinxhiri** — partneri del me markën e vet dhe mund të hapë partnerë nën vete,
+  pa fund të caktuar. Paneli i tij vizatohet veçmas (`drawPartnerPage`), sepse thellësia
+  nuk hyn dot në skemën e rreshtave.
 
 ### Dy rrugët e nisjes
 
@@ -158,7 +170,7 @@ Pa skedar, vizatohet një panel i imituar (pa error).
 radx-3d-demo/
 ├─ nis.cmd                  ← kliko dy herë
 ├─ server.js                ← server statik, pa varësi
-├─ radx-prezantim.html      ← PREZANTIMI KRYESOR (21 kapituj + telefoni)
+├─ radx-prezantim.html      ← PREZANTIMI KRYESOR (23 kapituj + telefoni)
 ├─ radx-demo.html           ← versioni i para (7 kapituj)
 ├─ assets/dashboard.png     ← (opsional) screenshot-i i vërtetë
 └─ vendor/                  ← Three.js r160 lokal + RoomEnvironment
