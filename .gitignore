@@ -5,3 +5,8 @@ dist/
 # Pamjet e nxjerra prej tyre qendrojne te assets/app/ (2.1 MB) dhe ndjeken normalisht.
 PDF-Presentation.pdf
 *.mp4
+
+# Tekstet e redaktuara lokalisht (vegel authoring). Shkruhen nga db.js permes
+# /api/tekstet; jane gjendje pune, jo pjese e prezantimit statik. Kur permbajtja
+# te "piqet", kalon te TEXT_OVERRIDES ne radx-prezantim.html.
+content/

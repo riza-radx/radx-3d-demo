@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Një karikim në RadX</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23022636'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%237fbc42'%3EX%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a1740'/%3E%3Ctext x='16' y='23' font-size='20' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%231bb6dc'%3EX%3C/text%3E%3C/svg%3E">
 <style>
   /* ================= PALETA (ndryshoje vetem ketu) ================= */
   :root{
-    --brand:#7fbc42;
-    --brand-dk:#4e7a26;
-    --teal:#00a3b9;      /* vlera e sakte e markes (PDF + piksel i pamjeve) */
-    --navy:#022636;
-    --navy-2:#08435d;    /* vlera e sakte e markes */
-    --ink:#eaf4f7;
-    --dim:#8fb0bb;
+    --brand:#1bb6dc;     /* cyan-i i ndritshem i RadX (broshura) — thekset kryesore */
+    --brand-dk:#0e7fa0;
+    --teal:#0e9bc4;      /* cyan-i i thelle i RadX — theksi dytesor */
+    --navy:#0a1740;      /* navy-ja e thelle e RadX — sfondet me te erreta */
+    --navy-2:#1b2e6e;    /* navy-ja mbreterore e RadX (fjala RADX ne broshure) */
+    --ink:#e9f1fb;
+    --dim:#93a4c6;
     --warn:#f0a33a;
-    --bad:#ff7979;       /* vlera e sakte e markes */
-    --card:rgba(2,38,54,.84);
-    --line:rgba(143,176,187,.22);
+    --bad:#ff7979;
+    --card:rgba(10,23,64,.84);
+    --line:rgba(150,166,200,.24);
     --mono:ui-monospace,"Cascadia Mono",Consolas,"SF Mono",monospace;
     --sans:"Segoe UI Variable Display","Segoe UI",system-ui,-apple-system,sans-serif;
   }
@@ -26,7 +26,7 @@
   html,body{height:100%;height:100dvh;overflow:hidden}
   body{
     font-family:var(--sans);color:var(--ink);
-    background:radial-gradient(120% 90% at 42% 0%, #0b5566 0%, #04384d 42%, #022636 100%);
+    background:radial-gradient(120% 90% at 42% 0%, #1b3a86 0%, #11225a 42%, #0a1740 100%);
   }
   #scene{position:fixed;inset:0;width:100%;height:100%;height:100dvh;display:block;touch-action:none}
   #ui{position:fixed;inset:0;pointer-events:none;z-index:2}
@@ -55,10 +55,10 @@
   }
   .chapter .step b{color:var(--brand);font-weight:700}
   .chapter h1{font-size:25px;line-height:1.14;letter-spacing:-.3px;margin-bottom:8px}
-  .chapter p{font-size:14.5px;line-height:1.5;color:#cfe3ea;min-height:5.2em}
+  .chapter p{font-size:14.5px;line-height:1.5;color:#cdd8ef;min-height:5.2em}
   .chapter .tech{
     display:none;margin-top:10px;padding-top:9px;border-top:1px dashed var(--line);
-    font-family:var(--mono);font-size:11.5px;line-height:1.5;color:#6f97a4;
+    font-family:var(--mono);font-size:11.5px;line-height:1.5;color:#8391b5;
   }
   .chapter.showtech .tech{display:block}
 
@@ -69,7 +69,7 @@
     border-radius:9px;padding:8px 15px;cursor:pointer;transition:.15s;
   }
   @media (hover:hover){
-    .navrow button:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#0b2a06}
+    .navrow button:hover:not(:disabled){background:var(--brand);border-color:var(--brand);color:#062044}
   }
   .navrow button:disabled{opacity:.3;cursor:default}
   .dots{
@@ -88,6 +88,11 @@
      Vetem opacity + transform — layout-i nuk luan, keshtu portret/landscape
      kane nevoje vetem per transform-in e vet. */
   body.wide .phone{opacity:0;pointer-events:none;transform:translateY(-50%) translateX(54px) scale(.97)}
+
+  /* Hapi hyres: telefoni fshihet dhe skena merr gjithe ekranin (si te 'wide',
+     por pa layout-in e seksionit RadX). Perdoret vetem te kapitulli i pare. */
+  body.nophone .phone{opacity:0;pointer-events:none}
+  body.nophone #scene{height:100dvh}
 
   /* Telefoni tani ESHTE pamja e app-it: pamjet te assets/app/ permbajne edhe
      trupin e pajisjes, keshtu qelqi, notch-i dhe shiriti i vjeter u hoqen.
@@ -194,7 +199,7 @@
   .ov-ring{position:absolute;right:5%;top:12%;width:20%;aspect-ratio:1}
   .ov-btn{
     position:absolute;left:5%;right:5%;bottom:3%;height:23%;
-    background:#07435d;border-radius:999px;display:grid;place-items:center;
+    background:#1b2e6e;border-radius:999px;display:grid;place-items:center;
     font-size:8px;font-size:2.6cqw;letter-spacing:.2px;
   }
 
@@ -205,25 +210,25 @@
     background:#fff;display:grid;grid-template-columns:68% 32%;align-items:center;
   }
   .ov-done b{
-    font-size:13px;font-size:4.1cqw;font-weight:600;color:#08435d;
+    font-size:13px;font-size:4.1cqw;font-weight:600;color:#1b2e6e;
     letter-spacing:-.3px;line-height:1;white-space:nowrap;
   }
   .phone .glass{
     position:relative;width:100%;height:100%;border-radius:33px;overflow:hidden;
-    background:#061b24;
+    background:#0a1636;
   }
   .phone .notch{
     position:absolute;top:9px;left:50%;transform:translateX(-50%);
-    width:96px;height:22px;border-radius:12px;background:#050f14;z-index:6;
+    width:96px;height:22px;border-radius:12px;background:#060b20;z-index:6;
   }
   .sbar{
     position:absolute;top:0;left:0;right:0;height:40px;z-index:5;
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 20px;font-size:11.5px;font-family:var(--mono);color:#cfe3ea;
+    padding:0 20px;font-size:11.5px;font-family:var(--mono);color:#cdd8ef;
   }
   .sbar .rt{display:flex;gap:6px;align-items:center}
-  .sbar .bat{width:20px;height:10px;border:1.4px solid #cfe3ea;border-radius:3px;position:relative}
-  .sbar .bat::after{content:'';position:absolute;inset:1.6px;right:5px;background:#cfe3ea;border-radius:1px}
+  .sbar .bat{width:20px;height:10px;border:1.4px solid #cdd8ef;border-radius:3px;position:relative}
+  .sbar .bat::after{content:'';position:absolute;inset:1.6px;right:5px;background:#cdd8ef;border-radius:1px}
 
   .appbar{
     position:absolute;top:40px;left:0;right:0;height:46px;z-index:4;
@@ -244,8 +249,8 @@
 
   .h{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:11px}
   .pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;
-        padding:4px 10px;border-radius:999px;background:rgba(127,188,66,.16);color:var(--brand)}
-  .pill.t{background:rgba(16,162,172,.18);color:#4fd3dd}
+        padding:4px 10px;border-radius:999px;background:rgba(27,182,220,.16);color:var(--brand)}
+  .pill.t{background:rgba(14,155,196,.18);color:#5fd0e8}
   .pill.w{background:rgba(240,163,58,.18);color:var(--warn)}
   .pill.b{background:rgba(226,86,74,.18);color:#ff8a7e}
 
@@ -256,8 +261,8 @@
 
   .btn{
     display:block;width:100%;text-align:center;margin-top:14px;
-    background:var(--brand);color:#0b2a06;font-weight:800;font-size:15px;
-    padding:14px;border-radius:13px;box-shadow:0 10px 26px rgba(127,188,66,.28);
+    background:var(--brand);color:#062044;font-weight:800;font-size:15px;
+    padding:14px;border-radius:13px;box-shadow:0 10px 26px rgba(27,182,220,.28);
   }
   .btn.ghost{background:rgba(143,176,187,.13);color:var(--ink);box-shadow:none;font-weight:700}
 
@@ -265,21 +270,21 @@
   .map{position:absolute;inset:0;background:
       linear-gradient(rgba(143,176,187,.07) 1px,transparent 1px) 0 0/100% 46px,
       linear-gradient(90deg,rgba(143,176,187,.07) 1px,transparent 1px) 0 0/46px 100%,
-      #08222c}
+      #0a1740}
   .map .road{position:absolute;background:rgba(143,176,187,.13)}
   .pin{position:absolute;width:26px;height:26px;border-radius:50% 50% 50% 4px;
        transform:rotate(-45deg);display:grid;place-items:center;
        box-shadow:0 5px 14px rgba(0,0,0,.45)}
   .pin s{transform:rotate(45deg);font-size:11px;font-weight:800;text-decoration:none}
-  .pin.free{background:var(--brand);color:#0b2a06}
-  .pin.busy{background:#3f6472;color:#cfe3ea}
-  .pin.me{background:var(--teal);color:#02252a;width:32px;height:32px;animation:beat 1.8s infinite}
+  .pin.free{background:var(--brand);color:#062044}
+  .pin.busy{background:#3f5680;color:#cdd8ef}
+  .pin.me{background:var(--teal);color:#052038;width:32px;height:32px;animation:beat 1.8s infinite}
   @keyframes beat{0%,100%{transform:rotate(-45deg) scale(1)}50%{transform:rotate(-45deg) scale(1.12)}}
   .maptop{position:absolute;top:12px;left:14px;right:14px;z-index:2;
           background:rgba(4,34,44,.9);border:1px solid var(--line);border-radius:11px;
           padding:9px 12px;font-size:12px;display:flex;justify-content:space-between;align-items:center}
   .mapbot{position:absolute;bottom:14px;left:14px;right:14px;z-index:2;
-          background:#04222c;border:1px solid var(--line);border-radius:13px;padding:12px 14px}
+          background:#0a1a3e;border:1px solid var(--line);border-radius:13px;padding:12px 14px}
 
   /* bateria rrethore */
   .ring{position:relative;width:158px;height:158px;margin:2px auto 10px}
@@ -294,19 +299,19 @@
   .chk.ok{opacity:1}
   .chk em{width:22px;height:22px;border-radius:50%;flex:0 0 22px;display:grid;place-items:center;
           background:rgba(143,176,187,.16);font-style:normal;font-size:12px;font-weight:800;color:var(--dim);transition:.45s}
-  .chk.ok em{background:var(--brand);color:#0b2a06}
+  .chk.ok em{background:var(--brand);color:#062044}
   .chk u{text-decoration:none;color:var(--dim);font-size:11.5px;display:block}
 
   /* njoftim push */
   .push{
-    background:#0c2f3c;border:1px solid rgba(127,188,66,.4);border-radius:14px;
+    background:#12245a;border:1px solid rgba(27,182,220,.4);border-radius:14px;
     padding:13px 14px;box-shadow:0 12px 30px rgba(0,0,0,.4);
     animation:drop .5s cubic-bezier(.2,.9,.2,1);
   }
   @keyframes drop{from{transform:translateY(-16px);opacity:0}to{transform:none;opacity:1}}
   .push b{display:block;font-size:13.5px;margin-bottom:4px}
-  .push span{font-size:12.5px;color:#b7d2db;line-height:1.45}
-  .push span b{display:inline;font-weight:700;color:#eaf4f7}
+  .push span{font-size:12.5px;color:#c2cdea;line-height:1.45}
+  .push span b{display:inline;font-weight:700;color:#e9f1fb}
 
   /* shirita ndarjeje fuqie */
   .sh{margin:9px 0}
@@ -316,11 +321,11 @@
   .sh .tr i{display:block;height:100%;border-radius:6px;transition:width .7s}
 
   /* fatura */
-  .inv{background:#f6fafb;color:#0b2733;border-radius:13px;padding:15px}
+  .inv{background:#f6fafb;color:#0a1740;border-radius:13px;padding:15px}
   .inv .t{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#5d7580;margin-bottom:9px}
   .inv .r{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;color:#3c5560}
-  .inv .r b{font-family:var(--mono);color:#0b2733}
-  .inv .tot{margin-top:9px;padding-top:9px;border-top:2px solid #0b2733;font-size:14px}
+  .inv .r b{font-family:var(--mono);color:#0a1740}
+  .inv .tot{margin-top:9px;padding-top:9px;border-top:2px solid #0a1740;font-size:14px}
   .inv .tot b{font-size:20px}
 
   /* ================= NDIHMA E TASTIERES ================= */
@@ -330,12 +335,12 @@
 
   .draghint{
     position:absolute;left:calc(50% - 190px);bottom:52px;transform:translateX(-50%);
-    background:var(--brand);color:#0b2a06;font-weight:800;font-size:15.5px;
-    padding:12px 24px;border-radius:999px;box-shadow:0 14px 40px rgba(127,188,66,.42);
+    background:var(--brand);color:#062044;font-weight:800;font-size:15.5px;
+    padding:12px 24px;border-radius:999px;box-shadow:0 14px 40px rgba(27,182,220,.42);
     opacity:0;transition:.35s;white-space:nowrap;
   }
   .draghint.show{opacity:1}
-  .draghint.done{background:var(--teal);color:#02252a;box-shadow:0 14px 40px rgba(16,162,172,.42)}
+  .draghint.done{background:var(--teal);color:#052038;box-shadow:0 14px 40px rgba(14,155,196,.42)}
 
   #boot{position:fixed;inset:0;z-index:9;display:grid;place-items:center;background:var(--navy);transition:opacity .6s}
   #boot.hide{opacity:0;pointer-events:none}
@@ -345,7 +350,7 @@
   /* Tagline-i i video-s, me shkelqimin e vet. */
   #boot p.tag{
     margin-top:16px;font-size:13px;letter-spacing:.26em;text-transform:uppercase;
-    color:#eaf4f7;text-align:center;
+    color:#e9f1fb;text-align:center;
     text-shadow:0 0 26px rgba(234,244,247,.55), 0 0 60px rgba(0,163,185,.45);
   }
 
@@ -527,6 +532,53 @@
        e vetmja shirit i lire mes butonit ⛶ dhe telefonit. */
     .draghint{top:14px;bottom:auto}
   }
+
+  /* ================= REDAKTUESI (vegel authoring; hiqe kur permbajtja piqet) ================= */
+  #editbar{position:fixed;right:14px;bottom:14px;z-index:50}
+  #editbar[hidden]{display:none}
+  #ed-open{
+    font-family:var(--sans);font-size:13px;font-weight:700;color:#062044;
+    background:var(--brand);border:none;border-radius:999px;
+    padding:10px 17px;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.42);
+  }
+  #ed-open:hover{filter:brightness(1.06)}
+
+  /* Paneli i redaktimit — sirtar djathtas, mbi skene. */
+  #edpanel{
+    position:fixed;top:0;right:0;z-index:60;height:100dvh;width:min(400px,94vw);
+    display:flex;flex-direction:column;gap:13px;overflow-y:auto;
+    background:rgba(8,18,52,.97);border-left:1px solid var(--line);
+    padding:18px 18px 24px;backdrop-filter:blur(12px);
+    box-shadow:-24px 0 64px rgba(0,0,0,.5);
+    font-family:var(--sans);color:var(--ink);
+  }
+  #edpanel[hidden]{display:none}
+  #edpanel .ep-head{display:flex;align-items:center;justify-content:space-between}
+  #edpanel .ep-head b{font-size:16px}
+  #ep-close{background:none;border:none;color:var(--dim);font-size:20px;line-height:1;cursor:pointer;padding:2px 6px}
+  #ep-close:hover{color:var(--ink)}
+  #edpanel .ep-f{
+    display:flex;flex-direction:column;gap:6px;
+    font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--brand);font-weight:700;
+  }
+  #edpanel select,#edpanel textarea{
+    font:inherit;text-transform:none;letter-spacing:normal;font-weight:400;color:var(--ink);
+    background:rgba(150,166,200,.10);border:1px solid var(--line);border-radius:9px;
+    padding:9px 11px;line-height:1.45;
+  }
+  #edpanel textarea{font-size:14px;resize:vertical}
+  #edpanel select{cursor:pointer}
+  #edpanel select:focus,#edpanel textarea:focus{outline:2px solid var(--brand);border-color:transparent}
+  #edpanel .ep-actions{display:flex;gap:9px;margin-top:2px}
+  #edpanel .ep-actions button{
+    font:inherit;font-size:13px;font-weight:600;color:var(--ink);
+    background:rgba(150,166,200,.14);border:1px solid var(--line);border-radius:9px;
+    padding:9px 14px;cursor:pointer;transition:.15s;
+  }
+  #edpanel .ep-actions button:hover{background:rgba(150,166,200,.22)}
+  #edpanel .ep-actions .primary{background:var(--brand);border-color:var(--brand);color:#062044;font-weight:700}
+  #edpanel .ep-actions .primary:hover{filter:brightness(1.06)}
+  #ep-status{font-size:12px;color:var(--dim);min-height:1.2em}
 </style>
 </head>
 <body>
@@ -590,11 +642,11 @@
         <div class="ov-sub" id="ov-sub">01:29:58 to finish</div>
         <svg class="ov-ring" viewBox="0 0 100 100" aria-hidden="true">
           <circle cx="50" cy="50" r="41" fill="none" stroke="#2a3134" stroke-width="11"/>
-          <circle id="ov-arc" cx="50" cy="50" r="41" fill="none" stroke="#00a3b9" stroke-width="11"
+          <circle id="ov-arc" cx="50" cy="50" r="41" fill="none" stroke="#0e9bc4" stroke-width="11"
                   stroke-linecap="round" stroke-dasharray="257.6" stroke-dashoffset="129"
                   transform="rotate(-90 50 50)"/>
           <rect x="42" y="38" width="16" height="24" rx="3" fill="none" stroke="#8b989c" stroke-width="3"/>
-          <rect id="ov-batt" x="44" y="50" width="12" height="10" fill="#00a3b9"/>
+          <rect id="ov-batt" x="44" y="50" width="12" height="10" fill="#0e9bc4"/>
         </svg>
         <div class="ov-btn" id="ov-btn">Stop Charging ⚡</div>
       </div>
@@ -626,6 +678,23 @@
   </div>
 </div>
 
+<!-- ===== REDAKTUESI I TEKSTEVE (vegel authoring; e fshehur ne live) ===== -->
+<div id="editbar" hidden>
+  <button id="ed-open">✎ Redakto tekstin</button>
+</div>
+<div id="edpanel" hidden>
+  <div class="ep-head"><b>✎ Redakto tekstin</b><button id="ep-close" title="Mbyll (Esc)">✕</button></div>
+  <label class="ep-f">Kapitulli<select id="ep-chap"></select></label>
+  <label class="ep-f">Titulli<textarea id="ep-title" rows="2"></textarea></label>
+  <label class="ep-f">Teksti — për publikun<textarea id="ep-body" rows="7"></textarea></label>
+  <label class="ep-f">Teknik — pas tastit T<textarea id="ep-tech" rows="3"></textarea></label>
+  <div class="ep-actions">
+    <button id="ep-save" class="primary">Ruaj</button>
+    <button id="ep-reset">Rikthe origjinalin</button>
+  </div>
+  <div id="ep-status"></div>
+</div>
+
 <div id="boot"><div>
   <div class="block">
     <svg class="rmark" viewBox="226.19 358.50 126.04 124.91" aria-hidden="true"><use href="#radx-ring"/></svg>
@@ -644,10 +713,10 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 /* ===================== PALETA 3D ===================== */
 const P = {
-  brand:0x7fbc42, teal:0x00a3b9, navy:0x022636, asphalt:0x0e2b38,
-  line:0x9fb8c1, metal:0xdfe9ec, dark:0x0a1f29, glass:0x0d3a4a,
+  brand:0x1bb6dc, teal:0x0e9bc4, navy:0x0a1740, asphalt:0x111d3e,
+  line:0xa6b4d0, metal:0xdde6f2, dark:0x0a1430, glass:0x123a6a,
   warn:0xf0a33a, bad:0xff7979,
-  carA:0xe8eef0, carB:0x2d5c6b, carC:0x8a97a0,
+  carA:0xe6ecf6, carB:0x27527e, carC:0x8893ac,
 };
 
 /* ===================== NUMRAT E TREGIMIT ===================== */
@@ -665,7 +734,7 @@ const CHAPTERS = [
   /* Kapitujt kane 'id'. Logjika e skenes lidhet me id, jo me indeks — kjo e ben
      rendin te ndryshueshem pa thyer karten, spinen, panelin apo sesionet anesore. */
 
-  { id:'person', sec:'Shoferi', screen:'map', hero:true,
+  { id:'person', sec:'Shoferi', screen:'map', noPhone:true,
     title:'Nis nga njeriu, jo nga sistemi',
     body:'Një shofer me makinë elektrike, në një qytet ku nuk e njeh mirë rrugën. Hap aplikacionin '+
          'dhe shikon pikat pranë tij. Zgjedh njërën — dhe atje i del gjithçka që i duhet të dijë '+
@@ -894,7 +963,7 @@ key.shadow.camera.left = -16; key.shadow.camera.right = 16;
 key.shadow.camera.top = 16;   key.shadow.camera.bottom = -16;
 key.shadow.bias = -0.0007; key.shadow.normalBias = 0.02;
 scene.add(key);
-scene.add(new THREE.HemisphereLight(0x9fd4e0, P.navy, 0.5));
+scene.add(new THREE.HemisphereLight(0x9fc4ea, P.navy, 0.5));
 const rim = new THREE.DirectionalLight(0x67d5e8, 0.85);
 rim.position.set(-9, 5, -7); scene.add(rim);
 
@@ -937,6 +1006,59 @@ BAY_X.forEach(x => {
 });
 box(30,0.26,0.7,MAT.curb,4.0,0.13,-3.9);
 
+/* ===================== MJEDISI: pemE + pallate ===================== */
+/* Sfond low-poly qe e mbush hapesiren rreth parkimit — pa asete, vetem box/cyl.
+   Rrijne prapa bordurES (z te thelle) dhe ne krahE, larg rruges se kameres ne
+   kapitujt e afErt. Fog-u navy i tret ne thellESi -> ndjesi qyteti ne muzg.
+   Dekor: pa hije (castShadow=false), qe te mos rendojne shadow map-in e skenES. */
+const ENVMAT = {
+  bldg:  [mat({color:0x172a52,roughness:.85}), mat({color:0x1e335f,roughness:.85}), mat({color:0x223a6b,roughness:.8})],
+  roof:  mat({color:0x101d3e,roughness:.9}),
+  winOn: mat({color:0x0a1740,emissive:new THREE.Color(0x7fd7ec),emissiveIntensity:.9,roughness:.5}),
+  winOff:mat({color:0x0e1d44,roughness:.6}),
+  trunk: mat({color:0x241c17,roughness:.9}),
+  leafA: mat({color:0x2f6b52,roughness:.85}),
+  leafB: mat({color:0x3c7d55,roughness:.85}),
+};
+const noShadow = o => { o.castShadow = false; o.receiveShadow = false; return o; };
+
+/* Nje pallat: trup + cati + rreshta dritaresh ne faqen nga kamera (+z);
+   ndezja e dritareve eshte deterministike qe skena te mos "vezulloje" pa nevoje. */
+function building(x, z, w, d, h, mi = 0){
+  const body = noShadow(box(w, h, d, ENVMAT.bldg[mi % ENVMAT.bldg.length], x, h/2, z));
+  noShadow(box(w*1.02, 0.3, d*1.02, ENVMAT.roof, x, h + 0.15, z));
+  const zf = z + d/2 + 0.02;
+  const cols = Math.max(2, Math.floor(w/1.6));
+  const rows = Math.max(2, Math.floor(h/2.0));
+  const gx = w/cols, gy = (h - 0.9)/rows;
+  for (let r = 0; r < rows; r++)
+    for (let c = 0; c < cols; c++){
+      const lit = ((r*7 + c*3 + (mi+1)*5) % 10) < 6;
+      noShadow(box(gx*0.5, gy*0.55, 0.06, lit ? ENVMAT.winOn : ENVMAT.winOff,
+                   x - w/2 + gx*(c+0.5), 0.95 + gy*(r+0.5), zf));
+    }
+  return body;
+}
+
+/* Nje peme low-poly: trung + dy kone gjethesh (cyl me rreze-lart 0 = kon). */
+function tree(x, z, s = 1){
+  noShadow(cyl(0.09*s, 0.12*s, 0.9*s, 6, ENVMAT.trunk, x, 0.45*s, z));
+  noShadow(cyl(0, 0.62*s, 1.15*s, 7, ENVMAT.leafA, x, 1.15*s, z));
+  noShadow(cyl(0, 0.46*s, 0.95*s, 7, ENVMAT.leafB, x, 1.75*s, z));
+}
+
+/* Skyline prapa parkimit. [x, z, gjeresi, thellesi, lartesi, ngjyra] */
+[[-13,-16, 5,4, 11, 0], [-6,-19, 6,5, 8, 1], [1,-21, 5,5, 13, 2],
+ [7,-17, 6,4, 9, 0], [14,-20, 5,5, 12, 1], [21,-16, 5,4, 7, 2],
+ [27,-19, 6,5, 10, 0], [-19,-15, 4,4, 6, 1]
+].forEach(b => building(...b));
+
+/* Pemet: ne krahE dhe ne mesplan — jashte zones se kamerave te afErta. */
+[[-8,-2,1.1], [-9,-6,1.2], [-7,-10,1.15], [-11,-13,1.2],
+ [15,-1,1.1], [17,-5,1.15], [16,-9,1.2], [19,-12,1.25],
+ [3,-12,1.1], [9,-13,1.05], [-2,-14,1.15], [23,-13,1.2]
+].forEach(t => tree(...t));
+
 /* ===================== EKRANI I KARIKUESIT ===================== */
 function makeScreen(){
   const c = document.createElement('canvas'); c.width = 256; c.height = 208;
@@ -945,11 +1067,11 @@ function makeScreen(){
   let last = '';
   const draw = (label, value, accent, id) => {
     const sig = [label,value,accent,id].join('|'); if (sig === last) return; last = sig;
-    x.fillStyle = '#04222c'; x.fillRect(0,0,256,208);
+    x.fillStyle = '#0a1a3e'; x.fillRect(0,0,256,208);
     x.fillStyle = accent;    x.fillRect(0,0,256,7);
     x.fillStyle = '#7d9aa4'; x.font = '600 16px sans-serif'; x.fillText(id, 18, 36);
     x.fillStyle = accent;    x.font = '700 27px sans-serif'; x.fillText(label, 18, 92);
-    x.fillStyle = '#eaf4f7'; x.font = '700 26px monospace';  x.fillText(value, 18, 142);
+    x.fillStyle = '#e9f1fb'; x.font = '700 26px monospace';  x.fillText(value, 18, 142);
     x.fillStyle = '#456975'; x.font = '600 15px sans-serif'; x.fillText('RadX', 18, 186);
     tex.needsUpdate = true;
   };
@@ -1025,7 +1147,7 @@ const car2    = buildCar(BAY_X[1], MAT.carB, 0.03);
 const car3    = buildCar(BAY_X[2], MAT.carC, -0.02);
 
 /* ===================== KARTA RFID ===================== */
-const cardMat   = mat({ color:0x08435d, roughness:.34, transparent:true, opacity:0 });
+const cardMat   = mat({ color:0x1b2e6e, roughness:.34, transparent:true, opacity:0 });
 const stripeMat = mat({ color:P.brand, roughness:.3, transparent:true, opacity:0 });
 const chipMat   = mat({ color:0xffffff, roughness:.28, transparent:true, opacity:0 });
 const card = new THREE.Group(); scene.add(card);
@@ -1072,7 +1194,7 @@ function refreshCable(force=false){
 }
 refreshCable(true);
 
-const pulseMat = new THREE.MeshBasicMaterial({ color:0xd6ffa8, transparent:true, opacity:0 });
+const pulseMat = new THREE.MeshBasicMaterial({ color:0xc9f4ff, transparent:true, opacity:0 });
 track.push(pulseMat);
 const pulses = Array.from({length:7}, ()=>{
   const s = new THREE.Mesh(geo(new THREE.SphereGeometry(0.058,12,10)), pulseMat);
@@ -1097,9 +1219,9 @@ function dashboardTexture(){
   const c = document.createElement('canvas'); c.width = 1600; c.height = 900;
   const x = c.getContext('2d');
   x.fillStyle='#f2f6f8'; x.fillRect(0,0,1600,900);
-  x.fillStyle='#10a2ac'; x.fillRect(0,0,1600,74);
+  x.fillStyle='#0e9bc4'; x.fillRect(0,0,1600,74);
   x.fillStyle='#fff'; x.font='600 30px sans-serif'; x.fillText('RadX · Dashboard', 40, 48);
-  x.fillStyle='#022636'; x.fillRect(40,104,1520,86);
+  x.fillStyle='#0a1740'; x.fillRect(40,104,1520,86);
   x.fillStyle='#fff'; x.font='600 26px sans-serif';
   x.fillText('Rrjeti punon. 3 gjëra kërkojnë kujdes.', 66, 156);
   [['ENERGJIA SOT','6,780 kWh'],['TË ARDHURAT','259K ALL'],['SESIONE','249'],
@@ -1108,22 +1230,22 @@ function dashboardTexture(){
     x.fillStyle='#fff'; x.fillRect(px,214,287,124);
     x.strokeStyle='#dfe7ea'; x.strokeRect(px,214,287,124);
     x.fillStyle='#7b939c'; x.font='500 16px sans-serif'; x.fillText(k,px+20,248);
-    x.fillStyle='#022636'; x.font='700 36px monospace'; x.fillText(v,px+20,300);
+    x.fillStyle='#0a1740'; x.font='700 36px monospace'; x.fillText(v,px+20,300);
   });
   x.fillStyle='#fff'; x.fillRect(40,362,1080,420);
   x.strokeStyle='#dfe7ea'; x.strokeRect(40,362,1080,420);
-  x.fillStyle='#022636'; x.font='600 22px sans-serif'; x.fillText('Ngarkesa e rrjetit sot',68,402);
+  x.fillStyle='#0a1740'; x.font='600 22px sans-serif'; x.fillText('Ngarkesa e rrjetit sot',68,402);
   const pts=[.08,.13,.3,.34,.33,.55,.48,.5,.52,.42,.86,.88];
   const path=()=>{ x.beginPath(); pts.forEach((v,i)=>{const gx=80+i*90,gy=740-v*300; i?x.lineTo(gx,gy):x.moveTo(gx,gy);}); };
   path(); x.lineTo(80+(pts.length-1)*90,740); x.lineTo(80,740); x.closePath();
-  x.fillStyle='rgba(16,162,172,.18)'; x.fill();
-  path(); x.strokeStyle='#10a2ac'; x.lineWidth=4; x.stroke();
+  x.fillStyle='rgba(14,155,196,.18)'; x.fill();
+  path(); x.strokeStyle='#0e9bc4'; x.lineWidth=4; x.stroke();
   x.fillStyle='#fff'; x.fillRect(1150,362,410,420);
   x.strokeStyle='#dfe7ea'; x.strokeRect(1150,362,410,420);
-  x.fillStyle='#022636'; x.font='600 22px sans-serif'; x.fillText('Shëndeti i rrjetit',1178,402);
-  x.beginPath(); x.arc(1355,560,92,-1.57,4.0); x.strokeStyle='#7fbc42'; x.lineWidth=26; x.stroke();
+  x.fillStyle='#0a1740'; x.font='600 22px sans-serif'; x.fillText('Shëndeti i rrjetit',1178,402);
+  x.beginPath(); x.arc(1355,560,92,-1.57,4.0); x.strokeStyle='#1bb6dc'; x.lineWidth=26; x.stroke();
   x.beginPath(); x.arc(1355,560,92,4.0,4.71); x.strokeStyle='#f0a33a'; x.stroke();
-  x.fillStyle='#022636'; x.font='700 42px monospace'; x.textAlign='center';
+  x.fillStyle='#0a1740'; x.font='700 42px monospace'; x.textAlign='center';
   x.fillText('87.6%',1355,574); x.textAlign='left';
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; track.push(t); return t;
 }
@@ -1133,14 +1255,14 @@ function dashboardTexture(){
    sa lexohet ne projektor, dhe ndryshimi i faqes kushton vetem nje texture swap.
    Gjuha e faqeve mbetet e njejta si e kapitujve — pa terma teknike. */
 const PANEL_W = 1600, PANEL_H = 900;
-const PANEL_INK = '#022636', PANEL_DIM = '#7b939c', PANEL_EDGE = '#dfe7ea';
-const PANEL_OK = '#4e7a26', PANEL_WARN = '#b06f10';
+const PANEL_INK = '#0a1740', PANEL_DIM = '#7b939c', PANEL_EDGE = '#dfe7ea';
+const PANEL_OK = '#0e7fa0', PANEL_WARN = '#b06f10';
 
 function drawPage(x, p){
   x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, PANEL_W, PANEL_H);
 
   /* shiriti i marks */
-  x.fillStyle = p.brand || '#10a2ac'; x.fillRect(0, 0, PANEL_W, 74);
+  x.fillStyle = p.brand || '#0e9bc4'; x.fillRect(0, 0, PANEL_W, 74);
   x.textAlign = 'left'; x.textBaseline = 'alphabetic';
   x.fillStyle = '#fff'; x.font = '600 30px sans-serif';
   x.fillText(p.app || 'RadX · Dashboard', 40, 48);
@@ -1212,7 +1334,7 @@ function drawBrandPage(x){
   x.fillText('WHITE LABEL', PANEL_W / 2, 66);
 
   /* ---- Siperfaqja: karta qe shikon klienti ---- */
-  const cw = 760, ox = (PANEL_W - cw) / 2, oy = 96, brand = '#7fbc42';
+  const cw = 760, ox = (PANEL_W - cw) / 2, oy = 96, brand = '#1bb6dc';
   x.fillStyle = '#fff'; x.fillRect(ox, oy, cw, 380);
   x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(ox, oy, cw, 380);
   x.fillStyle = brand; x.fillRect(ox, oy, cw, 72);
@@ -1248,8 +1370,8 @@ function drawBrandPage(x){
 
   /* ---- Motori: RadX ---- */
   const ey = 556, eh = 128;
-  x.fillStyle = '#022636'; x.fillRect(120, ey, PANEL_W - 240, eh);
-  x.textAlign = 'left'; x.fillStyle = '#7fbc42'; x.font = '700 30px sans-serif';
+  x.fillStyle = '#0a1740'; x.fillRect(120, ey, PANEL_W - 240, eh);
+  x.textAlign = 'left'; x.fillStyle = '#1bb6dc'; x.font = '700 30px sans-serif';
   x.fillText('RadX', 152, ey + 48);
   x.fillStyle = 'rgba(234,244,247,.62)'; x.font = '500 19px sans-serif';
   x.fillText('motori që nuk e shikon klienti', 152, ey + 82);
@@ -1258,9 +1380,9 @@ function drawBrandPage(x){
   let px = 470;
   ['çmimi', 'matja', 'faturimi', 'portofoli', 'karikuesit'].forEach(t => {
     const tw = x.measureText(t).width + 34;
-    x.fillStyle = 'rgba(127,188,66,.16)'; x.fillRect(px, ey + 44, tw, 42);
-    x.strokeStyle = 'rgba(127,188,66,.5)'; x.lineWidth = 1; x.strokeRect(px, ey + 44, tw, 42);
-    x.fillStyle = '#cfe8ad'; x.textAlign = 'center'; x.fillText(t, px + tw / 2, ey + 71);
+    x.fillStyle = 'rgba(27,182,220,.16)'; x.fillRect(px, ey + 44, tw, 42);
+    x.strokeStyle = 'rgba(27,182,220,.5)'; x.lineWidth = 1; x.strokeRect(px, ey + 44, tw, 42);
+    x.fillStyle = '#bfe6f2'; x.textAlign = 'center'; x.fillText(t, px + tw / 2, ey + 71);
     x.textAlign = 'left'; px += tw + 14;
   });
 
@@ -1309,7 +1431,7 @@ function drawPagePortrait(x, p){
   x.textAlign = 'left'; x.textBaseline = 'alphabetic';
 
   /* shiriti i marks */
-  x.fillStyle = p.brand || '#10a2ac'; x.fillRect(0, 0, W, 100);
+  x.fillStyle = p.brand || '#0e9bc4'; x.fillRect(0, 0, W, 100);
   x.fillStyle = '#fff'; x.font = '600 36px sans-serif';
   x.fillText(p.app || 'RadX · Dashboard', M, 64);
   if (p.pageName){
@@ -1404,7 +1526,7 @@ function drawBrandPagePortrait(x){
   x.fillText('WHITE LABEL', W/2, 68);
 
   /* ---- Siperfaqja: karta qe shikon klienti ---- */
-  const oy = 110, ch = 470, brand = '#7fbc42';
+  const oy = 110, ch = 470, brand = '#1bb6dc';
   x.fillStyle = '#fff'; x.fillRect(M, oy, IW, ch);
   x.strokeStyle = PANEL_EDGE; x.lineWidth = 1; x.strokeRect(M, oy, IW, ch);
   x.fillStyle = brand; x.fillRect(M, oy, IW, 82);
@@ -1442,8 +1564,8 @@ function drawBrandPagePortrait(x){
 
   /* ---- Motori: RadX ---- */
   const ey = 700, eh = 300;
-  x.fillStyle = '#022636'; x.fillRect(M, ey, IW, eh);
-  x.textAlign = 'left'; x.fillStyle = '#7fbc42'; x.font = '700 42px sans-serif';
+  x.fillStyle = '#0a1740'; x.fillRect(M, ey, IW, eh);
+  x.textAlign = 'left'; x.fillStyle = '#1bb6dc'; x.font = '700 42px sans-serif';
   x.fillText('RadX', M + 30, ey + 62);
   x.fillStyle = 'rgba(234,244,247,.62)'; x.font = '500 26px sans-serif';
   x.fillText('motori që nuk e shikon klienti', M + 30, ey + 104);
@@ -1453,9 +1575,9 @@ function drawBrandPagePortrait(x){
   ['çmimi', 'matja', 'faturimi', 'portofoli', 'karikuesit'].forEach(t => {
     const tw = x.measureText(t).width + 40;
     if (px + tw > W - M - 30){ px = M + 30; py += 66; }
-    x.fillStyle = 'rgba(127,188,66,.16)'; x.fillRect(px, py, tw, 54);
-    x.strokeStyle = 'rgba(127,188,66,.5)'; x.lineWidth = 1; x.strokeRect(px, py, tw, 54);
-    x.fillStyle = '#cfe8ad'; x.textAlign = 'center'; x.fillText(t, px + tw/2, py + 36);
+    x.fillStyle = 'rgba(27,182,220,.16)'; x.fillRect(px, py, tw, 54);
+    x.strokeStyle = 'rgba(27,182,220,.5)'; x.lineWidth = 1; x.strokeRect(px, py, tw, 54);
+    x.fillStyle = '#bfe6f2'; x.textAlign = 'center'; x.fillText(t, px + tw/2, py + 36);
     x.textAlign = 'left'; px += tw + 16;
   });
 
@@ -1479,7 +1601,7 @@ function dashboardTexturePortrait(){
   const x = c.getContext('2d');
   x.fillStyle = '#f2f6f8'; x.fillRect(0, 0, W, H);
   x.textAlign = 'left'; x.textBaseline = 'alphabetic';
-  x.fillStyle = '#10a2ac'; x.fillRect(0, 0, W, 100);
+  x.fillStyle = '#0e9bc4'; x.fillRect(0, 0, W, 100);
   x.fillStyle = '#fff'; x.font = '600 36px sans-serif';
   x.fillText('RadX · Dashboard', M, 64);
   x.fillStyle = PANEL_INK; x.fillRect(M, 128, IW, 92);
@@ -1509,8 +1631,8 @@ function dashboardTexturePortrait(){
     const px = gx0 + i*(gx1 - gx0)/(pts.length - 1), py = gBase - v*(gBase - gTop);
     i ? x.lineTo(px, py) : x.moveTo(px, py); }); };
   path(); x.lineTo(gx1, gBase); x.lineTo(gx0, gBase); x.closePath();
-  x.fillStyle = 'rgba(16,162,172,.18)'; x.fill();
-  path(); x.strokeStyle = '#10a2ac'; x.lineWidth = 5; x.stroke();
+  x.fillStyle = 'rgba(14,155,196,.18)'; x.fill();
+  path(); x.strokeStyle = '#0e9bc4'; x.lineWidth = 5; x.stroke();
 
   const nl = ['24 pika · 17 karikojnë tani',
               '3 gjëra kërkojnë kujdes — operatori u njoftua'];
@@ -1523,7 +1645,7 @@ function dashboardTexturePortrait(){
   x.fillStyle = PANEL_INK; x.font = '600 32px sans-serif';
   x.fillText('Shëndeti i rrjetit', M + 26, hy + 50);
   const rx = W/2, ry = hy + hh/2 + 30, rr = 104;
-  x.beginPath(); x.arc(rx, ry, rr, -1.57, 4.0); x.strokeStyle = '#7fbc42'; x.lineWidth = 30; x.stroke();
+  x.beginPath(); x.arc(rx, ry, rr, -1.57, 4.0); x.strokeStyle = '#1bb6dc'; x.lineWidth = 30; x.stroke();
   x.beginPath(); x.arc(rx, ry, rr, 4.0, 4.71); x.strokeStyle = '#f0a33a'; x.stroke();
   x.fillStyle = PANEL_INK; x.font = '700 52px monospace'; x.textAlign = 'center';
   x.fillText('87.6%', rx, ry + 18); x.textAlign = 'left';
@@ -1656,8 +1778,8 @@ const PANEL_PAGES = {
    ngjyren e vet, me lidhje kembe-qeni mes tyre. Permbajtja rri mbi y 700: karta
    e kapitullit ze fundin-majtas. */
 const CHAIN = [
-  ['#7fbc42', 'KOMPANIA JOTE',        'marka jote'],
-  ['#00a3b9', 'PARTNERI YT',          'marka e tij'],
+  ['#1bb6dc', 'KOMPANIA JOTE',        'marka jote'],
+  ['#0e9bc4', 'PARTNERI YT',          'marka e tij'],
   ['#f0a33a', 'PARTNERI I PARTNERIT', 'marka e vet'],
 ];
 const CHAIN_RIGHTS = ['çmimet e anëtarëve', 'portofolin e tyre',
@@ -1705,12 +1827,12 @@ function drawPartnerPage(x){
   x.font = '500 23px sans-serif';
   CHAIN_RIGHTS.forEach((t, i) => {
     const ry = y0 + 82 + i * 54;
-    x.fillStyle = '#7fbc42'; x.beginPath(); x.arc(rx0 + 9, ry - 8, 7, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#1bb6dc'; x.beginPath(); x.arc(rx0 + 9, ry - 8, 7, 0, Math.PI * 2); x.fill();
     x.fillStyle = '#3c5560'; x.fillText(t, rx0 + 32, ry);
   });
-  x.fillStyle = '#022636';
+  x.fillStyle = '#0a1740';
   x.fillRect(rx0, y0 + 82 + CHAIN_RIGHTS.length * 54 + 14, 500, 96);
-  x.fillStyle = '#7fbc42'; x.font = '700 26px sans-serif';
+  x.fillStyle = '#1bb6dc'; x.font = '700 26px sans-serif';
   x.fillText('RadX', rx0 + 26, y0 + 82 + CHAIN_RIGHTS.length * 54 + 56);
   x.fillStyle = 'rgba(234,244,247,.66)'; x.font = '500 20px sans-serif';
   x.fillText('poshtë çdo niveli, i njëjti motor', rx0 + 26, y0 + 82 + CHAIN_RIGHTS.length * 54 + 88);
@@ -1766,13 +1888,13 @@ function drawPartnerPagePortrait(x){
   x.font = '500 27px sans-serif';
   CHAIN_RIGHTS.forEach((t, i) => {
     const ry = ry0 + 60 + i * 64;
-    x.fillStyle = '#7fbc42'; x.beginPath(); x.arc(M + 10, ry - 9, 8, 0, Math.PI * 2); x.fill();
+    x.fillStyle = '#1bb6dc'; x.beginPath(); x.arc(M + 10, ry - 9, 8, 0, Math.PI * 2); x.fill();
     x.fillStyle = '#3c5560'; x.fillText(t, M + 36, ry);
   });
 
   const ey = ry0 + 60 + CHAIN_RIGHTS.length * 64 + 10;
-  x.fillStyle = '#022636'; x.fillRect(M, ey, IW, 120);
-  x.fillStyle = '#7fbc42'; x.font = '700 32px sans-serif'; x.fillText('RadX', M + 28, ey + 50);
+  x.fillStyle = '#0a1740'; x.fillRect(M, ey, IW, 120);
+  x.fillStyle = '#1bb6dc'; x.font = '700 32px sans-serif'; x.fillText('RadX', M + 28, ey + 50);
   x.fillStyle = 'rgba(234,244,247,.66)'; x.font = '500 25px sans-serif';
   x.fillText('poshtë çdo niveli, i njëjti motor', M + 28, ey + 90);
 
@@ -1833,7 +1955,7 @@ const PANEL_DIMS = {
 let panelDim = PANEL_DIMS.land;
 const panel = new THREE.Mesh(geo(new THREE.PlaneGeometry(panelDim.w, panelDim.h)), panelMat);
 panel.position.set(0.4, panelDim.y, -1.6); panel.rotation.x = -0.06; scene.add(panel);
-const frameMat = mat({ color:0x02222e, roughness:.4, metalness:.3, transparent:true, opacity:0 });
+const frameMat = mat({ color:0x0a1636, roughness:.4, metalness:.3, transparent:true, opacity:0 });
 const panelFrame = box(panelDim.fw, panelDim.fh, 0.08, frameMat, 0.4, panelDim.y, -1.68);
 panelFrame.rotation.x = -0.06; panelFrame.castShadow = false;
 
@@ -1947,6 +2069,12 @@ function applyWide(){
     document.body.classList.toggle('wide', wide);
     S.camDirty = true;
   }
+  /* Hapi hyres i thjeshte: pa telefon, skena mban gjithe hapesiren. */
+  const nophone = !!c.noPhone;
+  if (document.body.classList.contains('nophone') !== nophone){
+    document.body.classList.toggle('nophone', nophone);
+    S.camDirty = true;
+  }
 }
 
 /* ===================== KAPITUJT ===================== */
@@ -2054,12 +2182,17 @@ const L = n => Math.round(n).toLocaleString('sq-AL');
 function renderUI(){
   const c = CHAPTERS[chapter];
   document.getElementById('c-step').innerHTML = `${c.sec} · <b>${chapter+1}</b> / ${N}`;
-  document.getElementById('c-title').textContent = c.title;
-  document.getElementById('c-body').textContent  = c.body;
-  document.getElementById('c-tech').textContent   = c.tech;
+  document.getElementById('c-title').textContent = txtOf(c, 'title');
+  document.getElementById('c-body').textContent  = txtOf(c, 'body');
+  document.getElementById('c-tech').textContent   = txtOf(c, 'tech');
   document.getElementById('btn-prev').disabled = chapter===0;
   document.getElementById('btn-next').disabled = chapter===N-1;
   [...document.querySelectorAll('#dots i')].forEach((d,i)=> d.classList.toggle('on', i===chapter));
+  /* Nese paneli eshte hapur dhe s'po shkruan brenda tij, ndiq kapitullin aktual. */
+  if (panelOpen && !(document.activeElement && document.activeElement.closest && document.activeElement.closest('#edpanel'))){
+    const s = document.getElementById('ep-chap'); if (s) s.value = String(chapter);
+    fillFields(chapter);
+  }
   measureCard();   /* teksti sapo ndryshoi → lartesia e kartes mund te kete ndryshuar */
 }
 
@@ -2137,6 +2270,18 @@ document.getElementById('btn-fs').onclick = () => {
 const KEYMAP = ['1','2','3','4','5','6','7','8','9','0','-','=','[',
                 ']','\\',';',"'",',','.','/','`','z','x'];
 window.addEventListener('keydown', e=>{
+  /* Redaktimi ka perparesi: 'E' e ndez/fik, dhe sa jemi brenda tij nuk lejojme
+     shkurtoret e prezantimit (perndryshe shkronjat qe shtypim do te ndErronin kapituj). */
+  if (isTypingTarget(e)){                        // duke shkruar ne panel: vetem Esc / Ctrl+S
+    if (e.key==='Escape') closePanel();
+    else if ((e.ctrlKey||e.metaKey) && (e.key==='s'||e.key==='S')){ e.preventDefault(); saveTexts(); }
+    return;                                        // asnje shkurtore prezantimi sa shkruan
+  }
+  if ((e.key==='e'||e.key==='E') && EDIT_LOCAL){ panelOpen ? closePanel() : openPanel(); return; }
+  if (panelOpen){
+    if (e.key==='Escape'){ closePanel(); return; }
+    if ((e.ctrlKey||e.metaKey) && (e.key==='s'||e.key==='S')){ e.preventDefault(); saveTexts(); return; }
+  }
   if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); goTo(chapter+1); }
   else if (e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(chapter-1); }
   else if (KEYMAP.includes(e.key)) goTo(KEYMAP.indexOf(e.key));
@@ -2159,6 +2304,7 @@ let lastW = 0, lastH = 0;
    kështu nuk duhet zhvendosje horizontale. */
 function phonePad(){
   if (document.body.classList.contains('wide')) return 0;   // seksioni RadX: pa telefon
+  if (document.body.classList.contains('nophone')) return 0; // hapi hyres: pa telefon
   const portrait = window.innerHeight > window.innerWidth;
   if (portrait && window.innerWidth <= 1100) return 0;   // layout i shtresuar
   if (window.innerHeight <= 520) return 105;             // telefon horizontal
@@ -2390,21 +2536,21 @@ function frame(){
 
   /* ekranet e karikuesve */
   const ID0 = 'RDX-014 · C1';
-  if      (S.phase==='idle')     stations[0].screen.draw('I LIRË','—','#10a2ac',ID0);
+  if      (S.phase==='idle')     stations[0].screen.draw('I LIRË','—','#0e9bc4',ID0);
   else if (S.phase==='auth')     stations[0].screen.draw('AFRO KARTËN','Po kontrollohet','#2f9bff',ID0);
   else if (S.phase==='start')    stations[0].screen.draw('PO NIS','Prit një moment','#2f9bff',ID0);
   else if (S.phase==='connect')  stations[0].screen.draw(S.connected?'LIDHUR':'LIDH SPINËN',
                                    S.connected?'AFRO KARTELËN':'Fut spinën','#2f9bff',ID0);
-  else if (S.phase==='ok')       stations[0].screen.draw('✓ E PRANUAR','Karikimi nis','#7fbc42',ID0);
-  else if (S.phase==='charging') stations[0].screen.draw('KARIKON', Math.round(S.kw)+' kW','#7fbc42',ID0);
+  else if (S.phase==='ok')       stations[0].screen.draw('✓ E PRANUAR','Karikimi nis','#1bb6dc',ID0);
+  else if (S.phase==='charging') stations[0].screen.draw('KARIKON', Math.round(S.kw)+' kW','#1bb6dc',ID0);
   else if (S.phase==='topped'||S.phase==='full') stations[0].screen.draw('BATERIA PLOT','100%','#f0a33a',ID0);
-  else                           stations[0].screen.draw('MBARUAR', S.kwh.toFixed(1)+' kWh','#10a2ac',ID0);
+  else                           stations[0].screen.draw('MBARUAR', S.kwh.toFixed(1)+' kWh','#0e9bc4',ID0);
 
   const on = S.side > 0.4;
-  stations[1].screen.draw(on?'KARIKON':'I LIRË', on?'52 kW':'—', on?'#7fbc42':'#10a2ac','RDX-014 · C2');
+  stations[1].screen.draw(on?'KARIKON':'I LIRË', on?'52 kW':'—', on?'#1bb6dc':'#0e9bc4','RDX-014 · C2');
   stations[2].screen.draw(faultOn?'PA LIDHJE': (on?'KARIKON':'I LIRË'),
                           faultOn?'Nuk përgjigjet': (on?'43 kW':'—'),
-                          faultOn?'#e2564a': (on?'#7fbc42':'#10a2ac'), 'RDX-021 · C1');
+                          faultOn?'#e2564a': (on?'#1bb6dc':'#0e9bc4'), 'RDX-021 · C1');
 
   /* ===== TELEFONI: numrat live mbi pamjet e app-it =====
      App-i real shfaq perqindje, kilometra dhe kohe-per-te-mbaruar — jo kW e kosto.
@@ -2432,11 +2578,131 @@ function frame(){
   requestAnimationFrame(frame);
 }
 
+/* ===================== REDAKTUESI I TEKSTEVE ===================== */
+/* Vegel VETEM per pergatitje: nje panel me fusha (Titull/Tekst/Teknik) qe ndryshon
+   tekstet e cdo kapitulli dhe i ruan ne content/tekstet.json permes server.js
+   (GET/POST /api/tekstet). Rendi: OVERRIDES (te ruajtura/te pjekura) -> origjinali.
+   Ne live (statik, pa 127.0.0.1) API-ja nuk thirret dhe paneli s'shfaqet; mbeten
+   vetem tekstet e pjekura te TEXT_OVERRIDES. Kur permbajtja te jete gati: kopjo
+   content/tekstet.json te TEXT_OVERRIDES, vendos REDAKTIM=false, dhe hiq kete bllok
+   + #editbar + #edpanel + rrugen /api/tekstet te server.js — kthehet plotesisht statik. */
+const REDAKTIM       = true;                // false = fike redaktimin (perdor vetem te pjekurat)
+const TEXT_OVERRIDES = {};                  // <- ketu "piqen" tekstet perfundimtare
+const LOCAL      = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
+const EDIT_LOCAL = REDAKTIM && LOCAL;       // redaktim vetem kur je ne serverin lokal
+const FUSHAT     = ['title','body','tech'];
+let   OVERRIDES  = {};                       // gjendja aktuale ne kujtese
+let   panelOpen  = false;
+
+const elp      = id => document.getElementById(id);
+const edStatus = m => { const s = elp('ep-status'); if (s) s.textContent = m; };
+const edNow    = () => new Date().toLocaleTimeString('sq-AL', { hour:'2-digit', minute:'2-digit' });
+/* Sa jemi duke shkruar ne nje fushe, tastet s'duhet t'i shkojne prezantimit. */
+const isTypingTarget = e => { const t = e.target;
+  return !!t && (t.isContentEditable || t.tagName==='INPUT' || t.tagName==='TEXTAREA' || t.tagName==='SELECT'); };
+
+/* Teksti efektiv i nje fushe: override-i (jo bosh) ose origjinali i kapitullit. */
+function txtOf(c, field){
+  const o = OVERRIDES[c.id];
+  if (o && typeof o[field] === 'string' && o[field].length) return o[field];
+  return c[field];
+}
+
+/* Ngarko: fillo nga te pjekurat, pastaj (vetem lokal) mbivendos ato te ruajtura ne disk. */
+async function loadOverrides(){
+  OVERRIDES = JSON.parse(JSON.stringify(TEXT_OVERRIDES || {}));
+  if (!EDIT_LOCAL) return;
+  try{
+    const r = await fetch('/api/tekstet', { cache:'no-store' });
+    if (r.ok){
+      const disk = await r.json();
+      if (disk && typeof disk === 'object')
+        for (const k in disk) OVERRIDES[k] = { ...(OVERRIDES[k] || {}), ...disk[k] };
+    }
+  }catch{ /* s'ka server (live) — normale, mbeten te pjekurat */ }
+}
+
+/* Mbush fushat e panelit me tekstin efektiv te nje kapitulli. */
+function fillFields(i){
+  const c = CHAPTERS[i];
+  elp('ep-title').value = txtOf(c, 'title');
+  elp('ep-body').value  = txtOf(c, 'body');
+  elp('ep-tech').value  = txtOf(c, 'tech');
+}
+
+/* Nje shkronje ne fushe → perditeso override-in dhe karten menjehere (pa e ruajtur ne disk). */
+function onFieldInput(field){
+  const c = CHAPTERS[chapter];
+  const o = OVERRIDES[c.id] || (OVERRIDES[c.id] = {});
+  o[field] = elp('ep-' + field).value;
+  renderUI();
+  edStatus('• ndryshime te paruajtura');
+}
+
+function openPanel(){
+  if (!EDIT_LOCAL) return;
+  panelOpen = true;
+  elp('edpanel').hidden = false;
+  elp('editbar').hidden = true;
+  elp('ep-chap').value = String(chapter);
+  fillFields(chapter);
+  edStatus('');
+}
+function closePanel(){
+  panelOpen = false;
+  elp('edpanel').hidden = true;
+  elp('editbar').hidden = false;
+}
+
+async function saveTexts(){
+  if (!EDIT_LOCAL) return;
+  edStatus('Po ruaj…');
+  try{
+    const r = await fetch('/api/tekstet', {
+      method:'POST', headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify(OVERRIDES),
+    });
+    const j = await r.json().catch(() => ({}));
+    edStatus(r.ok && j.ok ? ('U ruajt ✓ ' + edNow()) : ('Gabim: ' + (j.error || r.status)));
+  }catch{ edStatus('S’u ruajt — s’ka server lokal'); }
+}
+
+/* Kthe nje kapitull te tekstet origjinale: hiq override-in, ripamje, dhe ruaj. */
+async function resetChapter(){
+  delete OVERRIDES[CHAPTERS[chapter].id];
+  fillFields(chapter);
+  renderUI();
+  await saveTexts();
+  edStatus('U rikthye origjinali ' + edNow());
+}
+
+function initEditor(){
+  loadOverrides().then(() => {
+    renderUI();                    // ri-vizato karten me tekstet e ngarkuara
+    if (!EDIT_LOCAL) return;       // live ose redaktim i fikur → asnje vegel
+    const sel = elp('ep-chap');
+    CHAPTERS.forEach((c, i) => {
+      const o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = (i + 1) + ' · ' + c.title;
+      sel.appendChild(o);
+    });
+    sel.onchange       = () => { const i = +sel.value; goTo(i, true); fillFields(i); };
+    elp('ed-open').onclick  = openPanel;
+    elp('ep-close').onclick = closePanel;
+    elp('ep-save').onclick  = saveTexts;
+    elp('ep-reset').onclick = resetChapter;
+    FUSHAT.forEach(f => elp('ep-' + f).addEventListener('input', () => onFieldInput(f)));
+    elp('editbar').hidden = false; // shfaq butonin nises
+  });
+}
+
 /* ===================== NISJA ===================== */
 measureCard();
 goTo(0, true);
 requestAnimationFrame(frame);
 setTimeout(()=> document.getElementById('boot').classList.add('hide'), 420);
+initEditor();   // ngarko tekstet e ruajtura dhe (nese lokal) ndez veglat e redaktimit
 
 window.__demo = { goTo, restart, snapPlug, S, CHAPTERS, CH, phoneTap, camera, scene, renderer, plug, plugPos, heroCar, stations, panel, setPanelPage,
                   setScreen, get screen(){ return curScreen; },
