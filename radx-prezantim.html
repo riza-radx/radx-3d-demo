@@ -1915,12 +1915,14 @@ const PANEL_AT = new THREE.Vector3(0.4, 3.6, -1.6);   /* qendra, ndryshon me ori
 let overviewTex = dashboardTexture();     /* landscape; screenshot-i real zevendeson kete */
 let overviewPortTex = null;
 const panelCache = { land:{}, port:{} };
+const panelImg = {};   /* name -> Texture reale (landscape), nese hidhet assets/panel-<name>.png */
 function panelTex(name){
   if (name === 'overview'){
     if (!panelPort) return overviewTex;
     if (!overviewPortTex) overviewPortTex = dashboardTexturePortrait();
     return overviewPortTex;
   }
+  if (!panelPort && panelImg[name]) return panelImg[name];   /* foto reale e app-it, nese ekziston */
   const cache = panelCache[panelPort ? 'port' : 'land'];
   if (cache[name]) return cache[name];
   const c = document.createElement('canvas');
@@ -1980,6 +1982,18 @@ new THREE.TextureLoader().load('./assets/dashboard.png', tex=>{
   overviewTex = tex;
   if (wasShowing){ panelMat.map = tex; panelMat.needsUpdate = true; }
 }, undefined, ()=>{});
+
+/* Faqet e seksionit RadX (14→fund): nese hidhet assets/panel-<name>.png, foto reale
+   zevendeson vizatimin (vetem landscape). Lista permban VETEM emrat qe kane skedar
+   te vertete, qe te mos dalin 404 ne konsole. Shto emrin ketu kur shton skedarin e vet:
+   ['intro','brand','offer','groups','partners','price','chargers','money','alerts','scale'] */
+[].forEach(name=>{
+  new THREE.TextureLoader().load('./assets/panel-'+name+'.png', tex=>{
+    tex.colorSpace = THREE.SRGBColorSpace; track.push(tex);
+    panelImg[name] = tex;
+    if (!panelPort && panelPageNow === name){ panelMat.map = tex; panelMat.needsUpdate = true; }
+  }, undefined, ()=>{});
+});
 
 /* ===================== SHTEGU I KAMERES ===================== */
 const camCurve = new THREE.CatmullRomCurve3(
